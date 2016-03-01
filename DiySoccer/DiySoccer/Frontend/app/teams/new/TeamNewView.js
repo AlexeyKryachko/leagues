@@ -3,14 +3,9 @@
     className: 'cursor-pointer',
     template: "#team-new-member",
     ui: {
-        edit: '.editable'
     },
     onShow: function () {
-        $(this.ui.edit).editable(this.edit.bind(this));
-    },
-    edit: function(value, settings) {
-        this.model.set('name', value);
-        return value;
+        
     },
     serializeData: function () {
         return this.model.toJSON();
@@ -23,13 +18,27 @@ var TeamNewView = Backbone.Marionette.CompositeView.extend({
     childView: TeamNewMemberListItemView,
     emptyView: EmptyListView,
     ui: {
-        'createNewMember': '.create-new-member'
+        'createNewMember': '.create-new-member',
+        'memberName': '.new-member-name',
+        'teamName': '.new-team-name',
+        'submit': '.create-new-team'
     },
     events: {
-        'click @ui.createNewMember': 'createNewMember'
+        'click @ui.createNewMember': 'createNewMember',
+        'change @ui.teamName': 'writeTeamName'
     },
-    createNewMember: function() {
-        this.collection.add({});
+    triggers: {
+        'click @ui.submit': 'submit'
+    },
+    writeTeamName: function() {
+        this.model.set('name', this.ui.teamName.val());
+    },
+    createNewMember: function () {
+        var name = this.ui.memberName.val();
+        if (!name || name == '')
+            return;
+
+        this.collection.add({ value: name });
     },
     initialize: function (options) {
     }

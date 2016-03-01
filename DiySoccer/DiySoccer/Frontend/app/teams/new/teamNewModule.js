@@ -2,24 +2,44 @@
     startWithParent: false,
 
     initialize: function (options, app, object) {
-        this.app = app;
-    },
+        var self = this;
 
+        self.app = app;
+
+        self.model = new Backbone.Model();
+        self.members = new Backbone.Collection();
+
+        self.layout = new LayoutView();
+        self.newTeamView = new TeamNewView({ model: this.model, collection: this.members });
+
+        self.listenTo(self.layout, 'show', function () {
+            self.layout.bigRegion.show(self.newTeamView);
+        });
+
+        self.listenTo(self.newTeamView, 'submit', this.createTeam);
+    },
+    createTeam: function () {
+        var data = {
+            league: this.options.leagueId,
+            name: this.model.get('name'),
+            members: this.members.toJSON()
+        }
+
+        console.log(data);
+        $.ajax({
+            type: "POST",
+            url: "/api/teams",
+            data: data,
+            success: function() {
+                document.location.href = '#leagues/' + this.options.leagueId;
+            }
+        });
+    },
     onStart: function (options) {
         var self = this;
 
-        console.log('[teamNewModule] started');
-        if (!self.layout)
-            self.layout = new LayoutView();
-
-        var model = new Backbone.Model();
-        var members = new Backbone.Collection();
-
-        var newTeamView = new TeamNewView({ model: model, collection: members });
-
-        self.listenTo(self.layout, 'show', function () {
-            self.layout.bigRegion.show(newTeamView);
-        });
+        self.options = options;
+        self.members.reset();
 
         self.app.mainRegion.show(self.layout);
     },

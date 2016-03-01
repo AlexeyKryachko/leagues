@@ -3,3 +3,9 @@ node_modules
 /DiySoccer/packages
 /DiySoccer/DiySoccer/bin
 /DiySoccer/DiySoccer/obj
+/DiySoccer/Dependences/bin
+/DiySoccer/Dependences/obj
+/DiySoccer/Implementations/obj
+/DiySoccer/Implementations/bin
+/DiySoccer/Interfaces/obj
+/DiySoccer/Interfaces/bin
