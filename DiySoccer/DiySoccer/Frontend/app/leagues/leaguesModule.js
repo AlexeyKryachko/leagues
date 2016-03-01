@@ -6,23 +6,23 @@
     },
 
     onStart: function (options) {
-        console.log('[leagues] started')
-        if (!this.layout)
-            this.layout = new leaguesLayoutView();
+        var self = this;
+
+        if (!self.layout)
+            self.layout = new LayoutView();
 
         var leagues = new Backbone.Collection([{ id: 1, name: 'SPB DIY League 2015-2016', description: 'Our league' }]);
 
-        var leagueList = new LeagueList({ collection: leagues })
+        var leagueList = new LeagueList({ collection: leagues });
 
-        this.listenTo(this.layout, 'show', function () {
-            this.layout.bigRegion.show(leagueList)
+        this.listenTo(self.layout, 'show', function () {
+            self.layout.bigRegion.show(leagueList);
         });
 
-        this.app.mainRegion.show(this.layout);        
+        self.app.mainRegion.show(self.layout);
     },
 
     onStop: function (options) {
-        console.log('[leagues] stopped');
     },
 });
 

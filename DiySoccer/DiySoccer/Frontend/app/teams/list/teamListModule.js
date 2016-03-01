@@ -1,4 +1,4 @@
-﻿var tableModule = Marionette.Module.extend({
+﻿var teamsModule = Marionette.Module.extend({
     startWithParent: false,
 
     initialize: function (options, app, object) {
@@ -6,9 +6,11 @@
     },
 
     onStart: function (options) {
-        console.log('[table] started')
-        if (!this.layout)
-            this.layout = new leaguesLayoutView();
+        var self = this;
+
+        console.log('[table] started');
+        if (!self.layout)
+            self.layout = new LayoutView();
 
         var teams = new Backbone.Collection([
             { id: 1, name: 'нюен', matchesCount: 13, wins: 10, draw: 3, lose: 0, goals: '135-38(+97)', points: 33 },
@@ -16,13 +18,13 @@
             { id: 3, name: 'гидраер', matchesCount: 13, wins: 11, draw: 0, lose: 2, goals: '112-42(+70)', points: 33 },
         ]);
 
-        var tableView = new TableView({ collection: teams });
+        var tableView = new TeamListView({ collection: teams, leagueId: options.leagueId });
 
-        this.listenTo(this.layout, 'show', function () {
-            this.layout.bigRegion.show(tableView)
+        self.listenTo(self.layout, 'show', function () {
+            self.layout.bigRegion.show(tableView);
         });
 
-        this.app.mainRegion.show(this.layout);        
+        self.app.mainRegion.show(self.layout);
     },
 
     onStop: function (options) {
@@ -30,4 +32,4 @@
     },
 });
 
-MyApp.module("table", tableModule);
+MyApp.module("teamList", teamsModule);

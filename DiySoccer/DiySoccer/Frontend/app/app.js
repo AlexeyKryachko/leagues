@@ -7,7 +7,7 @@ MyApp.addRegions({
 MyApp.on('start', function () {
     console.log('[Application] started')
 
-    var templateIds = ['leagues-template', 'leagues-list', 'leagues-item', 'team-list', 'team-item' ];
+    var templateIds = ['leagues-template', 'leagues-list', 'leagues-item', 'team-list', 'team-item', 'team-new', 'team-new-member', 'empty-list-view' ];
     var preloading = Backbone.Marionette.TemplateCache.preloadTemplates(templateIds, this);
     $.when(preloading).done(function () {
         new MyRouter();
