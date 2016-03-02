@@ -1,5 +1,5 @@
 ﻿var LayoutView = Backbone.Marionette.LayoutView.extend({
-    template: "#leagues-template",
+    template: "#layout",
     regions: {
         bigRegion: "#big-region"
     }

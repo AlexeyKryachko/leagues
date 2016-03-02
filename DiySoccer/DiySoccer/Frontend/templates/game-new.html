@@ -1,0 +1,26 @@
+﻿<select class="form-control change-team">
+    {{#each teams}}
+    {{#if selected}}
+    <option value="{{id}}" selected="selected">{{name}}</option>
+    {{else}}
+        <option value="{{id}}">{{name}}</option>
+    {{/if}}
+    {{/each}}
+</select>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Имя
+            </th>
+            <th>
+                Гол
+            </th>
+            <th>
+                Пас
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>

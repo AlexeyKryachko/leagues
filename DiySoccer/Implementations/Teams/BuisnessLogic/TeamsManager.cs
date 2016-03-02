@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Interfaces.Core;
 using Interfaces.Teams.BuisnessLogic;
 using Interfaces.Teams.BuisnessLogic.Models;
 using Interfaces.Teams.DataAccess;
@@ -24,6 +26,25 @@ namespace Implementations.Teams.BuisnessLogic
 
             var userIds = userEntities.Select(x => x.Id);
             _teamsRepository.Create(model.League, model.Name, userIds);
+        }
+
+        public IEnumerable<TeamViewModel> GetByLeague(string id)
+        {
+            var teams = _teamsRepository.GetByLeague(id).ToList();
+            var userIds = teams.SelectMany(x => x.MemberIds).Distinct();
+            var users = _usersRepository.GetRange(userIds).ToList()
+                .ToDictionary(x => x.Id, y => y);
+
+            return teams.Select(x => new TeamViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Members = x.MemberIds.Select(y => new IdValueViewModel
+                {
+                    Id = y,
+                    Value = users[y].Name
+                })
+            });
         }
     }
 }

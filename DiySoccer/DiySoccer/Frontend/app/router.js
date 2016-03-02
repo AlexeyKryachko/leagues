@@ -2,10 +2,10 @@
     routes: {
         "": "defaultRoute",
         "leagues/:leagueId": "tableRoute",
-        "leagues/:leagueId/teams/new": "newTeamRoute"
+        "leagues/:leagueId/teams/new": "newTeamRoute",
+        "leagues/:leagueId/games/new": "newGameRoute"
     },
     defaultRoute: function () {
-        console.log('[Router][defaultRoute]')
         this.changeModule(MyApp.submodules.leagues);
     },
     tableRoute: function (leagueId) {
@@ -15,6 +15,10 @@
     newTeamRoute: function (leagueId) {
         var options = { leagueId: leagueId };
         this.changeModule(MyApp.submodules.teamNew, options);
+    },
+    newGameRoute: function (leagueId) {
+        var options = { leagueId: leagueId };
+        this.changeModule(MyApp.submodules.gameNew, options);
     },
     changeModule: function (module, options) {
         if (this.workingModule)

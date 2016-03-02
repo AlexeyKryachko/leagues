@@ -14,8 +14,10 @@ namespace DiySoccer.Api
         }
 
         [HttpGet]
-        public void Hello()
+        public IHttpActionResult GetTeams(string leagueId)
         {
+            var teams = _teamsManager.GetByLeague(leagueId);
+            return Json(teams);
         }
 
         [HttpPost]

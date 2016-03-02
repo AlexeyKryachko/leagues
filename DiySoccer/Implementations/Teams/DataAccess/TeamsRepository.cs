@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Implementations.Core.DataAccess;
 using Interfaces.Teams.DataAccess;
+using MongoDB.Driver;
 
 namespace Implementations.Teams.DataAccess
 {
@@ -18,6 +20,11 @@ namespace Implementations.Teams.DataAccess
             };
 
             Add(entity);
+        }
+
+        public IEnumerable<TeamDb> GetByLeague(string id)
+        {
+            return Collection.AsQueryable().Where(x => x.LeagueId == id);
         }
     }
 }

@@ -60,6 +60,7 @@
     <Compile Include="Core\DataAccess\IBaseRepository.cs" />
     <Compile Include="Core\IdValueViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Teams\BuisnessLogic\Models\TeamViewModel.cs" />
     <Compile Include="Users\DataAccess\IUsersRepository.cs" />
     <Compile Include="Users\DataAccess\UserDb.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\CreateTeamViewModel.cs" />

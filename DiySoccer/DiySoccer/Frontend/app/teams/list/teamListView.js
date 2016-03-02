@@ -20,10 +20,12 @@ var TeamListView = Backbone.Marionette.CompositeView.extend({
     childViewContainer: "tbody",
     childView: TeamListItemView,
     ui: {
-        'addBtn': '.add-new-team'
+        'addBtn': '.add-new-team',
+        'addGame': '.add-new-game'
     },
     events: {
-        'click @ui.addBtn': 'redirectAddTeam'
+        'click @ui.addBtn': 'redirectAddTeam',
+        'click @ui.addGame': 'redirectAddGame'
     },
     initialize: function (options) {
         this.options = {
@@ -32,5 +34,8 @@ var TeamListView = Backbone.Marionette.CompositeView.extend({
     },
     redirectAddTeam: function (e) {
         document.location.href = "#leagues/" + this.options.leagueId + "/teams/new";
+    },
+    redirectAddGame: function (e) {
+        document.location.href = "#leagues/" + this.options.leagueId + "/games/new";
     }
 });
