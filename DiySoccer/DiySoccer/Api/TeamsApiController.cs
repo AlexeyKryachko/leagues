@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Linq;
+using System.Web.Http;
 using Interfaces.Teams.BuisnessLogic;
 using Interfaces.Teams.BuisnessLogic.Models;
 
@@ -13,10 +14,11 @@ namespace DiySoccer.Api
             _teamsManager = teamsManager;
         }
 
-        [HttpGet]
-        public IHttpActionResult GetTeams(string leagueId)
+        [Route("api/teams/getTeamsByLeague/{leagueId}")]
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult Get(string leagueId)
         {
-            var teams = _teamsManager.GetByLeague(leagueId);
+            var teams = _teamsManager.GetByLeague(leagueId).ToList();
             return Json(teams);
         }
 

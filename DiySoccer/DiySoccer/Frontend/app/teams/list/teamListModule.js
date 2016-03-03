@@ -14,22 +14,28 @@
     onStart: function (options) {
         var self = this;
 
-        console.log('[table] started');
-        if (!self.layout)
-            self.layout = new LayoutView();
-        
-        var tableView = new TeamListView({ collection: self.teams, leagueId: options.leagueId });
+        self.options = options;
 
-        self.listenTo(self.layout, 'show', function () {
-            self.layout.bigRegion.show(tableView);
-        });
+        self.createViews();
+        self.bindViews();
 
         self.app.mainRegion.show(self.layout);
     },
-
-    onStop: function (options) {
-        console.log('[table] stopped');
+    createViews: function () {
+        var self = this;
+        
+        self.layout = new LayoutView();
+        self.tableView = new TeamListView({ collection: self.teams, leagueId: self.options.leagueId });
     },
+    bindViews: function () {
+        var self = this;
+
+        self.listenTo(self.layout, 'show', function () {
+            self.layout.bigRegion.show(self.tableView);
+        });
+    },
+    onStop: function (options) {
+    }
 });
 
 MyApp.module("teamList", teamsModule);

@@ -160,16 +160,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\BaseApiController.cs" />
+    <Compile Include="Api\GamesApiController.cs" />
     <Compile Include="Api\TeamsApiController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Content Include="Frontend\app\games\new\gamenewActions.js" />
     <Content Include="Frontend\app\leagues\leaguesList.js" />
     <Content Include="Frontend\app\games\new\gameNewModule.js" />
     <Content Include="Frontend\app\games\new\gameNewView.js" />
     <Content Include="Frontend\app\models\teams.js" />
     <Content Include="Frontend\app\shared\emptyListView.js" />
+    <Content Include="Frontend\app\shared\saveView.js" />
     <Content Include="Frontend\app\shared\splittedLayout.js" />
     <Content Include="Frontend\app\teams\new\teamNewModule.js" />
     <Content Include="Frontend\app\teams\new\teamNewView.js" />
@@ -197,6 +200,7 @@
     <Content Include="Frontend\js\static\backbone.marionette.min.js" />
     <Content Include="Frontend\js\static\bootstrap.min.js" />
     <Content Include="Frontend\js\static\jquery-1.12.1.min.js" />
+    <Content Include="Frontend\templates\save.html" />
     <Content Include="Frontend\templates\empty-list-view.html" />
     <Content Include="Frontend\templates\splitted-layout.html" />
     <Content Include="Frontend\templates\game-new.html" />

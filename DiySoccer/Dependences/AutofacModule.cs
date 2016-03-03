@@ -1,7 +1,9 @@
 ﻿using Autofac;
+using Implementations.Games.BuisnessLogic;
 using Implementations.Teams.BuisnessLogic;
 using Implementations.Teams.DataAccess;
 using Implementations.Users.DataAccess;
+using Interfaces.Games.BuisnessLogic;
 using Interfaces.Teams.BuisnessLogic;
 using Interfaces.Teams.DataAccess;
 using Interfaces.Users.DataAccess;
@@ -16,6 +18,8 @@ namespace Dependences
             builder.RegisterType(typeof(TeamsRepository)).As<ITeamsRepository>();
 
             builder.RegisterType(typeof(UsersRepository)).As<IUsersRepository>();
+
+            builder.RegisterType(typeof(GamesManager)).As<IGamesManager>();
         }
     }
 }
