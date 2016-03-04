@@ -166,7 +166,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Content Include="Frontend\app\games\new\gamenewActions.js" />
+    <Content Include="Frontend\app\games\new\gameNewActions.js" />
     <Content Include="Frontend\app\leagues\leaguesList.js" />
     <Content Include="Frontend\app\games\new\gameNewModule.js" />
     <Content Include="Frontend\app\games\new\gameNewView.js" />
