@@ -13,7 +13,7 @@
         self.newTeamView = new TeamNewView({ model: this.model, collection: this.members });
 
         self.listenTo(self.layout, 'show', function () {
-            self.layout.bigRegion.show(self.newTeamView);
+            self.layout.center.show(self.newTeamView);
         });
 
         self.listenTo(self.newTeamView, 'submit', this.createTeam);

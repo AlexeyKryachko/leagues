@@ -8,12 +8,11 @@
 
         self.teams = new Teams();
 
+        self.optionsModel = new Backbone.Model();
         self.leftModel = new Backbone.Model();
         self.leftScores = new Backbone.Collection();
         self.rightModel = new Backbone.Model();
         self.rightScores = new Backbone.Collection();
-
-        
     },
     createGame: function () {
         $.ajax({
@@ -44,11 +43,12 @@
         self.layout = new SplittedLayout();
         self.leftGameView = new GameNewView({ model: self.leftModel, collection: self.leftScores, teams: self.teams });
         self.rightGameView = new GameNewView({ model: self.rightModel, collection: self.rightScores, teams: self.teams });
+        self.optionsView = new GameNewOptionsView({ model: self.optionsModel });
         self.saveView = new SaveView();
     },
     bindViews: function () {
         var self = this;
-
+        
         self.listenTo(self.layout, 'show', function () {
 
             self.layout.left.show(self.leftGameView);
@@ -59,13 +59,16 @@
         self.listenTo(self.saveView, 'save', function () {
 
             var homeTeam = self.leftModel.toJSON();
+            homeTeam.score = self.optionsModel.get('homeTeamScore');
             homeTeam.members = self.leftScores.toJSON();
 
             var guestTeam = self.rightModel.toJSON();
+            guestTeam.score = self.optionsModel.get('guestTeamScore');
             guestTeam.members = self.rightScores.toJSON();
 
             var data = {
                 leagueId: self.options.leagueId,
+                customScores: self.optionsModel.get('customScores'),
                 homeTeam: homeTeam,
                 guestTeam: guestTeam
             }
@@ -93,6 +96,7 @@
     onStop: function (options) {
         var self = this;
 
+        self.optionsView.destroy();
         self.saveView.destroy();
         self.leftGameView.destroy();
         self.rightGameView.destroy();

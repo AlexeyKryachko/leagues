@@ -7,7 +7,7 @@ namespace Interfaces.Teams.DataAccess
     public class TeamDb : IBaseEntity
     {
         [BsonId]
-        public string Id { get; set; }
+        public string EntityId { get; set; }
         
         [BsonElement("lid")]
         public string LeagueId { get; set; }

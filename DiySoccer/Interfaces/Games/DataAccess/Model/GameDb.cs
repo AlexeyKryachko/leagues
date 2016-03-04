@@ -6,7 +6,7 @@ namespace Interfaces.Games.DataAccess.Model
     public class GameDb : IBaseEntity
     {
         [BsonId]
-        public string Id { get; set; }
+        public string EntityId { get; set; }
 
         [BsonElement("leagueId")]
         public string LeagueId { get; set; }
@@ -14,7 +14,7 @@ namespace Interfaces.Games.DataAccess.Model
         [BsonElement("homeTeam")]
         public GameTeamDb HomeTeam { get; set; }
 
-        [BsonElement("homeTeam")]
+        [BsonElement("guestTeam")]
         public GameTeamDb GuestTeam { get; set; }
     }
 }

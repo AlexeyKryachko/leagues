@@ -9,6 +9,9 @@ namespace Interfaces.Games.DataAccess.Model
         [BsonElement("id")]
         public string Id { get; set; }
 
+        [BsonElement("score")]
+        public int Score { get; set; }
+
         [BsonElement("members")]
         public IEnumerable<GameMemberDb> Members { get; set; }
 

@@ -1,6 +1,8 @@
 ﻿var LayoutView = Backbone.Marionette.LayoutView.extend({
     template: "#layout",
     regions: {
-        bigRegion: "#big-region"
+        up: "#up-region",
+        center: "#center-region",
+        down: "#down-region"
     }
 });

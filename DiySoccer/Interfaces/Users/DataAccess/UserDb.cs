@@ -6,7 +6,7 @@ namespace Interfaces.Users.DataAccess
     public class UserDb : IBaseEntity
     {
         [BsonId]
-        public string Id { get; set; }
+        public string EntityId { get; set; }
 
         [BsonElement("name")]
         public string Name { get; set; }

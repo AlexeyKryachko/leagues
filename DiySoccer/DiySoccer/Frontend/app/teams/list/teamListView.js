@@ -1,12 +1,12 @@
 ﻿var TeamListItemView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
-    className: 'cursor-pointer',
+    //className: 'cursor-pointer',
     template: "#team-item",
     events:{
         'click': 'onRedirect'
     },
     onRedirect: function () {
-        document.location.href = document.location.href + '/teams/' + this.model.get('id');
+        //document.location.href = document.location.href + '/teams/' + this.model.get('id');
     },
     onShow: function () {
     },
@@ -19,6 +19,16 @@ var TeamListView = Backbone.Marionette.CompositeView.extend({
     template: "#team-list",    
     childViewContainer: "tbody",
     childView: TeamListItemView,
+    emptyView: EmptyListView,
+    initialize: function (options) {
+        this.options = {
+            leagueId: options.leagueId
+        }
+    }
+});
+
+var TeamListActions = Backbone.Marionette.CompositeView.extend({
+    template: "#team-list-actions",
     ui: {
         'addBtn': '.add-new-team',
         'addGame': '.add-new-game'

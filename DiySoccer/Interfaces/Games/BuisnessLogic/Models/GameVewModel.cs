@@ -7,6 +7,9 @@ namespace Interfaces.Games.BuisnessLogic.Models
         [JsonProperty("leagueId")]
         public string LeagueId { get; set; }
 
+        [JsonProperty("customScores")]
+        public bool CustomScores { get; set; }
+
         [JsonProperty("homeTeam")]
         public GameTeamViewModel HomeTeam { get; set; }
 
