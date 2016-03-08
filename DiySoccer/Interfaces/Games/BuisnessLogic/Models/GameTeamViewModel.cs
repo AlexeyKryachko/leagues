@@ -8,6 +8,9 @@ namespace Interfaces.Games.BuisnessLogic.Models
         [JsonProperty("id")]
         public string Id { get; set; }
 
+        [JsonProperty("score")]
+        public int Score { get; set; }
+
         [JsonProperty("members")]
         public IEnumerable<GameMemberViewModel> Members { get; set; }
     }

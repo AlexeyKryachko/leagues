@@ -22,7 +22,7 @@ namespace Implementations.Core.DataAccess
         
         public void Add(T entity)
         {
-            entity.Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
+            entity.EntityId = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
             Collection.InsertOne(entity);
         }
 
@@ -30,19 +30,19 @@ namespace Implementations.Core.DataAccess
         {
             foreach (var entity in entities)
             {
-                entity.Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
+                entity.EntityId = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
             }
             Collection.InsertMany(entities);
         }
 
         public T Get(string id)
         {
-            return Collection.AsQueryable().FirstOrDefault(x => x.Id == id);
+            return Collection.AsQueryable().FirstOrDefault(x => x.EntityId == id);
         }
 
         public IEnumerable<T> GetRange(IEnumerable<string> ids)
         {
-            return Collection.AsQueryable().Where(x => ids.Contains(x.Id));
+            return Collection.AsQueryable().Where(x => ids.Contains(x.EntityId));
         }
     }
 }

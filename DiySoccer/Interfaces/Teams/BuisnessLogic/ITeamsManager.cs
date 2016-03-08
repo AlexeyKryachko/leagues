@@ -8,5 +8,7 @@ namespace Interfaces.Teams.BuisnessLogic
         void Create(CreateTeamViewModel model);
 
         IEnumerable<TeamViewModel> GetByLeague(string id);
+
+        IEnumerable<TeamStatisticViewModel> GetStatisticByLeague(string leagueId);
     }
 }

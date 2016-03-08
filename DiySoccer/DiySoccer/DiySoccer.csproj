@@ -166,7 +166,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Content Include="Frontend\app\games\new\gamenewActions.js" />
+    <Content Include="Frontend\app\games\new\gameNewActions.js" />
     <Content Include="Frontend\app\leagues\leaguesList.js" />
     <Content Include="Frontend\app\games\new\gameNewModule.js" />
     <Content Include="Frontend\app\games\new\gameNewView.js" />
@@ -182,6 +182,8 @@
     <Content Include="Frontend\css\ie10-viewport-bug-workaround.css" />
     <Content Include="Frontend\css\bootstrap-theme.min.css" />
     <Content Include="Frontend\css\bootstrap.min.css" />
+    <Content Include="Frontend\templates\custom-game.html" />
+    <Content Include="Frontend\templates\team-list-actions.html" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

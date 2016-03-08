@@ -16,7 +16,7 @@
         var leagueList = new LeagueList({ collection: leagues });
 
         this.listenTo(self.layout, 'show', function () {
-            self.layout.bigRegion.show(leagueList);
+            self.layout.center.show(leagueList);
         });
 
         self.app.mainRegion.show(self.layout);
