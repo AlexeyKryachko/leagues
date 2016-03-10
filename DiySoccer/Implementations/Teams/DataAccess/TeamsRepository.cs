@@ -26,5 +26,13 @@ namespace Implementations.Teams.DataAccess
         {
             return Collection.AsQueryable().Where(x => x.LeagueId == id);
         }
+
+        public void Update(string leagueId, string id, string name, IEnumerable<string> memberIds)
+        {
+            var filter = Builders<TeamDb>.Filter.Eq(x => x.LeagueId, leagueId) & Builders<TeamDb>.Filter.Eq(x => x.EntityId, id);
+            var update = Builders<TeamDb>.Update.Set(x => x.MemberIds, memberIds);
+
+            Collection.UpdateOne(filter, update);
+        }
     }
 }

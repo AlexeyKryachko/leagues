@@ -3,7 +3,11 @@
     //className: 'cursor-pointer',
     template: "#team-item",
     events:{
-        'click': 'onRedirect'
+        'click': 'onRedirect',
+        'click .edit-team': 'editTeam'
+    },
+    editTeam: function () {
+        document.location.href = document.location.href + '/teams/' + this.model.get('id') + '/edit';
     },
     onRedirect: function () {
         //document.location.href = document.location.href + '/teams/' + this.model.get('id');
@@ -11,7 +15,9 @@
     onShow: function () {
     },
     serializeData: function () {
-        return this.model.toJSON();
+        var model = this.model.toJSON();
+        model.goals = model.scores + '-' + model.missed + '(' + (model.scores - model.missed) + ')';
+        return model;
     }
 });
 

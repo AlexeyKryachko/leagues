@@ -17,6 +17,9 @@
         self.bindViews();
 
         self.app.mainRegion.show(self.layout);
+
+        self.teams.setLeagueId(self.options.leagueId);
+        self.teams.fetch();
     },
     createViews: function () {
         var self = this;

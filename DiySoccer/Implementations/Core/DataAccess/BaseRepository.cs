@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Interfaces.Core.DataAccess;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Implementations.Core.DataAccess

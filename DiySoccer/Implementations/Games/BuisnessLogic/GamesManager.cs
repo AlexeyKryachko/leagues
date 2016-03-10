@@ -13,9 +13,9 @@ namespace Implementations.Games.BuisnessLogic
             _gamesRepository = gamesRepository;
         }
 
-        public void Create(GameVewModel model)
+        public void Create(string leagueId, GameVewModel model)
         {
-            _gamesRepository.Create(model);
+            _gamesRepository.Create(leagueId, model);
         }
     }
 }

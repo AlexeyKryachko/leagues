@@ -1,4 +1,8 @@
-﻿<select class="form-control change-team">
+﻿<div class="form-group">
+    <input type="number" class="form-control team-score" value="{{score}}" {{#if disableScoreValue}}{{else}}disabled="disabled"{{/if}} />
+</div>
+
+<select class="form-control change-team">
     {{#if selected}}
     {{else}}
     <option selected="selected" disabled="disabled">Выберете команду</option>

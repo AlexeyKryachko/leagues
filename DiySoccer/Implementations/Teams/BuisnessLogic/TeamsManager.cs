@@ -22,13 +22,55 @@ namespace Implementations.Teams.BuisnessLogic
             _gamesRepository = gamesRepository;
         }
 
-        public void Create(CreateTeamViewModel model)
+        public void Create(string leagueId, CreateTeamViewModel model)
         {
-            var userEntities = model.Members.Select(x => new UserDb {Name = x.Value}).ToList();
+            var exitedIds = model.Members
+                .Where(x => !string.IsNullOrEmpty(x.Id))
+                .Select(x => x.Id);
+            var userEntities = model.Members
+                .Where(x => string.IsNullOrEmpty(x.Id))
+                .Select(x => new UserDb {Name = x.Value})
+                .ToList();
             _usersRepository.AddRange(userEntities);
 
             var userIds = userEntities.Select(x => x.EntityId);
-            _teamsRepository.Create(model.League, model.Name, userIds);
+            var memberIds = exitedIds.Concat(userIds);
+            _teamsRepository.Create(leagueId, model.Name, memberIds);
+        }
+
+        public TeamViewModel Get(string leagueId, string teamId)
+        {
+            var team = _teamsRepository.Get(teamId);
+            if (team == null)
+                return null;
+
+            var members = _usersRepository.GetRange(team.MemberIds);
+            return new TeamViewModel
+            {
+                Id = team.EntityId,
+                Name = team.Name,
+                Members = members.Select(x => new IdValueViewModel
+                {
+                    Id = x.EntityId,
+                    Value = x.Name
+                })
+            };
+        }
+
+        public void Update(string leagueId, string teamId, CreateTeamViewModel model)
+        {
+            var exitedIds = model.Members
+                .Where(x => !string.IsNullOrEmpty(x.Id))
+                .Select(x => x.Id);
+            var userEntities = model.Members
+                .Where(x => string.IsNullOrEmpty(x.Id))
+                .Select(x => new UserDb { Name = x.Value })
+                .ToList();
+            _usersRepository.AddRange(userEntities);
+
+            var userIds = userEntities.Select(x => x.EntityId);
+            var memberIds = exitedIds.Concat(userIds);
+            _teamsRepository.Update(leagueId, teamId, model.Name, memberIds);
         }
 
         public IEnumerable<TeamViewModel> GetByLeague(string id)

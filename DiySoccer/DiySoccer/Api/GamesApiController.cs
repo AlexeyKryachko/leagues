@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿
 using System.Web.Http;
 using Interfaces.Games.BuisnessLogic;
 using Interfaces.Games.BuisnessLogic.Models;
@@ -14,11 +14,11 @@ namespace DiySoccer.Api
             _gamesManager = gamesManager;
         }
 
-        [Route("api/games")]
+        [Route("api/leagues/{leagueId}/games")]
         [HttpPost]
-        public void Create([FromBody]GameVewModel model)
+        public void Create([FromUri]string leagueId, [FromBody]GameVewModel model)
         {
-            _gamesManager.Create(model);
+            _gamesManager.Create(leagueId, model);
         }
     }
 }

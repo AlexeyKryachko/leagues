@@ -1,19 +1,26 @@
-﻿<div class="form-group">
-    <input type="text" class="form-control new-team-name"/>
+﻿<div class="form-group row">
+    <div class="col-sm-4">
+        <input type="text" class="form-control new-team-name" placeholder="Название" value="{{name}}"/>
+    </div>
 </div>
+<div class="form-group row">
+    <div class="col-sm-4">
+        <input type="text" class="form-control new-member-name" placeholder="Имя"/>
+    </div>
+    <div class="col-sm-4">
+        <button type="button" class="btn btn-primary create-new-member">Добавить игрока</button>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-sm-4">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th>
-                    Игроки                    
-                </th>
-            </tr>
                 <tr>
                     <th>
-                        <input type="text" class="form-control new-member-name" />
-                        <button type="button" class="btn btn-lg btn-primary create-new-member">Добавить</button>
+                        Игроки
+                    </th>
+                    <th>
                     </th>
                 </tr>
             </thead>
@@ -22,5 +29,6 @@
     </div>
 </div>
 <div>
-    <button type="button" class="btn btn-lg btn-primary create-new-team">Create</button>
+    <button type="button" class="btn btn-primary create-new-team">Сохранить</button>
+    <button type="button" class="btn btn-link create-new-team-back">Назад</button>
 </div>

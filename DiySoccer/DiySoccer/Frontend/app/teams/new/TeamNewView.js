@@ -3,6 +3,13 @@
     className: 'cursor-pointer',
     template: "#team-new-member",
     ui: {
+        'removeMember': '.remove-new-member'
+    },
+    events: {
+        'click @ui.removeMember': 'removeMember'
+    },
+    removeMember: function() {
+        this.model.destroy();
     },
     onShow: function () {
         
@@ -19,16 +26,19 @@ var TeamNewView = Backbone.Marionette.CompositeView.extend({
     emptyView: EmptyListView,
     ui: {
         'createNewMember': '.create-new-member',
+        'back': '.create-new-team-back',
         'memberName': '.new-member-name',
         'teamName': '.new-team-name',
         'submit': '.create-new-team'
     },
     events: {
         'click @ui.createNewMember': 'createNewMember',
+        'click @ui.back': 'back',
         'change @ui.teamName': 'writeTeamName'
     },
     triggers: {
-        'click @ui.submit': 'submit'
+        'click @ui.submit': 'submit',
+        'click @ui.back': 'back'
     },
     writeTeamName: function() {
         this.model.set('name', this.ui.teamName.val());
@@ -39,6 +49,7 @@ var TeamNewView = Backbone.Marionette.CompositeView.extend({
             return;
 
         this.collection.add({ value: name });
+        this.ui.memberName.val('');
     },
     initialize: function (options) {
     }

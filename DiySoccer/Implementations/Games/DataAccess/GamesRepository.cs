@@ -12,11 +12,11 @@ namespace Implementations.Games.DataAccess
     {
         protected override string CollectionName => "games";
         
-        public void Create(GameVewModel model)
+        public void Create(string leagueId, GameVewModel model)
         {
             var entity = new GameDb
             {
-                LeagueId = model.LeagueId,
+                LeagueId = leagueId,
                 HomeTeam = new GameTeamDb
                 {
                     Id = model.HomeTeam.Id,
@@ -45,7 +45,7 @@ namespace Implementations.Games.DataAccess
                 },
             };
 
-            Collection.InsertOne(entity);
+            Add(entity);
         }
 
         public IEnumerable<GameDb> GetByLeague(string leagueId)

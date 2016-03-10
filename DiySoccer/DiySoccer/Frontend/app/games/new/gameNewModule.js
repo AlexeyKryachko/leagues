@@ -50,24 +50,25 @@
         var self = this;
         
         self.listenTo(self.layout, 'show', function () {
-
+            self.layout.up.show(self.optionsView);
             self.layout.left.show(self.leftGameView);
             self.layout.right.show(self.rightGameView);
             self.layout.down.show(self.saveView);
         });
 
+        self.listenTo(self.optionsView, 'scoring:changed', self.scoringShowing);
+
         self.listenTo(self.saveView, 'save', function () {
 
             var homeTeam = self.leftModel.toJSON();
-            homeTeam.score = self.optionsModel.get('homeTeamScore');
+            homeTeam.score = self.leftModel.get('score');
             homeTeam.members = self.leftScores.toJSON();
 
             var guestTeam = self.rightModel.toJSON();
-            guestTeam.score = self.optionsModel.get('guestTeamScore');
+            guestTeam.score = self.rightModel.get('score');
             guestTeam.members = self.rightScores.toJSON();
 
             var data = {
-                leagueId: self.options.leagueId,
                 customScores: self.optionsModel.get('customScores'),
                 homeTeam: homeTeam,
                 guestTeam: guestTeam
@@ -76,7 +77,7 @@
             console.log('Created game: ', data);
             $.ajax({
                 type: "POST",
-                url: "/api/games",
+                url: '/api/leagues/' + self.options.leagueId + '/games',
                 data: data,
                 success: function () {
                     document.location.href = '#leagues/' + self.options.leagueId;
@@ -93,6 +94,16 @@
             self.rightScores.reset();
         });
     },
+    scoringShowing: function (disabled) {
+        var self = this;
+        if (disabled) {
+            self.leftGameView.enableScore();
+            self.rightGameView.enableScore();
+        } else {
+            self.leftGameView.disableScore();
+            self.rightGameView.disableScore();
+        }
+    },
     onStop: function (options) {
         var self = this;
 
@@ -100,6 +111,7 @@
         self.saveView.destroy();
         self.leftGameView.destroy();
         self.rightGameView.destroy();
+        self.layout.destroy();
     }
 });
 

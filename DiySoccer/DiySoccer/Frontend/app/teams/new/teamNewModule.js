@@ -8,30 +8,51 @@
 
         self.model = new Backbone.Model();
         self.members = new Backbone.Collection();
-
-        self.layout = new LayoutView();
-        self.newTeamView = new TeamNewView({ model: this.model, collection: this.members });
-
-        self.listenTo(self.layout, 'show', function () {
-            self.layout.center.show(self.newTeamView);
-        });
-
-        self.listenTo(self.newTeamView, 'submit', this.createTeam);
     },
-    createTeam: function () {
+    onSubmit: function () {
+        var self = this;
+        
+        if (self.options.teamId) {
+            self._updateTeam();
+        } else {
+            self._createTeam();
+        }
+    },
+    onCancel: function () {
+        document.location.href = '#leagues/' + this.options.leagueId;
+    },
+    _updateTeam: function () {
+        var self = this;
+
         var data = {
-            league: this.options.leagueId,
-            name: this.model.get('name'),
-            members: this.members.toJSON()
+            name: self.model.get('name'),
+            members: self.members.toJSON()
         }
 
-        console.log(data);
+        $.ajax({
+            type: "PUT",
+            url: '/api/leagues/' + self.options.leagueId + '/teams/' + self.model.get('id'),
+            data: data,
+            success: function () {
+                document.location.href = '#leagues/' + self.options.leagueId;
+            }
+        });
+    },
+    _createTeam: function () {
+        var self = this;
+
+        var data = {
+            league: self.options.leagueId,
+            name: self.model.get('name'),
+            members: self.members.toJSON()
+        }
+
         $.ajax({
             type: "POST",
-            url: "/api/teams",
+            url: '/api/leagues/' + self.options.leagueId + '/teams/',
             data: data,
-            success: function() {
-                document.location.href = '#leagues/' + this.options.leagueId;
+            success: function () {
+                document.location.href = '#leagues/' + self.options.leagueId;
             }
         });
     },
@@ -39,13 +60,64 @@
         var self = this;
 
         self.options = options;
+        if (options.teamId) {
+            self._onEditStart(options);
+        } else {
+            self._onCreateStart(options);
+        }
+    },
+    _onEditStart: function (options) {
+        var self = this;
+
+        self.options = options;
+
+        $.get('/api/league/' + options.leagueId + '/teams/' + options.teamId, function (response) {
+            self.model.clear();
+            self.model.set('name', response.name);
+            self.model.set('id', response.id);
+            self.members.reset(response.members);
+
+            self.createViews();
+            self.bindViews();
+
+            self.app.mainRegion.show(self.layout);
+        });
+    },
+    _onCreateStart: function (options) {
+        var self = this;
+
+        self.options = options;
+
+        self.model.clear();
         self.members.reset();
+
+        self.createViews();
+        self.bindViews();
 
         self.app.mainRegion.show(self.layout);
     },
+    createViews: function () {
+        var self = this;
+
+        self.layout = new LayoutView();
+        self.newTeamView = new TeamNewView({ model: this.model, collection: this.members });
+    },
+    bindViews: function () {
+        var self = this;
+
+        self.listenTo(self.layout, 'show', function () {
+            self.layout.center.show(self.newTeamView);
+        });
+
+        self.listenTo(self.newTeamView, 'submit', this.onSubmit);
+        self.listenTo(self.newTeamView, 'back', this.onCancel);
+    },
 
     onStop: function (options) {
-        console.log('[teamNewModule] stopped');
+        var self = this;
+
+        self.newTeamView.destroy();
+        self.layout.destroy();
     }
 });
 

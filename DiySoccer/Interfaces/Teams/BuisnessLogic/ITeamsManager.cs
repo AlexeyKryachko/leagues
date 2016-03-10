@@ -5,7 +5,11 @@ namespace Interfaces.Teams.BuisnessLogic
 {
     public interface ITeamsManager
     {
-        void Create(CreateTeamViewModel model);
+        void Create(string leagueId, CreateTeamViewModel model);
+
+        TeamViewModel Get(string leagueId, string teamId);
+
+        void Update(string leagueId, string teamId, CreateTeamViewModel model);
 
         IEnumerable<TeamViewModel> GetByLeague(string id);
 
