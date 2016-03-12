@@ -57,6 +57,33 @@ namespace Implementations.Teams.BuisnessLogic
             };
         }
 
+        public TeamInfoViewModel GetInfo(string leagueId, string teamId)
+        {
+            var games = _gamesRepository.GetByTeam(leagueId, teamId);
+            var teamIds = games.Select(x => x.GuestTeam.Id).Concat(games.Select(x => x.HomeTeam.Id)).ToList();
+            teamIds.Add(teamId);
+            teamIds = teamIds.Distinct().ToList();
+            var teams = _teamsRepository
+                .GetRange(teamIds)
+                .ToDictionary(x => x.EntityId, y => y.Name);
+
+            return new TeamInfoViewModel
+            {
+                Id = teamId,
+                Name = teams[teamId],
+                Games = games.Select(x => new TeamInfoGameViewModel
+                {
+                    Id = x.EntityId,
+                    OpponentName = x.GuestTeam.Id == teamId
+                        ? teams[x.HomeTeam.Id]
+                        : teams[x.GuestTeam.Id],
+                    Goals = x.GuestTeam.Id == teamId
+                        ? x.HomeTeam.Score + ":" + x.GuestTeam.Score
+                        : x.GuestTeam.Score + ":" + x.HomeTeam.Score
+                })
+            };
+        }
+
         public void Update(string leagueId, string teamId, CreateTeamViewModel model)
         {
             var exitedIds = model.Members

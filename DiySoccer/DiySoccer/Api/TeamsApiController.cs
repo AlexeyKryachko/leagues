@@ -18,26 +18,26 @@ namespace DiySoccer.Api
 
         [Route("api/league/{leagueId}/teams/{teamId}")]
         [HttpGet]
-        public IHttpActionResult GetTeamsByLeague(string leagueId, string teamId)
+        public IHttpActionResult GetTeamByLeague(string leagueId, string teamId)
         {
             var team = _teamsManager.Get(leagueId, teamId);
             return Json(team);
         }
 
-        [Route("api/teams/getTeamsByLeague/{leagueId}")]
+        [Route("api/leagues/{leagueId}/teams/{teamId}/info")]
+        [HttpGet]
+        public IHttpActionResult GetTeamInfo(string leagueId, string teamId)
+        {
+            var teamInfo = _teamsManager.GetInfo(leagueId, teamId);
+            return Json(teamInfo);
+        }
+
+        [Route("api/leagues/{leagueId}/teams")]
         [HttpGet]
         public IHttpActionResult GetTeamsByLeague(string leagueId)
         {
             var teams = _teamsManager.GetByLeague(leagueId).ToList();
             return Json(teams);
-        }
-        
-        [Route("api/teams/statistic/{leagueId}")]
-        [HttpGet]
-        public IHttpActionResult GetStatistic(string leagueId)
-        {
-            var statistic = _teamsManager.GetStatisticByLeague(leagueId).ToList();
-            return Json(statistic);
         }
 
         #endregion

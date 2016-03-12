@@ -1,6 +1,6 @@
 ﻿var TeamListItemView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
-    //className: 'cursor-pointer',
+    className: 'cursor-pointer',
     template: "#team-item",
     events:{
         'click': 'onRedirect',
@@ -10,7 +10,7 @@
         document.location.href = document.location.href + '/teams/' + this.model.get('id') + '/edit';
     },
     onRedirect: function () {
-        //document.location.href = document.location.href + '/teams/' + this.model.get('id');
+        document.location.href = document.location.href + '/teams/' + this.model.get('id');
     },
     onShow: function () {
     },

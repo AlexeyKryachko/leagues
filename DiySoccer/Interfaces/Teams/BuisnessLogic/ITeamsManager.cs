@@ -9,6 +9,8 @@ namespace Interfaces.Teams.BuisnessLogic
 
         TeamViewModel Get(string leagueId, string teamId);
 
+        TeamInfoViewModel GetInfo(string leagueId, string teamId);
+
         void Update(string leagueId, string teamId, CreateTeamViewModel model);
 
         IEnumerable<TeamViewModel> GetByLeague(string id);

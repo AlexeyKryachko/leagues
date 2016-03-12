@@ -52,5 +52,10 @@ namespace Implementations.Games.DataAccess
         {
             return Collection.AsQueryable().Where(x => x.LeagueId == leagueId);
         }
+
+        public IEnumerable<GameDb> GetByTeam(string leagueId, string teamId)
+        {
+            return Collection.AsQueryable().Where(x => x.GuestTeam.Id == teamId || x.HomeTeam.Id == teamId);
+        }
     }
 }

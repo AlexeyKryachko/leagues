@@ -161,6 +161,7 @@
   <ItemGroup>
     <Compile Include="Api\BaseApiController.cs" />
     <Compile Include="Api\GamesApiController.cs" />
+    <Compile Include="Api\LeaguesApiController.cs" />
     <Compile Include="Api\TeamsApiController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -174,6 +175,8 @@
     <Content Include="Frontend\app\shared\emptyListView.js" />
     <Content Include="Frontend\app\shared\saveView.js" />
     <Content Include="Frontend\app\shared\splittedLayout.js" />
+    <Content Include="Frontend\app\teams\info\teamInfoModule.js" />
+    <Content Include="Frontend\app\teams\info\teamInfoView.js" />
     <Content Include="Frontend\app\teams\new\teamNewModule.js" />
     <Content Include="Frontend\app\teams\new\teamNewView.js" />
     <Content Include="Frontend\app\teams\list\teamListView.js" />
@@ -183,6 +186,8 @@
     <Content Include="Frontend\css\bootstrap-theme.min.css" />
     <Content Include="Frontend\css\bootstrap.min.css" />
     <Content Include="Frontend\templates\custom-game.html" />
+    <Content Include="Frontend\templates\team-game.html" />
+    <Content Include="Frontend\templates\team-games.html" />
     <Content Include="Frontend\templates\team-list-actions.html" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

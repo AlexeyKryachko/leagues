@@ -3,7 +3,7 @@
         this.leagueId = 0;
     },
     url: function() {
-        return '/api/teams/getTeamsByLeague/' + this.leagueId;
+        return '/api/leagues/' + this.leagueId + 'teams/';
     },
     setLeagueId: function(leagueId) {
         this.leagueId = leagueId;
@@ -15,7 +15,7 @@ var TeamsStatistic = Backbone.Collection.extend({
         this.leagueId = 0;
     },
     url: function() {
-        return '/api/teams/statistic/' + this.leagueId;
+        return '/api/leagues/' + this.leagueId + '/statistic/';
     },
     setLeagueId: function(leagueId) {
         this.leagueId = leagueId;

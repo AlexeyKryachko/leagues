@@ -10,5 +10,7 @@ namespace Interfaces.Games.DataAccess
         void Create(string leagueId, GameVewModel model);
 
         IEnumerable<GameDb> GetByLeague(string leagueId);
+
+        IEnumerable<GameDb> GetByTeam(string leagueId, string teamId);
     }
 }
