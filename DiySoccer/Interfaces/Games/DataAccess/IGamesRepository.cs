@@ -7,10 +7,13 @@ namespace Interfaces.Games.DataAccess
 {
     public interface IGamesRepository : IBaseRepository<GameDb>
     {
-        void Create(string leagueId, GameVewModel model);
-
         IEnumerable<GameDb> GetByLeague(string leagueId);
 
         IEnumerable<GameDb> GetByTeam(string leagueId, string teamId);
+
+        void Create(string leagueId, GameVewModel model);
+
+        void Update(string leagueId, string id, int guestScore, IEnumerable<GameMemberDb> guestMembersScores,
+            int homeScore, IEnumerable<GameMemberDb> homeMembersScores);
     }
 }

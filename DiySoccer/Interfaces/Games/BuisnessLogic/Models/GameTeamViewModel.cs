@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Interfaces.Games.BuisnessLogic.Models
@@ -13,5 +14,10 @@ namespace Interfaces.Games.BuisnessLogic.Models
 
         [JsonProperty("members")]
         public IEnumerable<GameMemberViewModel> Members { get; set; }
+
+        public GameTeamViewModel()
+        {
+            Members = Enumerable.Empty<GameMemberViewModel>();
+        }
     }
 }

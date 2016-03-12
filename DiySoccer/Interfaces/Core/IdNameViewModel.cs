@@ -2,12 +2,12 @@
 
 namespace Interfaces.Core
 {
-    public class IdValueViewModel
+    public class IdNameViewModel
     {
         [JsonProperty("id")]
         public string Id { get; set; }
 
-        [JsonProperty("value")]
-        public string Value { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
     }
 }

@@ -58,7 +58,7 @@
   <ItemGroup>
     <Compile Include="Core\DataAccess\IBaseEntity.cs" />
     <Compile Include="Core\DataAccess\IBaseRepository.cs" />
-    <Compile Include="Core\IdValueViewModel.cs" />
+    <Compile Include="Core\IdNameViewModel.cs" />
     <Compile Include="Core\ScoreCalculation.cs" />
     <Compile Include="Games\BuisnessLogic\IGamesManager.cs" />
     <Compile Include="Games\BuisnessLogic\Models\GameMemberViewModel.cs" />

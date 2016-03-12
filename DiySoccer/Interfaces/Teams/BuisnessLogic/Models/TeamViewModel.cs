@@ -14,11 +14,11 @@ namespace Interfaces.Teams.BuisnessLogic.Models
         public string Name { get; set; }
 
         [JsonProperty("members")]
-        public IEnumerable<IdValueViewModel> Members { get; set; }
+        public IEnumerable<IdNameViewModel> Members { get; set; }
 
         public TeamViewModel()
         {
-            Members = Enumerable.Empty<IdValueViewModel>();
+            Members = Enumerable.Empty<IdNameViewModel>();
         }
     }
 }

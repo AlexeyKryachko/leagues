@@ -167,13 +167,14 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutofacConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Content Include="Frontend\app\games\new\gameNewActions.js" />
+    <Content Include="Frontend\app\games\game\gameActions.js" />
     <Content Include="Frontend\app\leagues\leaguesList.js" />
-    <Content Include="Frontend\app\games\new\gameNewModule.js" />
-    <Content Include="Frontend\app\games\new\gameNewView.js" />
+    <Content Include="Frontend\app\games\game\gameModule.js" />
+    <Content Include="Frontend\app\games\game\gameView.js" />
     <Content Include="Frontend\app\models\teams.js" />
+    <Content Include="Frontend\app\shared\bottom\cancelView.js" />
     <Content Include="Frontend\app\shared\emptyListView.js" />
-    <Content Include="Frontend\app\shared\saveView.js" />
+    <Content Include="Frontend\app\shared\bottom\saveView.js" />
     <Content Include="Frontend\app\shared\splittedLayout.js" />
     <Content Include="Frontend\app\teams\info\teamInfoModule.js" />
     <Content Include="Frontend\app\teams\info\teamInfoView.js" />
@@ -186,6 +187,7 @@
     <Content Include="Frontend\css\bootstrap-theme.min.css" />
     <Content Include="Frontend\css\bootstrap.min.css" />
     <Content Include="Frontend\templates\custom-game.html" />
+    <Content Include="Frontend\templates\cancel.html" />
     <Content Include="Frontend\templates\team-game.html" />
     <Content Include="Frontend\templates\team-games.html" />
     <Content Include="Frontend\templates\team-list-actions.html" />

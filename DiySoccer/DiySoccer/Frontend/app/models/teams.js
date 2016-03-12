@@ -3,7 +3,7 @@
         this.leagueId = 0;
     },
     url: function() {
-        return '/api/leagues/' + this.leagueId + 'teams/';
+        return '/api/leagues/' + this.leagueId + '/teams/';
     },
     setLeagueId: function(leagueId) {
         this.leagueId = leagueId;

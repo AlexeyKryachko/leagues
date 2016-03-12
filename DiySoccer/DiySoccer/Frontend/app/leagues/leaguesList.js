@@ -1,7 +1,6 @@
 ﻿var leagueView = Backbone.Marionette.ItemView.extend({
     template: "#leagues-item",
     onShow: function () {
-        console.log('[leagueView] shown')
     }
 });
 

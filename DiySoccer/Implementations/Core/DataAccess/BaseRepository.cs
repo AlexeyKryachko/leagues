@@ -45,5 +45,10 @@ namespace Implementations.Core.DataAccess
         {
             return Collection.AsQueryable().Where(x => ids.Contains(x.EntityId));
         }
+
+        public void Delete(string id)
+        {
+            Collection.DeleteOne(x => x.EntityId == id);
+        }
     }
 }

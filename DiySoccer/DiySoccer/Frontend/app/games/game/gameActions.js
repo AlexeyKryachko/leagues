@@ -1,4 +1,4 @@
-﻿var GameNewOptionsView = Backbone.Marionette.ItemView.extend({
+﻿var GameOptionsView = Backbone.Marionette.ItemView.extend({
     template: "#custom-game",
     ui: {
         'customScoring': '.custom-scoring'

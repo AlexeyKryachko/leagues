@@ -11,7 +11,17 @@ namespace Implementations.Games.DataAccess
     public class GamesRepository : BaseRepository<GameDb>, IGamesRepository
     {
         protected override string CollectionName => "games";
-        
+
+        public IEnumerable<GameDb> GetByLeague(string leagueId)
+        {
+            return Collection.AsQueryable().Where(x => x.LeagueId == leagueId);
+        }
+
+        public IEnumerable<GameDb> GetByTeam(string leagueId, string teamId)
+        {
+            return Collection.AsQueryable().Where(x => x.GuestTeam.Id == teamId || x.HomeTeam.Id == teamId);
+        }
+
         public void Create(string leagueId, GameVewModel model)
         {
             var entity = new GameDb
@@ -48,14 +58,16 @@ namespace Implementations.Games.DataAccess
             Add(entity);
         }
 
-        public IEnumerable<GameDb> GetByLeague(string leagueId)
+        public void Update(string leagueId, string id, int guestScore, IEnumerable<GameMemberDb> guestMembersScores, int homeScore, IEnumerable<GameMemberDb> homeMembersScores)
         {
-            return Collection.AsQueryable().Where(x => x.LeagueId == leagueId);
-        }
+            var filter = Builders<GameDb>.Filter.Eq(x => x.LeagueId, leagueId) & Builders<GameDb>.Filter.Eq(x => x.EntityId, id);
+            var update = Builders<GameDb>.Update
+                .Set(x => x.GuestTeam.Score, guestScore)
+                .Set(x => x.GuestTeam.Members, guestMembersScores)
+                .Set(x => x.HomeTeam.Score, homeScore)
+                .Set(x => x.HomeTeam.Members, homeMembersScores);
 
-        public IEnumerable<GameDb> GetByTeam(string leagueId, string teamId)
-        {
-            return Collection.AsQueryable().Where(x => x.GuestTeam.Id == teamId || x.HomeTeam.Id == teamId);
+            Collection.UpdateOne(filter, update);
         }
     }
 }

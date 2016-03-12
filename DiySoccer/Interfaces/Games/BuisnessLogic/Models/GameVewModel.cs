@@ -4,6 +4,9 @@ namespace Interfaces.Games.BuisnessLogic.Models
 {
     public class GameVewModel
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
         [JsonProperty("customScores")]
         public bool CustomScores { get; set; }
 

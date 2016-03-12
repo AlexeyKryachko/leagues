@@ -1,4 +1,4 @@
-﻿var GameNewScoresView = Backbone.Marionette.ItemView.extend({
+﻿var GameScoresView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
     template: "#game-new-member",
     ui: {
@@ -29,10 +29,10 @@
     }
 });
 
-var GameNewView = Backbone.Marionette.CompositeView.extend({
+var GameView = Backbone.Marionette.CompositeView.extend({
     template: "#game-new",    
     childViewContainer: "tbody",
-    childView: GameNewScoresView,
+    childView: GameScoresView,
     emptyView: EmptyListView,
     childEvents: {
         'score:changed': 'recalculateScore'
@@ -46,7 +46,6 @@ var GameNewView = Backbone.Marionette.CompositeView.extend({
         'change @ui.score': 'changeScore'
     },
     triggers: {
-        'click @ui.submit': 'submit'
     },
     recalculateScore: function () {
         var score = 0;

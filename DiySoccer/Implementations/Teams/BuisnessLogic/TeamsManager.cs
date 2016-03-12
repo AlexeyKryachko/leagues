@@ -29,7 +29,7 @@ namespace Implementations.Teams.BuisnessLogic
                 .Select(x => x.Id);
             var userEntities = model.Members
                 .Where(x => string.IsNullOrEmpty(x.Id))
-                .Select(x => new UserDb {Name = x.Value})
+                .Select(x => new UserDb {Name = x.Name})
                 .ToList();
             _usersRepository.AddRange(userEntities);
 
@@ -49,10 +49,10 @@ namespace Implementations.Teams.BuisnessLogic
             {
                 Id = team.EntityId,
                 Name = team.Name,
-                Members = members.Select(x => new IdValueViewModel
+                Members = members.Select(x => new IdNameViewModel
                 {
                     Id = x.EntityId,
-                    Value = x.Name
+                    Name = x.Name
                 })
             };
         }
@@ -91,7 +91,7 @@ namespace Implementations.Teams.BuisnessLogic
                 .Select(x => x.Id);
             var userEntities = model.Members
                 .Where(x => string.IsNullOrEmpty(x.Id))
-                .Select(x => new UserDb { Name = x.Value })
+                .Select(x => new UserDb { Name = x.Name })
                 .ToList();
             _usersRepository.AddRange(userEntities);
 
@@ -110,10 +110,10 @@ namespace Implementations.Teams.BuisnessLogic
             {
                 Id = x.EntityId,
                 Name = x.Name,
-                Members = x.MemberIds.Select(y => new IdValueViewModel
+                Members = x.MemberIds.Select(y => new IdNameViewModel
                 {
                     Id = y,
-                    Value = users[y].Name
+                    Name = users[y].Name
                 })
             });
         }
