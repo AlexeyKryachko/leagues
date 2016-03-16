@@ -39,7 +39,9 @@ var GameView = Backbone.Marionette.CompositeView.extend({
     },
     ui: {
         'changeTeam': '.change-team',
-        'score': '.team-score'
+        'score': '.team-score',
+        'rent': '.add-custom-member',
+        'addRent': '#add-custom-member-button'
     },
     events: {
         'change @ui.changeTeam': 'changeTeam',
@@ -74,7 +76,21 @@ var GameView = Backbone.Marionette.CompositeView.extend({
         this.teams = options.teams;
     },
     onShow: function() {
-        
+        this.ui.rent.typeahead({
+            source: function (query, process) {
+                return $.get('/umbraco/backoffice/api/ADUsersBackofficeApi/FindUser', { query: query }, function (response) {
+                    return process(response);
+                });
+            },
+            displayText: function (item) {
+                return item.value;
+            },
+            updater: function (item) {
+                $('#aduser-searcher').prop('disabled', 'disabled');
+                $scope.loadData(item.id);
+                return item.value;
+            }
+        });
     },
     serializeData: function() {
         var model = this.model.toJSON();
@@ -82,11 +98,16 @@ var GameView = Backbone.Marionette.CompositeView.extend({
         if (this.teams.length == 0)
             return model;
 
+        model.rent = false;
         model.teams = [];
         _.each(this.teams.models, function (team) {
+            var selected = team.get('id') == model.id;
+            if (selected)
+                model.rent = true;
+
             model.teams.push({ id: team.get('id'), name: team.get('name'), selected: team.get('id') == model.id });
         });
-
+        
         return model;
     },
     modelEvents: {

@@ -48,7 +48,7 @@ var TeamNewView = Backbone.Marionette.CompositeView.extend({
         if (!name || name == '')
             return;
 
-        this.collection.add({ value: name });
+        this.collection.add({ name: name });
         this.ui.memberName.val('');
     },
     initialize: function (options) {

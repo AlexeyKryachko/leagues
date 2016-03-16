@@ -73,6 +73,7 @@
     <Compile Include="Teams\BuisnessLogic\Models\TeamStatisticViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamInfoViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamViewModel.cs" />
+    <Compile Include="Users\BuisnessLogic\IUsersManager.cs" />
     <Compile Include="Users\DataAccess\IUsersRepository.cs" />
     <Compile Include="Users\DataAccess\UserDb.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\CreateTeamViewModel.cs" />

@@ -70,6 +70,8 @@
 
     },
     _onNew: function () {
+        var self = this;
+
         self.leftModel.clear();
         self.leftScores.reset();
         self.rightModel.clear();

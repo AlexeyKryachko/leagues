@@ -18,7 +18,7 @@
     onShow: function () {
     },
     serializeData: function () {
-        return this.model.toJSON();
+        return  this.model.toJSON();
     }
 });
 

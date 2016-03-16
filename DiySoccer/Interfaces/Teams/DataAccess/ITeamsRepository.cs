@@ -10,5 +10,7 @@ namespace Interfaces.Teams.DataAccess
         IEnumerable<TeamDb> GetByLeague(string id);
 
         void Update(string leagueId, string id, string name, IEnumerable<string> memberIds);
+
+        IEnumerable<TeamDb> FindByUsers(string leagueId, IEnumerable<string> userIds);
     }
 }

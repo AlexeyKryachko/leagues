@@ -78,8 +78,8 @@ namespace Implementations.Teams.BuisnessLogic
                         ? teams[x.HomeTeam.Id]
                         : teams[x.GuestTeam.Id],
                     Goals = x.GuestTeam.Id == teamId
-                        ? x.HomeTeam.Score + ":" + x.GuestTeam.Score
-                        : x.GuestTeam.Score + ":" + x.HomeTeam.Score
+                        ? x.HomeTeam.Score + ":" + x.GuestTeam.Score + "*"
+                        : x.GuestTeam.Score + ":" + x.HomeTeam.Score + "*"
                 })
             };
         }

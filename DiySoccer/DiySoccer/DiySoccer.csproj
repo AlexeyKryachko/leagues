@@ -162,6 +162,7 @@
     <Compile Include="Api\BaseApiController.cs" />
     <Compile Include="Api\GamesApiController.cs" />
     <Compile Include="Api\LeaguesApiController.cs" />
+    <Compile Include="Api\UsersApiController.cs" />
     <Compile Include="Api\TeamsApiController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
