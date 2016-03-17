@@ -44,6 +44,7 @@
     onStop: function (options) {
         var self = this;
 
+        self.bottomView.destroy();
         self.teamInfoView.destroy();
         self.layout.destroy();
     }

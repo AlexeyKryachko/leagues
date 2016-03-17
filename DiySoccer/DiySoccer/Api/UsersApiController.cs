@@ -1,4 +1,5 @@
 ﻿
+using System.Linq;
 using System.Web.Http;
 using Interfaces.Users.BuisnessLogic;
 
@@ -15,11 +16,14 @@ namespace DiySoccer.Api
 
         #region GET
 
-        /*[Route("api/league/{leagueId}/teams/{teamId}")]
+        [Route("api/league/{leagueId}/users/")]
         [HttpGet]
-        public IHttpActionResult GetTeamByLeague(string leagueId, string teamId)
+        public IHttpActionResult Find(string leagueId, string query, string exceptTeamIds, int page, int pageSize)
         {
-        }*/
+            var exceptTeamIdsList = string.IsNullOrEmpty(exceptTeamIds) ? Enumerable.Empty<string>() : exceptTeamIds.Split(',').Where(x => !string.IsNullOrEmpty(x));
+            var results = _usersManager.Find(leagueId, query, exceptTeamIdsList, page, pageSize);
+            return Json(results);
+        }
 
         #endregion
     }

@@ -23,16 +23,22 @@ namespace Implementations.Core.DataAccess
         
         public void Add(string leagueId, T entity)
         {
-            entity.EntityId = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
+            if (entity == null)
+                return;
+
+            entity.EntityId = ObjectId.GenerateNewId().ToString();
             entity.LeagueId = leagueId;
             Collection.InsertOne(entity);
         }
 
         public void AddRange(string leagueId, IEnumerable<T> entities)
         {
+            if (entities == null || !entities.Any())
+                return;
+
             foreach (var entity in entities)
             {
-                entity.EntityId = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
+                entity.EntityId = ObjectId.GenerateNewId().ToString();
                 entity.LeagueId = leagueId;
             }
             Collection.InsertMany(entities);

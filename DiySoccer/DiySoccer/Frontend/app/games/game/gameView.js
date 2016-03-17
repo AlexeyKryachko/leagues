@@ -45,7 +45,8 @@ var GameView = Backbone.Marionette.CompositeView.extend({
     },
     events: {
         'change @ui.changeTeam': 'changeTeam',
-        'change @ui.score': 'changeScore'
+        'change @ui.score': 'changeScore',
+        'click @ui.addRent': 'addRent'
     },
     triggers: {
     },
@@ -74,13 +75,28 @@ var GameView = Backbone.Marionette.CompositeView.extend({
     },
     initialize: function (options) {
         this.teams = options.teams;
+        this.leagueId = options.leagueId;
     },
-    onShow: function () {
+    addRent: function () {
         var self = this;
 
-        /*this.ui.rent.typeahead({
+        var val = self.ui.rent.val();
+        if (!self.selectedRent || !val)
+            return;
+
+        self.collection.add(self.selectedRent);
+        self.ui.rent.val('');
+        self.selectedRent = null;
+    },
+    onRender: function () {
+        var self = this;
+
+        $(this.ui.rent).typeahead({
             source: function (query, process) {
-                return $.get('/api/', { query: query }, function (response) {
+                var url = '/api/league/' + self.leagueId + '/users?page=0&pageSize=10';
+                if (self.model.get('id'))
+                    url += '&exceptTeamIds=' + self.model.get('id');
+                return $.get(url, { query: query }, function (response) {
                     return process(response);
                 });
             },
@@ -88,9 +104,10 @@ var GameView = Backbone.Marionette.CompositeView.extend({
                 return item.name;
             },
             updater: function (item) {
-                return '';
+                self.selectedRent = item;
+                return item.name;
             }
-        });*/
+        });
     },
     serializeData: function() {
         var model = this.model.toJSON();

@@ -110,8 +110,8 @@
         var self = this;
 
         self.layout = new SplittedLayout();
-        self.leftGameView = new GameView({ model: self.leftModel, collection: self.leftScores, teams: self.teams });
-        self.rightGameView = new GameView({ model: self.rightModel, collection: self.rightScores, teams: self.teams });
+        self.leftGameView = new GameView({ model: self.leftModel, collection: self.leftScores, teams: self.teams, leagueId: self.options.leagueId });
+        self.rightGameView = new GameView({ model: self.rightModel, collection: self.rightScores, teams: self.teams, leagueId: self.options.leagueId });
         self.optionsView = new GameOptionsView({ model: self.optionsModel });
         self.saveView = new SaveView();
     },

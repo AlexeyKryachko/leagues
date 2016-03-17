@@ -6,7 +6,10 @@
         'click': 'onRedirect',
         'click .edit-team': 'editTeam'
     },
-    editTeam: function () {
+    editTeam: function (e) {
+        e.preventDefault();
+        if (e.stopPropagation)
+            e.stopPropagation();
         document.location.href = document.location.href + '/teams/' + this.model.get('id') + '/edit';
     },
     onRedirect: function () {
@@ -16,7 +19,7 @@
     },
     serializeData: function () {
         var model = this.model.toJSON();
-        model.goals = model.scores + '-' + model.missed + '(' + (model.scores - model.missed) + ')';
+        model.goals = model.scores + '-' + model.missed + ' (' + (model.scores - model.missed) + ')';
         return model;
     }
 });
@@ -30,6 +33,9 @@ var TeamListView = Backbone.Marionette.CompositeView.extend({
         this.options = {
             leagueId: options.leagueId
         }
+    },
+    collectionEvents: {
+        'sync': 'render'
     }
 });
 

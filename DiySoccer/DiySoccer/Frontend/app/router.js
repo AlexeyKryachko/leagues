@@ -1,6 +1,7 @@
 ﻿var MyRouter = Marionette.AppRouter.extend({
     routes: {
         "": "defaultRoute",
+        "leagues/": "defaultRoute",
         "leagues/:leagueId": "tableRoute",
         "leagues/:leagueId/teams/new": "newTeamRoute",
         "leagues/:leagueId/teams/:teamId/edit": "editTeamRoute",
@@ -17,11 +18,11 @@
     },
     newTeamRoute: function (leagueId) {
         var options = { leagueId: leagueId };
-        this.changeModule(MyApp.submodules.teamNew, options);
+        this.changeModule(MyApp.submodules.team, options);
     },
     editTeamRoute: function (leagueId, teamId) {
         var options = { leagueId: leagueId, teamId: teamId };
-        this.changeModule(MyApp.submodules.teamNew, options);
+        this.changeModule(MyApp.submodules.team, options);
     },
     infoTeamRoute: function (leagueId, teamId) {
         var options = { leagueId: leagueId, teamId: teamId };

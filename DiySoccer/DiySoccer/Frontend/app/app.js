@@ -5,7 +5,7 @@ MyApp.addRegions({
 });
 
 MyApp.on('start', function () {
-    var templateIds = ['layout', 'splitted-layout', 'leagues-list', 'leagues-item', 'team-list', 'team-item', 'team-new', 'team-new-member', 'empty-list-view',
+    var templateIds = ['layout', 'splitted-layout', 'leagues-list', 'leagues-item', 'team-list', 'team-item', 'team', 'team-member', 'empty-list-view',
         'game-new', 'game-new-member', 'save', 'team-list-actions', 'custom-game', 'team-games', 'team-game', 'cancel'];
     var preloading = Backbone.Marionette.TemplateCache.preloadTemplates(templateIds, this);
     $.when(preloading).done(function () {

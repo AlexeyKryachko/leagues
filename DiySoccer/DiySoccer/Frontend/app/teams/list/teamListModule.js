@@ -27,6 +27,7 @@
         self.layout = new LayoutView();
         self.tableView = new TeamListView({ collection: self.teams, leagueId: self.options.leagueId });
         self.actions = new TeamListActions({ leagueId: self.options.leagueId });
+        self.bottomView = new CancelView();
     },
     bindViews: function () {
         var self = this;
@@ -34,9 +35,20 @@
         self.listenTo(self.layout, 'show', function () {
             self.layout.up.show(self.actions);
             self.layout.center.show(self.tableView);
+            self.layout.down.show(self.bottomView);
+        });
+
+        self.listenTo(self.bottomView, 'cancel', function () {
+            document.location.href = '#leagues/';
         });
     },
     onStop: function (options) {
+        var self = this;
+
+        self.bottomView.destroy();
+        self.actions.destroy();
+        self.tableView.destroy();
+        self.layout.destroy();
     }
 });
 

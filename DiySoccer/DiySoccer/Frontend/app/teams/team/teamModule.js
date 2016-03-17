@@ -1,4 +1,4 @@
-﻿var teamNewModule = Marionette.Module.extend({
+﻿var teamModule = Marionette.Module.extend({
     startWithParent: false,
 
     initialize: function (options, app, object) {
@@ -100,25 +100,25 @@
         var self = this;
 
         self.layout = new LayoutView();
-        self.newTeamView = new TeamNewView({ model: this.model, collection: this.members });
+        self.teamView = new TeamView({ model: this.model, collection: this.members });
     },
     bindViews: function () {
         var self = this;
 
         self.listenTo(self.layout, 'show', function () {
-            self.layout.center.show(self.newTeamView);
+            self.layout.center.show(self.teamView);
         });
 
-        self.listenTo(self.newTeamView, 'submit', this.onSubmit);
-        self.listenTo(self.newTeamView, 'back', this.onCancel);
+        self.listenTo(self.teamView, 'submit', this.onSubmit);
+        self.listenTo(self.teamView, 'back', this.onCancel);
     },
 
     onStop: function (options) {
         var self = this;
 
-        self.newTeamView.destroy();
+        self.teamView.destroy();
         self.layout.destroy();
     }
 });
 
-MyApp.module("teamNew", teamNewModule);
+MyApp.module("team", teamModule);
