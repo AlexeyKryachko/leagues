@@ -8,6 +8,9 @@ namespace Interfaces.Users.DataAccess
         [BsonId]
         public string EntityId { get; set; }
 
+        [BsonElement("lid")]
+        public string LeagueId { get; set; }
+
         [BsonElement("name")]
         public string Name { get; set; }
     }

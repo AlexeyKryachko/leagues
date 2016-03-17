@@ -75,22 +75,22 @@ var GameView = Backbone.Marionette.CompositeView.extend({
     initialize: function (options) {
         this.teams = options.teams;
     },
-    onShow: function() {
-        this.ui.rent.typeahead({
+    onShow: function () {
+        var self = this;
+
+        /*this.ui.rent.typeahead({
             source: function (query, process) {
-                return $.get('/umbraco/backoffice/api/ADUsersBackofficeApi/FindUser', { query: query }, function (response) {
+                return $.get('/api/', { query: query }, function (response) {
                     return process(response);
                 });
             },
             displayText: function (item) {
-                return item.value;
+                return item.name;
             },
             updater: function (item) {
-                $('#aduser-searcher').prop('disabled', 'disabled');
-                $scope.loadData(item.id);
-                return item.value;
+                return '';
             }
-        });
+        });*/
     },
     serializeData: function() {
         var model = this.model.toJSON();

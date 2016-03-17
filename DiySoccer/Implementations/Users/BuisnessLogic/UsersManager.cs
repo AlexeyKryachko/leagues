@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Implementations.Core.DataAccess;
+using Interfaces.Core;
 using Interfaces.Teams.DataAccess;
 using Interfaces.Users.BuisnessLogic;
 using Interfaces.Users.DataAccess;
@@ -19,18 +20,31 @@ namespace Implementations.Users.BuisnessLogic
             _teamsRepository = teamsRepository;
         }
 
-        public IEnumerable<UserDb> Find(string leagueId, string query, string excludeTeamId, int page, int pageSize)
+        public IEnumerable<IdNameViewModel> Find(string leagueId, string query, IEnumerable<string> excludeTeamsId, int page, int pageSize)
         {
-            var users = _usersRepository.Find(leagueId, query, 0, int.MaxValue).Select(x => x.EntityId).ToList();
+            var users = _usersRepository.Find(leagueId, query, 0, int.MaxValue).ToList();
+            var userIds = users.Select(x => x.EntityId).ToList();
+
             var teams = _teamsRepository
-                .FindByUsers(leagueId, users)
-                .Where(x => x.EntityId != excludeTeamId)
+                .FindByUsers(leagueId, userIds)
+                .Where(x => !excludeTeamsId.Contains(x.EntityId))
                 .ToList();
+            
+            var result = new List<IdNameViewModel>();
+            foreach (var user in users)
+            {
+                var userTeam = teams.FirstOrDefault(team => team.MemberIds.Contains(user.EntityId));
+                var model = new IdNameViewModel
+                {
+                    Id = user.EntityId,
+                    Name = userTeam == null
+                        ? user.Name
+                        : user.Name + " (" + userTeam.Name + ")"
+                };
 
-            var usersNotFromtheTeam = users
-                .Where(x =>
-                    teams.Exists(team => team.EntityId != excludeTeamId && team.MemberIds.Contains(x)));
-
+                result.Add(model);
+            }
+            return result;
         }
     }
 }

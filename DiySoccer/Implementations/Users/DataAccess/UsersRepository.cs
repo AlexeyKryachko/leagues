@@ -14,5 +14,14 @@ namespace Implementations.Users.DataAccess
         {
             return Collection.AsQueryable().Where(x => x.Name.Contains(query));
         }
+
+        public IEnumerable<UserDb> Find(string leagueId, string query, int page, int pageSize)
+        {
+            return Collection.AsQueryable()
+                .Where(x => x.LeagueId == leagueId && 
+                    x.Name.Contains(query))
+                .Skip(page * pageSize)
+                .Take(pageSize);
+        }
     }
 }

@@ -14,12 +14,11 @@ namespace Implementations.Teams.DataAccess
         {
             var entity = new TeamDb
             {
-                LeagueId = leagueId,
                 Name = name,
                 MemberIds = memberIds
             };
 
-            Add(entity);
+            Add(leagueId, entity);
         }
 
         public IEnumerable<TeamDb> GetByLeague(string id)
@@ -33,6 +32,11 @@ namespace Implementations.Teams.DataAccess
             var update = Builders<TeamDb>.Update.Set(x => x.MemberIds, memberIds);
 
             Collection.UpdateOne(filter, update);
+        }
+
+        public IEnumerable<TeamDb> FindByUsers(string leagueId, IEnumerable<string> userIds)
+        {
+            return Collection.AsQueryable().Where(x => x.LeagueId == leagueId && x.MemberIds.Any(userId => userIds.Contains(userId)));
         }
     }
 }

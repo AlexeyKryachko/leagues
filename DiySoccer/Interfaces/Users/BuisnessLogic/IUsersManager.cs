@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Interfaces.Users.DataAccess;
+using Interfaces.Core;
 
 namespace Interfaces.Users.BuisnessLogic
 {
     public interface IUsersManager
     {
-        IEnumerable<UserDb> Find(string leagueId, string query, string excludeTeamId, int page, int pageSize);
+        IEnumerable<IdNameViewModel> Find(string leagueId, string query, IEnumerable<string> excludeTeamIds, int page, int pageSize);
     }
 }

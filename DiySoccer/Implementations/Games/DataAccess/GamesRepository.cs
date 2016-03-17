@@ -55,7 +55,7 @@ namespace Implementations.Games.DataAccess
                 },
             };
 
-            Add(entity);
+            Add(leagueId, entity);
         }
 
         public void Update(string leagueId, string id, int guestScore, IEnumerable<GameMemberDb> guestMembersScores, int homeScore, IEnumerable<GameMemberDb> homeMembersScores)

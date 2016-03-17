@@ -31,7 +31,7 @@ namespace Implementations.Teams.BuisnessLogic
                 .Where(x => string.IsNullOrEmpty(x.Id))
                 .Select(x => new UserDb {Name = x.Name})
                 .ToList();
-            _usersRepository.AddRange(userEntities);
+            _usersRepository.AddRange(leagueId, userEntities);
 
             var userIds = userEntities.Select(x => x.EntityId);
             var memberIds = exitedIds.Concat(userIds);
@@ -93,7 +93,7 @@ namespace Implementations.Teams.BuisnessLogic
                 .Where(x => string.IsNullOrEmpty(x.Id))
                 .Select(x => new UserDb { Name = x.Name })
                 .ToList();
-            _usersRepository.AddRange(userEntities);
+            _usersRepository.AddRange(leagueId, userEntities);
 
             var userIds = userEntities.Select(x => x.EntityId);
             var memberIds = exitedIds.Concat(userIds);

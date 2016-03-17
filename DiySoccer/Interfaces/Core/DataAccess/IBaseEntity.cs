@@ -3,5 +3,7 @@
     public interface IBaseEntity
     {
         string EntityId { get; set; }
+
+        string LeagueId { get; set; }
     }
 }

@@ -16,22 +16,24 @@ namespace Implementations.Core.DataAccess
 
         protected BaseRepository()
         {
-            _client = new MongoClient();
+            _client = new MongoClient("mongodb://7diysoccerLehaAdmin:0o9i8u@gmresearchdev.cloudapp.net:27017");
             _database = _client.GetDatabase("diysoccer");
             Collection = _database.GetCollection<T>(CollectionName);
         }
         
-        public void Add(T entity)
+        public void Add(string leagueId, T entity)
         {
             entity.EntityId = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
+            entity.LeagueId = leagueId;
             Collection.InsertOne(entity);
         }
 
-        public void AddRange(IEnumerable<T> entities)
+        public void AddRange(string leagueId, IEnumerable<T> entities)
         {
             foreach (var entity in entities)
             {
                 entity.EntityId = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
+                entity.LeagueId = leagueId;
             }
             Collection.InsertMany(entities);
         }
