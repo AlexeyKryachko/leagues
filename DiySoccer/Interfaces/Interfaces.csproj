@@ -70,6 +70,8 @@
     <Compile Include="Games\DataAccess\IGamesRepository.cs" />
     <Compile Include="Games\DataAccess\Model\GameDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\BuisnessLogic\PermissionsViewModel.cs" />
+    <Compile Include="Settings\BuisnessLogic\SettingsViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamInfoGameViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamStatisticViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamInfoViewModel.cs" />

@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\BaseApiController.cs" />
+    <Compile Include="Api\SettingsApiController.cs" />
     <Compile Include="Api\GamesApiController.cs" />
     <Compile Include="Api\LeaguesApiController.cs" />
     <Compile Include="Api\UsersApiController.cs" />
@@ -167,19 +168,24 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attributes\AuthorizeProviders\AuthorizeProvidersFactory.cs" />
+    <Compile Include="Attributes\AuthorizeProviders\IAuthorizeProvider.cs" />
+    <Compile Include="Attributes\AuthorizeProviders\VKAuthorizeProvider.cs" />
     <Compile Include="Attributes\BaseAttribute.cs" />
     <Compile Include="Attributes\DiySoccerAuthorizeAttribute.cs" />
     <Compile Include="AutofacConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Content Include="Frontend\app\games\game\gameActions.js" />
+    <Content Include="Frontend\app\header\headerModule.js" />
     <Content Include="Frontend\app\leagues\leaguesList.js" />
     <Content Include="Frontend\app\games\game\gameModule.js" />
     <Content Include="Frontend\app\games\game\gameView.js" />
+    <Content Include="Frontend\app\models\settings.js" />
     <Content Include="Frontend\app\models\teams.js" />
     <Content Include="Frontend\app\shared\bottom\cancelView.js" />
     <Content Include="Frontend\app\shared\emptyListView.js" />
     <Content Include="Frontend\app\shared\bottom\saveView.js" />
-    <Content Include="Frontend\app\shared\vk.js" />
+    <Content Include="Frontend\app\header\headerView.js" />
     <Content Include="Frontend\app\shared\splittedLayout.js" />
     <Content Include="Frontend\app\teams\info\teamInfoModule.js" />
     <Content Include="Frontend\app\teams\info\teamInfoView.js" />
@@ -192,6 +198,7 @@
     <Content Include="Frontend\css\bootstrap-theme.min.css" />
     <Content Include="Frontend\css\bootstrap.min.css" />
     <Content Include="Frontend\js\static\bootstrap3-typeahead.min.js" />
+    <Content Include="Frontend\templates\header.html" />
     <Content Include="Frontend\templates\custom-game.html" />
     <Content Include="Frontend\templates\cancel.html" />
     <Content Include="Frontend\templates\team-game.html" />

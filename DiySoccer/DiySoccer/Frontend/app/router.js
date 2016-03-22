@@ -1,4 +1,11 @@
 ﻿var MyRouter = Marionette.AppRouter.extend({
+    initialize: function () {
+        var self = this;
+
+        MyApp.listenTo(MyApp.Settings, 'sync', function () {
+            self.changeModule(self.workingModule, self.workingOptions);
+        });
+    },
     routes: {
         "": "defaultRoute",
         "leagues/": "defaultRoute",
@@ -11,7 +18,6 @@
     },
     defaultRoute: function () {
         this.changeModule(MyApp.submodules.leagues);
-        MyApp.submodules.vk.start();
     },
     tableRoute: function (leagueId) {
         var options = { leagueId: leagueId };
@@ -42,6 +48,7 @@
             this.workingModule.stop();
 
         this.workingModule = module;
-        this.workingModule.start(options);
+        this.workingOptions = options;
+        this.workingModule.start(this.workingOptions);
     }
 });

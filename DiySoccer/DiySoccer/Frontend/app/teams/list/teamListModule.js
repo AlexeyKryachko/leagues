@@ -12,6 +12,7 @@
         var self = this;
 
         self.options = options;
+        self.permissions = MyApp.Settings.get('permissions');
 
         self.createViews();
         self.bindViews();
@@ -26,14 +27,17 @@
         
         self.layout = new LayoutView();
         self.tableView = new TeamListView({ collection: self.teams, leagueId: self.options.leagueId });
-        self.actions = new TeamListActions({ leagueId: self.options.leagueId });
+        self.actions = new TeamListActions(self.options);
         self.bottomView = new CancelView();
     },
     bindViews: function () {
         var self = this;
 
         self.listenTo(self.layout, 'show', function () {
-            self.layout.up.show(self.actions);
+            if (self.permissions.relationships[self.options.leagueId] &&
+                self.permissions.relationships[self.options.leagueId] == '2') {
+                self.layout.up.show(self.actions);
+            }
             self.layout.center.show(self.tableView);
             self.layout.down.show(self.bottomView);
         });

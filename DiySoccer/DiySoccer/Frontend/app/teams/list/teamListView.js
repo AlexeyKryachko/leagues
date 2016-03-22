@@ -50,9 +50,7 @@ var TeamListActions = Backbone.Marionette.CompositeView.extend({
         'click @ui.addGame': 'redirectAddGame'
     },
     initialize: function (options) {
-        this.options = {
-            leagueId: options.leagueId
-        }
+        this.options = options;
     },
     redirectAddTeam: function (e) {
         document.location.href = "#leagues/" + this.options.leagueId + "/teams/new";
