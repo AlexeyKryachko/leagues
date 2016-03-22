@@ -11,6 +11,7 @@
     },
     defaultRoute: function () {
         this.changeModule(MyApp.submodules.leagues);
+        MyApp.submodules.vk.start();
     },
     tableRoute: function (leagueId) {
         var options = { leagueId: leagueId };

@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Authentication\Roles.cs" />
     <Compile Include="Core\DataAccess\IBaseEntity.cs" />
     <Compile Include="Core\DataAccess\IBaseRepository.cs" />
     <Compile Include="Core\IdNameViewModel.cs" />
