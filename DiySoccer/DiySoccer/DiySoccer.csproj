@@ -164,8 +164,11 @@
     <Compile Include="Api\LeaguesApiController.cs" />
     <Compile Include="Api\UsersApiController.cs" />
     <Compile Include="Api\TeamsApiController.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attributes\BaseAttribute.cs" />
+    <Compile Include="Attributes\DiySoccerAuthorizeAttribute.cs" />
     <Compile Include="AutofacConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Content Include="Frontend\app\games\game\gameActions.js" />
@@ -176,6 +179,7 @@
     <Content Include="Frontend\app\shared\bottom\cancelView.js" />
     <Content Include="Frontend\app\shared\emptyListView.js" />
     <Content Include="Frontend\app\shared\bottom\saveView.js" />
+    <Content Include="Frontend\app\shared\vk.js" />
     <Content Include="Frontend\app\shared\splittedLayout.js" />
     <Content Include="Frontend\app\teams\info\teamInfoModule.js" />
     <Content Include="Frontend\app\teams\info\teamInfoView.js" />
