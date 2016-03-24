@@ -1,5 +1,5 @@
 ﻿<div class="form-group">
-    <input type="number" class="form-control team-score" value="{{score}}" {{#if disableScoreValue}}{{else}}disabled="disabled"{{/if}} />
+    <input type="number" class="form-control team-score" value="{{score}}" {{#if disableScoreValue}}disabled="disabled"{{else}}{{/if}} />
 </div>
 
 <select class="form-control change-team">
@@ -33,13 +33,23 @@
     <tbody></tbody>
 </table>
 
-{{#if rent}}
+{{#if teamSelected}}
+<div class="row">
+    <div class="form-group col-sm-12">
+        <select class="form-control best-member">
+            <option selected="selected">Лучший игрок</option>
+            {{#each members}}
+            <option value="{{id}}" {{#if selected}}selected="selected"{{else}}{{/if}}>{{name}}</option>
+            {{/each}}
+        </select>
+    </div>
+</div>
 <div class="row">
     <div class="form-group col-sm-10">
         <input type="text" class="form-control add-custom-member" placeholder="Аренда"/>
     </div>
     <div class="col-sm-2 pull-right">
-        <button class="btn btn-primary pull-right" id="add-custom-member-button">Добавить</button>
+        <button class="btn btn-primary pull-right add-custom-member-button">Добавить</button>
     </div>
 </div>
 {{/if}}

@@ -19,10 +19,12 @@
 
         var homeTeam = self.leftModel.toJSON();
         homeTeam.score = self.leftModel.get('score');
+        homeTeam.bestId = self.leftModel.get('bestId');
         homeTeam.members = self.leftScores.toJSON();
 
         var guestTeam = self.rightModel.toJSON();
         guestTeam.score = self.rightModel.get('score');
+        guestTeam.bestId = self.rightModel.get('bestId');
         guestTeam.members = self.rightScores.toJSON();
 
         return {
@@ -73,8 +75,10 @@
         var self = this;
 
         self.leftModel.clear();
+        self.leftModel.set('disableScoreValue', true);
         self.leftScores.reset();
         self.rightModel.clear();
+        self.rightModel.set('disableScoreValue', true);
         self.rightScores.reset();
         self.teams.setLeagueId(self.options.leagueId);
 
@@ -91,11 +95,17 @@
         $.get('/api/leagues/' + self.options.leagueId + '/games/' + self.options.gameId + '/info', function (response) {
             self.leftModel.set('id', response.homeTeam.id);
             self.leftModel.set('score', response.homeTeam.score);
+            self.leftModel.set('bestId', response.homeTeam.bestId);
             self.leftScores.reset(response.homeTeam.members);
             self.rightModel.set('id', response.guestTeam.id);
             self.rightModel.set('score', response.guestTeam.score);
+            self.rightModel.set('bestId', response.guestTeam.bestId);
             self.rightScores.reset(response.guestTeam.members);
             self.teams.setLeagueId(self.options.leagueId);
+            self.optionsModel.set('customScores', response.customScores);
+
+            self.rightModel.set('disableScoreValue', !response.customScores);
+            self.leftModel.set('disableScoreValue', !response.customScores);
 
             self.createViews();
             self.bindViews();
@@ -146,13 +156,8 @@
     },
     scoringShowing: function (disabled) {
         var self = this;
-        if (disabled) {
-            self.leftGameView.enableScore();
-            self.rightGameView.enableScore();
-        } else {
-            self.leftGameView.disableScore();
-            self.rightGameView.disableScore();
-        }
+        self.rightModel.set('disableScoreValue', !disabled);
+        self.leftModel.set('disableScoreValue', !disabled);
     },
     onStop: function (options) {
         var self = this;

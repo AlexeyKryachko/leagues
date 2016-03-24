@@ -41,14 +41,20 @@ var GameView = Backbone.Marionette.CompositeView.extend({
         'changeTeam': '.change-team',
         'score': '.team-score',
         'rent': '.add-custom-member',
-        'addRent': '#add-custom-member-button'
+        'addRent': '.add-custom-member-button',
+        'bestMember': '.best-member'
     },
     events: {
         'change @ui.changeTeam': 'changeTeam',
         'change @ui.score': 'changeScore',
-        'click @ui.addRent': 'addRent'
+        'click @ui.addRent': 'addRent',
+        'change @ui.bestMember': 'changeBestMember'
     },
     triggers: {
+    },
+    changeBestMember: function (e) {
+        var val = this.ui.bestMember.val();
+        this.model.set('bestId', val);
     },
     recalculateScore: function () {
         var score = 0;
@@ -56,14 +62,6 @@ var GameView = Backbone.Marionette.CompositeView.extend({
             score += parseInt(obj.get('score'));
         });
         this.model.set('score', score);
-    },
-    disableScore: function () {
-        this.ui.score.prop('disabled', 'disabled');
-        this.model.set('disableScoreValue', false);
-    },
-    enableScore: function () {
-        this.ui.score.removeAttr('disabled');
-        this.model.set('disableScoreValue', true);
     },
     changeTeam: function () {
         var team = _.findWhere(this.teams.models, { id: this.ui.changeTeam.val() });
@@ -115,16 +113,27 @@ var GameView = Backbone.Marionette.CompositeView.extend({
         if (this.teams.length == 0)
             return model;
 
-        model.rent = false;
+        model.teamSelected = false;
         model.teams = [];
         _.each(this.teams.models, function (team) {
             var selected = team.get('id') == model.id;
             if (selected)
-                model.rent = true;
+                model.teamSelected = true;
 
             model.teams.push({ id: team.get('id'), name: team.get('name'), selected: team.get('id') == model.id });
         });
-        
+
+        model.members = [];
+        _.each(this.collection.models, function (member) {
+            var memberJson = { id: member.get('id'), name: member.get('name') };
+
+            var selected = member.get('id') == model.bestId;
+            if (selected)
+                memberJson.selected = true;
+
+            model.members.push(memberJson);
+        });
+
         return model;
     },
     modelEvents: {

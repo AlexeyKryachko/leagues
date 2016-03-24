@@ -27,12 +27,14 @@ namespace Implementations.Games.DataAccess
             var entity = new GameDb
             {
                 LeagueId = leagueId,
+                CustomScores = model.CustomScores,
                 HomeTeam = new GameTeamDb
                 {
                     Id = model.HomeTeam.Id,
                     Score = model.CustomScores 
                         ? model.HomeTeam.Score
                         : model.HomeTeam.Members.Sum(x => x.Score),
+                    BestMemberId = model.HomeTeam.BestId,
                     Members = model.HomeTeam.Members.Select(x => new GameMemberDb
                     {
                         Id = x.Id,
@@ -46,6 +48,7 @@ namespace Implementations.Games.DataAccess
                     Score = model.CustomScores
                         ? model.GuestTeam.Score
                         : model.GuestTeam.Members.Sum(x => x.Score),
+                    BestMemberId = model.GuestTeam.BestId,
                     Members = model.GuestTeam.Members.Select(x => new GameMemberDb
                     {
                         Id = x.Id,
@@ -58,14 +61,27 @@ namespace Implementations.Games.DataAccess
             Add(leagueId, entity);
         }
 
-        public void Update(string leagueId, string id, int guestScore, IEnumerable<GameMemberDb> guestMembersScores, int homeScore, IEnumerable<GameMemberDb> homeMembersScores)
+        public void Update(string leagueId, string id, bool customScores, int guestScore, string guestBestMemberId, IEnumerable<GameMemberDb> guestMembersScores,
+            int homeScore, string homeBestMemberId, IEnumerable<GameMemberDb> homeMembersScores)
         {
             var filter = Builders<GameDb>.Filter.Eq(x => x.LeagueId, leagueId) & Builders<GameDb>.Filter.Eq(x => x.EntityId, id);
+
+            guestScore = customScores
+                ? guestScore
+                : guestMembersScores.Sum(x => x.Score);
+
+            homeScore = customScores
+                ? homeScore
+                : homeMembersScores.Sum(x => x.Score);
+
             var update = Builders<GameDb>.Update
                 .Set(x => x.GuestTeam.Score, guestScore)
+                .Set(x => x.GuestTeam.BestMemberId, guestBestMemberId)
                 .Set(x => x.GuestTeam.Members, guestMembersScores)
                 .Set(x => x.HomeTeam.Score, homeScore)
-                .Set(x => x.HomeTeam.Members, homeMembersScores);
+                .Set(x => x.HomeTeam.BestMemberId, homeBestMemberId)
+                .Set(x => x.HomeTeam.Members, homeMembersScores)
+                .Set(x => x.CustomScores, customScores);
 
             Collection.UpdateOne(filter, update);
         }

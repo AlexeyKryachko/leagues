@@ -40,6 +40,7 @@
                 data: {},
                 appID: 5370269,
                 appPermissions: 16,
+                initеd: false,
                 init: function () {
                     VK.init({ apiId: vk.appID });
                 },

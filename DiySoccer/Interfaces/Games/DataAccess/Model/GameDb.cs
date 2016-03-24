@@ -11,6 +11,9 @@ namespace Interfaces.Games.DataAccess.Model
         [BsonElement("leagueId")]
         public string LeagueId { get; set; }
 
+        [BsonElement("customScores")]
+        public bool CustomScores { get; set; }
+
         [BsonElement("homeTeam")]
         public GameTeamDb HomeTeam { get; set; }
 

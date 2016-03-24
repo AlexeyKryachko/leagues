@@ -165,8 +165,11 @@ namespace Implementations.Teams.BuisnessLogic
 
                 result.Add(model);
             }
-
-            return result;
+            
+            return result
+                .OrderByDescending(x => x.Points)
+                .ThenByDescending(x => x.Scores)
+                .ThenByDescending(x => x.Missed);
         }
     }
 }

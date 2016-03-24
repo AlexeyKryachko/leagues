@@ -27,10 +27,12 @@ namespace Implementations.Games.BuisnessLogic
             return new GameVewModel
             {
                 Id = game.EntityId,
+                CustomScores = game.CustomScores,
                 HomeTeam = new GameTeamViewModel
                 {
                     Id = game.HomeTeam.Id,
                     Score = game.HomeTeam.Score,
+                    BestId = game.HomeTeam.BestMemberId,
                     Members = game.HomeTeam.Members.Select(x => new GameMemberViewModel
                     {
                         Id = x.Id,
@@ -43,6 +45,7 @@ namespace Implementations.Games.BuisnessLogic
                 {
                     Id = game.GuestTeam.Id,
                     Score = game.GuestTeam.Score,
+                    BestId = game.GuestTeam.BestMemberId,
                     Members = game.GuestTeam.Members.Select(x => new GameMemberViewModel
                     {
                         Id = x.Id,
@@ -61,19 +64,13 @@ namespace Implementations.Games.BuisnessLogic
 
         public void Update(string leagueId, string gameId, GameVewModel model)
         {
-            var guestScore = model.CustomScores
-                ? model.GuestTeam.Score
-                : model.GuestTeam.Members.Sum(x => x.Score);
             var guestMemberScores = model.GuestTeam.Members.Select(x => new GameMemberDb
             {
                 Id = x.Id,
                 Help = x.Help,
                 Score = x.Score
             });
-
-            var homeScore = model.CustomScores
-                ? model.HomeTeam.Score
-                : model.HomeTeam.Members.Sum(x => x.Score);
+            
             var homeMemberScores = model.HomeTeam.Members.Select(x => new GameMemberDb
             {
                 Id = x.Id,
@@ -81,7 +78,8 @@ namespace Implementations.Games.BuisnessLogic
                 Score = x.Score
             });
 
-            _gamesRepository.Update(leagueId, gameId, guestScore, guestMemberScores, homeScore, homeMemberScores);
+            _gamesRepository.Update(leagueId, gameId, model.CustomScores, model.GuestTeam.Score, model.GuestTeam.BestId, guestMemberScores,
+                model.HomeTeam.Score, model.HomeTeam.BestId, homeMemberScores);
         }
 
         public void Delete(string gameId)

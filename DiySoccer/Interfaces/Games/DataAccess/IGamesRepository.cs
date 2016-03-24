@@ -13,7 +13,7 @@ namespace Interfaces.Games.DataAccess
 
         void Create(string leagueId, GameVewModel model);
 
-        void Update(string leagueId, string id, int guestScore, IEnumerable<GameMemberDb> guestMembersScores,
-            int homeScore, IEnumerable<GameMemberDb> homeMembersScores);
+        void Update(string leagueId, string id, bool customScore, int guestScore, string guestBestMemberId, IEnumerable<GameMemberDb> guestMembersScores,
+            int homeScore, string homeBestMemberId, IEnumerable<GameMemberDb> homeMembersScores);
     }
 }
