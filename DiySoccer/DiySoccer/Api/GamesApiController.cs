@@ -15,7 +15,7 @@ namespace DiySoccer.Api
         }
 
         #region GET
-
+        
         [Route("api/leagues/{leagueId}/games/{gameId}/info")]
         [HttpGet]
         public IHttpActionResult GetGame(string leagueId, string gameId)

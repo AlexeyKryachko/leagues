@@ -39,36 +39,16 @@
         var vk = {
                 data: {},
                 appID: 5370269,
-                appPermissions: 16,
-                initеd: false,
+                appPermissions: 262144,
                 init: function () {
-                    VK.init({ apiId: vk.appID });
                 },
                 login: function (callback) {
-                    function authInfo(response) {
-                        if (response.session) {
-                            vk.data.user = response.session.user;
-                            if (callback)
-                                callback(vk.data.user.id, 'vk');
-                            console.log(response);
-                        } else {
-                            alert("Авторизоваться не удалось!");
-                        }
-                    }
-                    VK.Auth.login(authInfo, vk.appPermissions);
-                },
-                access: function (callback) {
-                    VK.Auth.getLoginStatus(function(response) {
-                        if (response.session) {
-                            callback(vk.data.user);
-                        } else {
-                            vk.login(callback);
-                        }
-                    });
+                    $.get('https://oauth.vk.com/authorize?client_id=' + vk.appID + '&scope=' + vk.appPermissions + '&redirect_uri=' +
+                        'http://diysoccer.azurewebsites.net/api/authVk' + '&response_type=code', function () {
+                            alert('Управление отдано.');
+                        });
                 },
                 logout: function () {
-                    VK.Auth.logout();
-                    this.data.user = {};
                 }
         }
 

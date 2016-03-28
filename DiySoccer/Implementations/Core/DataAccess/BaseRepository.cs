@@ -17,6 +17,7 @@ namespace Implementations.Core.DataAccess
         protected BaseRepository()
         {
             _client = new MongoClient("mongodb://7diysoccerLehaAdmin:0o9i8u@gmresearchdev.cloudapp.net:27017");
+           // _client = new MongoClient();
             _database = _client.GetDatabase("diysoccer");
             Collection = _database.GetCollection<T>(CollectionName);
         }

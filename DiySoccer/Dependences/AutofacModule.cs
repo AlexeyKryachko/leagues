@@ -1,10 +1,12 @@
-﻿using Autofac;
+﻿using System.Net;
+using Autofac;
 using Implementations.Games.BuisnessLogic;
 using Implementations.Games.DataAccess;
 using Implementations.Teams.BuisnessLogic;
 using Implementations.Teams.DataAccess;
 using Implementations.Users.BuisnessLogic;
 using Implementations.Users.DataAccess;
+using Interfaces.Core.Authentication;
 using Interfaces.Games.BuisnessLogic;
 using Interfaces.Games.DataAccess;
 using Interfaces.Teams.BuisnessLogic;
@@ -26,6 +28,9 @@ namespace Dependences
 
             builder.RegisterType(typeof(GamesManager)).As<IGamesManager>();
             builder.RegisterType(typeof(GamesRepository)).As<IGamesRepository>();
+
+            builder.RegisterType(typeof(Implementations.Core.Authentication.AuthenticationManager)).As<IAuthenticationManager>();
+            
         }
     }
 }
