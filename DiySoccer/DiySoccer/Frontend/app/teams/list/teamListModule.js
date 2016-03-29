@@ -5,7 +5,12 @@
         var self = this;
         this.app = app;
 
-        self.teams = new TeamsStatistic();
+        self.statistics = new TeamsStatistic();
+        self.teams = new Backbone.Collection();
+
+        self.listenTo(self.statistics, 'sync', function() {
+            self.teams.reset(self.statistics.get('teamStats'));
+        });
     },
 
     onStart: function (options) {
@@ -21,14 +26,14 @@
 
         self.app.mainRegion.show(self.layout);
 
-        self.teams.setLeagueId(self.options.leagueId);
-        self.teams.fetch();
+        self.statistics.setLeagueId(self.options.leagueId);
+        self.statistics.fetch();
     },
     createViews: function () {
         var self = this;
         
         self.layout = new LayoutView();
-        self.tableView = new TeamListView({ collection: self.teams, leagueId: self.options.leagueId });
+        self.tableView = new TeamListView({ model: self.statistics, collection: self.teams, leagueId: self.options.leagueId });
         self.actions = new TeamListActions(self.options);
         self.bottomView = new CancelView();
     },

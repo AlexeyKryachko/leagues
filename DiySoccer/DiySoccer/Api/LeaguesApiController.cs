@@ -9,11 +9,9 @@ namespace DiySoccer.Api
     public class LeaguesApiController : BaseApiController
     {
         private readonly ILeaguesManager _leaguesManager;
-        private readonly ITeamsManager _teamsManager;
 
-        public LeaguesApiController(ITeamsManager teamsManager, ILeaguesManager leaguesManager)
+        public LeaguesApiController(ILeaguesManager leaguesManager)
         {
-            _teamsManager = teamsManager;
             _leaguesManager = leaguesManager;
         }
 
@@ -23,7 +21,7 @@ namespace DiySoccer.Api
         [HttpGet]
         public IHttpActionResult GetStatistic(string leagueId)
         {
-            var statistic = _teamsManager.GetStatisticByLeague(leagueId).ToList();
+            var statistic = _leaguesManager.GetStatisticByLeague(leagueId);
             return Json(statistic);
         }
 

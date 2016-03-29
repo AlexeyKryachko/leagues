@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Interfaces.Teams.BuisnessLogic.Models
+namespace Interfaces.Leagues.BuisnessLogic.Model
 {
     public class TeamStatisticViewModel
     {

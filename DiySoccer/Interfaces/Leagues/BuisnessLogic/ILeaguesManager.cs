@@ -5,6 +5,8 @@ namespace Interfaces.Leagues.BuisnessLogic
 {
     public interface ILeaguesManager
     {
+        LeagueStatisticViewModel GetStatisticByLeague(string leagueId);
+
         IEnumerable<LeagueViewModel> GetAll();
 
         LeagueViewModel Get(string leagueId);

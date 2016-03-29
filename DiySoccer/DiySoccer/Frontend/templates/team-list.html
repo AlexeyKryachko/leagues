@@ -1,15 +1,36 @@
 ﻿<table class="table table-striped">
     <thead>
-        <tr>            
-            <th>Название</th>
-            <th>Кол-во игр</th>
-            <th>Победы</th>
-            <th>Поражения</th>
-            <th>Ничьи</th>
-            <th>Голы</th>
-            <th>Очки</th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>Название</th>
+        <th>Кол-во игр</th>
+        <th>Победы</th>
+        <th>Поражения</th>
+        <th>Ничьи</th>
+        <th>Голы</th>
+        <th>Очки</th>
+        <th></th>
+    </tr>
     </thead>
     <tbody></tbody>
 </table>
+
+<div class="row form-group">
+    <div class="col-sm-4">
+        <h4><strong>Лучшие игроки</strong></h4>
+        {{#each bestPlayers}}
+        <div>{{name}}</div>
+        {{/each}}
+    </div>
+    <div class="col-sm-4">
+        <h4><strong>Лучшие ассисстенты</strong></h4>
+        {{#each bestHelpers}}
+        <div>{{name}}</div>
+        {{/each}}
+    </div>
+    <div class="col-sm-4">
+        <h4><strong>Лучшие забивалы</strong></h4>
+        {{#each bestForwards}}
+        <div>{{name}}</div>
+        {{/each}}
+    </div>
+</div>

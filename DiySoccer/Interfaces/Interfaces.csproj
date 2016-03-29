@@ -71,14 +71,15 @@
     <Compile Include="Games\DataAccess\IGamesRepository.cs" />
     <Compile Include="Games\DataAccess\Model\GameDb.cs" />
     <Compile Include="Leagues\BuisnessLogic\ILeaguesManager.cs" />
+    <Compile Include="Leagues\BuisnessLogic\Model\LeagueStatisticViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueViewModel.cs" />
+    <Compile Include="Leagues\BuisnessLogic\Model\TeamStatisticViewModel.cs" />
     <Compile Include="Leagues\DataAccess\ILeaguesRepository.cs" />
     <Compile Include="Leagues\DataAccess\Model\LeagueDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\BuisnessLogic\PermissionsViewModel.cs" />
     <Compile Include="Settings\BuisnessLogic\SettingsViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamInfoGameViewModel.cs" />
-    <Compile Include="Teams\BuisnessLogic\Models\TeamStatisticViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamInfoViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamViewModel.cs" />
     <Compile Include="Users\BuisnessLogic\IUsersManager.cs" />

@@ -117,59 +117,5 @@ namespace Implementations.Teams.BuisnessLogic
                 })
             });
         }
-
-        public IEnumerable<TeamStatisticViewModel> GetStatisticByLeague(string leagueId)
-        {
-            var teams = _teamsRepository.GetByLeague(leagueId).ToList();
-            var games = _gamesRepository.GetByLeague(leagueId).ToList();
-            var result = new List<TeamStatisticViewModel>();
-            var scoreCalculation = new ScoreCalculation();
-
-            foreach (var team in teams)
-            {
-                var model = new TeamStatisticViewModel
-                {
-                    Id = team.EntityId,
-                    Name = team.Name
-                };
-
-                model.GamesCount = games.Count(x => x.GuestTeam.Id == team.EntityId || x.HomeTeam.Id == team.EntityId);
-
-                model.Wins = games.Count(x =>
-                    (x.GuestTeam.Id == team.EntityId && x.GuestTeam.Score > x.HomeTeam.Score) ||
-                    (x.HomeTeam.Id == team.EntityId && x.HomeTeam.Score > x.GuestTeam.Score));
-
-                model.Loses = games.Count(x =>
-                    (x.GuestTeam.Id == team.EntityId && x.GuestTeam.Score < x.HomeTeam.Score) ||
-                    (x.HomeTeam.Id == team.EntityId && x.HomeTeam.Score < x.GuestTeam.Score));
-
-                model.Draws = games.Count(x =>
-                    (x.GuestTeam.Id == team.EntityId && x.GuestTeam.Score == x.HomeTeam.Score) ||
-                    (x.HomeTeam.Id == team.EntityId && x.HomeTeam.Score == x.GuestTeam.Score));
-
-                model.Scores = games
-                    .Where(x => x.GuestTeam.Id == team.EntityId)
-                    .Sum(x => x.GuestTeam.Score);
-                model.Scores += games
-                    .Where(x => x.HomeTeam.Id == team.EntityId)
-                    .Sum(x => x.HomeTeam.Score);
-
-                model.Missed = games
-                    .Where(x => x.GuestTeam.Id == team.EntityId)
-                    .Sum(x => x.HomeTeam.Score);
-                model.Missed += games
-                    .Where(x => x.HomeTeam.Id == team.EntityId)
-                    .Sum(x => x.GuestTeam.Score);
-
-                model.Points = scoreCalculation.Default(model.Wins, model.Loses, model.Draws);
-
-                result.Add(model);
-            }
-            
-            return result
-                .OrderByDescending(x => x.Points)
-                .ThenByDescending(x => x.Scores)
-                .ThenByDescending(x => x.Missed);
-        }
     }
 }

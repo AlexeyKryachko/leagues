@@ -34,6 +34,9 @@ var TeamListView = Backbone.Marionette.CompositeView.extend({
             leagueId: options.leagueId
         }
     },
+    modelEvents: {
+        'sync': 'render'
+    },
     collectionEvents: {
         'sync': 'render'
     }

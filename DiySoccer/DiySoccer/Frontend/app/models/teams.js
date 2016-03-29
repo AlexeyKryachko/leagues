@@ -10,7 +10,7 @@
     }
 });
 
-var TeamsStatistic = Backbone.Collection.extend({
+var TeamsStatistic = Backbone.Model.extend({
     initialize: function() {
         this.leagueId = 0;
     },
