@@ -220,10 +220,14 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Content Include="Frontend\app\games\game\gameActions.js" />
     <Content Include="Frontend\app\header\headerModule.js" />
-    <Content Include="Frontend\app\leagues\leaguesList.js" />
+    <Content Include="Frontend\app\leagues\league\leagueModule.js" />
+    <Content Include="Frontend\app\leagues\league\leagueView.js" />
+    <Content Include="Frontend\app\leagues\list\leageusActions.js" />
+    <Content Include="Frontend\app\leagues\list\leaguesList.js" />
     <Content Include="Frontend\app\games\game\gameModule.js" />
     <Content Include="Frontend\app\games\game\gameView.js" />
     <Content Include="Frontend\app\models\settings.js" />
+    <Content Include="Frontend\app\models\leagues.js" />
     <Content Include="Frontend\app\models\teams.js" />
     <Content Include="Frontend\app\shared\bottom\cancelView.js" />
     <Content Include="Frontend\app\shared\emptyListView.js" />
@@ -244,6 +248,8 @@
     <Content Include="Frontend\templates\header.html" />
     <Content Include="Frontend\templates\custom-game.html" />
     <Content Include="Frontend\templates\cancel.html" />
+    <Content Include="Frontend\templates\league.html" />
+    <Content Include="Frontend\templates\leagues-actions.html" />
     <Content Include="Frontend\templates\team-game.html" />
     <Content Include="Frontend\templates\team-games.html" />
     <Content Include="Frontend\templates\team-list-actions.html" />
@@ -255,7 +261,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Frontend\app\shared\layout.js" />
-    <Content Include="Frontend\app\leagues\leaguesModule.js" />
+    <Content Include="Frontend\app\leagues\list\leaguesModule.js" />
     <Content Include="Frontend\app\template.js" />
     <Content Include="Frontend\app\router.js" />
     <Content Include="Frontend\app\app.js" />

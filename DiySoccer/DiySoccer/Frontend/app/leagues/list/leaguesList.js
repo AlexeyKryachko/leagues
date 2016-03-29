@@ -1,6 +1,16 @@
 ﻿var leagueView = Backbone.Marionette.ItemView.extend({
     template: "#leagues-item",
-    onShow: function () {
+    ui: {
+        'edit': '.league-edit'
+    },
+    events: {
+        'click @ui.edit': 'editLeague'
+    },
+    editLeague: function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        document.location.href = '#leagues/' + this.model.id + '/edit';
     }
 });
 

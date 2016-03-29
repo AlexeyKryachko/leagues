@@ -11,6 +11,8 @@
     onStart: function (options) {
         var self = this;
 
+        self.teams.reset();
+
         self.options = options;
         self.permissions = MyApp.Settings.get('permissions');
 
