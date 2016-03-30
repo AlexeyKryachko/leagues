@@ -5,7 +5,6 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Dependences;
-using DiySoccer.Attributes;
 
 namespace DiySoccer
 {
@@ -19,7 +18,6 @@ namespace DiySoccer
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             builder.RegisterModule(new AutofacModule());
-            builder.RegisterType<DiySoccerAuthorizeAttribute>().PropertiesAutowired();
 
             var container = builder.Build();
             

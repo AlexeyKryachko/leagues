@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using DiySoccer.Attributes;
 
 namespace DiySoccer
 {
@@ -7,7 +6,7 @@ namespace DiySoccer
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new DiySoccerAuthorizeAttribute());
+            
         }
     }
 }

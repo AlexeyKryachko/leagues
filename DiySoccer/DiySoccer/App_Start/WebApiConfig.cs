@@ -1,5 +1,4 @@
 ﻿using System.Web.Http;
-using System.Web.Http.Cors;
 
 namespace DiySoccer
 {
@@ -7,8 +6,6 @@ namespace DiySoccer
     {
         public static void Register(HttpConfiguration config)
         {
-            config.EnableCors();
-
             config.MapHttpAttributeRoutes();
         }
     }

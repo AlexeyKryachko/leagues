@@ -3,6 +3,7 @@ using Interfaces.Leagues.DataAccess;
 using Interfaces.Leagues.DataAccess.Model;
 using MongoDB.Driver;
 using System.Linq;
+using Core;
 using MongoDB.Bson;
 
 namespace Implementations.Leagues.DataAccess
@@ -17,8 +18,8 @@ namespace Implementations.Leagues.DataAccess
 
         public LeaguesRepository()
         {
-            _client = new MongoClient("mongodb://7diysoccerLehaAdmin:0o9i8u@gmresearchdev.cloudapp.net:27017");
-            _database = _client.GetDatabase("diysoccer");
+            _client = new MongoClient(MongoConnetcionString.ConnectionString);
+            _database = _client.GetDatabase(MongoConnetcionString.Database);
             Collection = _database.GetCollection<LeagueDb>(CollectionName);
         }
 

@@ -66,7 +66,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Authentication\AuthenticationManager.cs" />
     <Compile Include="Core\DataAccess\BaseRepository.cs" />
     <Compile Include="Games\BuisnessLogic\GamesManager.cs" />
     <Compile Include="Games\DataAccess\GamesRepository.cs" />
@@ -79,6 +78,10 @@
     <Compile Include="Teams\DataAccess\TeamsRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{43a4dc1a-0568-4360-92b1-cc1bf79beab8}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interfaces\Interfaces.csproj">
       <Project>{36915eff-12cc-4f40-b4de-5b4bcff1332e}</Project>
       <Name>Interfaces</Name>

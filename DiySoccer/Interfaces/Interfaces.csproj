@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MongoDB.Bson, Version=2.2.3.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Bson.2.2.3\lib\net45\MongoDB.Bson.dll</HintPath>
       <Private>True</Private>
@@ -47,6 +51,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -56,8 +61,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Authentication\IAuthenticationManager.cs" />
-    <Compile Include="Core\Authentication\Roles.cs" />
     <Compile Include="Core\DataAccess\IBaseEntity.cs" />
     <Compile Include="Core\DataAccess\IBaseRepository.cs" />
     <Compile Include="Core\IdNameViewModel.cs" />
@@ -84,13 +87,16 @@
     <Compile Include="Teams\BuisnessLogic\Models\TeamViewModel.cs" />
     <Compile Include="Users\BuisnessLogic\IUsersManager.cs" />
     <Compile Include="Users\DataAccess\IUsersRepository.cs" />
+    <Compile Include="Users\DataAccess\UserAuthDb.cs" />
     <Compile Include="Users\DataAccess\UserDb.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\CreateTeamViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\ITeamsManager.cs" />
     <Compile Include="Teams\DataAccess\ITeamsRepository.cs" />
     <Compile Include="Teams\DataAccess\TeamDb.cs" />
+    <Compile Include="Users\DataAccess\UserRoleDb.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,8 +1,6 @@
 ﻿
 using System.Collections.Generic;
 using System.Web.Http;
-using Interfaces.Games.BuisnessLogic;
-using Interfaces.Games.BuisnessLogic.Models;
 using Interfaces.Settings.BuisnessLogic;
 
 namespace DiySoccer.Api

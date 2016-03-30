@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Interfaces.Leagues.BuisnessLogic;
 using Interfaces.Leagues.BuisnessLogic.Model;
-using Interfaces.Teams.BuisnessLogic;
 
 namespace DiySoccer.Api
 {

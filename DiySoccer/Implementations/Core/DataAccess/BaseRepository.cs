@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Interfaces.Core.DataAccess;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -16,9 +17,8 @@ namespace Implementations.Core.DataAccess
 
         protected BaseRepository()
         {
-            _client = new MongoClient("mongodb://7diysoccerLehaAdmin:0o9i8u@gmresearchdev.cloudapp.net:27017");
-           // _client = new MongoClient();
-            _database = _client.GetDatabase("diysoccer");
+            _client = new MongoClient(MongoConnetcionString.ConnectionString);
+            _database = _client.GetDatabase(MongoConnetcionString.Database);
             Collection = _database.GetCollection<T>(CollectionName);
         }
         

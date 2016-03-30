@@ -7,7 +7,6 @@ using Implementations.Teams.BuisnessLogic;
 using Implementations.Teams.DataAccess;
 using Implementations.Users.BuisnessLogic;
 using Implementations.Users.DataAccess;
-using Interfaces.Core.Authentication;
 using Interfaces.Games.BuisnessLogic;
 using Interfaces.Games.DataAccess;
 using Interfaces.Leagues.BuisnessLogic;
@@ -34,8 +33,6 @@ namespace Dependences
 
             builder.RegisterType(typeof(LeaguesManager)).As<ILeaguesManager>();
             builder.RegisterType(typeof(LeaguesRepository)).As<ILeaguesRepository>();
-
-            builder.RegisterType(typeof(Implementations.Core.Authentication.AuthenticationManager)).As<IAuthenticationManager>();
         }
     }
 }

@@ -10,3 +10,7 @@ node_modules
 /DiySoccer/Interfaces/obj
 /DiySoccer/Interfaces/bin
 /DiySoccer/.vs
+/DiySoccer/Authentication/bin
+/DiySoccer/Authentication/obj
+/DiySoccer/Core/bin
+/DiySoccer/Core/obj
