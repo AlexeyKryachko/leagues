@@ -19,16 +19,16 @@ namespace DiySoccer.Controllers
         {
         }
 
-        public AccountController(AuthenticationUserManager userManager)
+        public AccountController(ApplicationUserManager userManager)
         {
             UserManager = userManager;
         }
 
-        private AuthenticationUserManager _userManager;
+        private ApplicationUserManager _userManager;
 
-        public AuthenticationUserManager UserManager
+        public ApplicationUserManager UserManager
         {
-            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<AuthenticationUserManager>(); }
+            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
             private set { _userManager = value; }
         }
 
@@ -154,7 +154,7 @@ namespace DiySoccer.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new UserAuthDb { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -387,7 +387,7 @@ namespace DiySoccer.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new UserAuthDb { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

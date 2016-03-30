@@ -11,7 +11,7 @@ using Microsoft.Owin.Security;
 
 namespace Authentication
 {
-    public class SignInHelper
+    /*public class SignInHelper
     {
         public SignInHelper(AuthenticationUserManager userManager, IAuthenticationManager authManager)
         {
@@ -150,5 +150,5 @@ namespace Authentication
             }
             return SignInStatus.Failure;
         }
-    }
+    }*/
 }
