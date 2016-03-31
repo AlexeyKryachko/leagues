@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Authentication;
+using Duke.Owin.VkontakteMiddleware;
+using Duke.Owin.VkontakteMiddleware.Provider;
 using Interfaces.Users.DataAccess;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -60,7 +64,31 @@ namespace DiySoccer
 
             //app.UseGoogleAuthentication();
 
-            app.UseVkontakteAuthentication("5370269", "RMw7P2WLOypLGgzc7fzi", "262144");
+            var options = new VkAuthenticationOptions
+            {
+                AppId = "5370269",
+                AppSecret = "RMw7P2WLOypLGgzc7fzi",
+                Scope = "262144",
+                Provider = new VkAuthenticationProvider()
+                {
+                    OnAuthenticated = (context) =>
+                    {
+                        // Only some of the basic details from facebook 
+                        // like id, username, email etc are added as claims.
+                        // But you can retrieve any other details from this
+                        // raw Json object from facebook and add it as claims here.
+                        // Subsequently adding a claim here will also send this claim
+                        // as part of the cookie set on the browser so you can retrieve
+                        // on every successive request. 
+                        context.Identity.AddClaim(new Claim("VkAccessToken", context.AccessToken));
+                        context.Identity.AddClaim(new Claim("VkUserId", context.Id));
+
+                        return Task.FromResult(0);
+                    }
+                }
+            };
+
+            app.UseVkontakteAuthentication(options);
         }
     }
 }

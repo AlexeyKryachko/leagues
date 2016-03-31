@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Interfaces.Users.DataAccess;
 using Microsoft.AspNet.Identity;
 using MongoDB.Driver;
