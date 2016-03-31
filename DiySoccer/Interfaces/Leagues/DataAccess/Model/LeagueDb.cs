@@ -1,4 +1,6 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using System.Collections.Generic;
+using System.Linq;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Interfaces.Leagues.DataAccess.Model
 {
@@ -12,5 +14,8 @@ namespace Interfaces.Leagues.DataAccess.Model
 
         [BsonElement("desc")]
         public string Description { get; set; }
+
+        [BsonElement("vkgroup")]
+        public string VkSecurityGroup { get; set; }
     }
 }

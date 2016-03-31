@@ -31,6 +31,9 @@
             MyApp.Settings.logout();
         });
 
+        self.listenTo(MyApp.Settings, 'needFetch', function () {
+            MyApp.Settings.fetch();
+        });
     },
     onStop: function (options) {
         this.headerView.destroy();

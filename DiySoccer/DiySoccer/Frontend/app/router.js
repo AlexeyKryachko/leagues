@@ -3,6 +3,7 @@
         var self = this;
 
         MyApp.listenTo(MyApp.Settings, 'sync', function () {
+            console.log('Settings: ', MyApp.Settings.toJSON());
             self.changeModule(self.workingModule, self.workingOptions);
         });
     },

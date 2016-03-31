@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using Authentication;
 using Duke.Owin.VkontakteMiddleware;
 using Duke.Owin.VkontakteMiddleware.Provider;
@@ -80,8 +81,44 @@ namespace DiySoccer
                         // Subsequently adding a claim here will also send this claim
                         // as part of the cookie set on the browser so you can retrieve
                         // on every successive request. 
-                        context.Identity.AddClaim(new Claim("VkAccessToken", context.AccessToken));
-                        context.Identity.AddClaim(new Claim("VkUserId", context.Id));
+                        var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                        var userId = HttpContext.Current.User.Identity.GetUserId();
+                        var user = userManager.FindById(userId);
+                        if (user == null)
+                        {
+                            user = new ApplicationUser {
+                                UserName = context.UserName,
+                                Email = string.IsNullOrEmpty(context.Email) 
+                                    ? Guid.NewGuid() + "@diysoccer.ru"
+                                    : context.Email 
+                            };
+                            var result = userManager.Create(user, "0O9i8u#");
+                            if (result.Succeeded)
+                            {
+                                var code = userManager.GenerateEmailConfirmationToken(user.Id);
+                                var confirmation = userManager.ConfirmEmail(user.Id, code);
+                                if (confirmation.Succeeded)
+                                {
+                                    context.Identity.AddClaim(new Claim("VkAccessToken", context.AccessToken));
+                                    context.Identity.AddClaim(new Claim("VkUserId", context.Id));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!user.EmailConfirmed)
+                            {
+                                var code = userManager.GenerateEmailConfirmationToken(user.Id);
+                                var confirmation = userManager.ConfirmEmail(userId, code);
+                                if (confirmation.Succeeded)
+                                {
+                                    context.Identity.AddClaim(new Claim("VkAccessToken", context.AccessToken));
+                                    context.Identity.AddClaim(new Claim("VkUserId", context.Id));
+                                }
+                            }
+                            context.Identity.AddClaim(new Claim("VkAccessToken", context.AccessToken));
+                            context.Identity.AddClaim(new Claim("VkUserId", context.Id));
+                        }
 
                         return Task.FromResult(0);
                     }

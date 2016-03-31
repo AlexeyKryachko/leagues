@@ -9,11 +9,13 @@ namespace Interfaces.Leagues.BuisnessLogic
 
         IEnumerable<LeagueViewModel> GetAll();
 
-        LeagueViewModel Get(string leagueId);
+        IEnumerable<LeagueUnsecureViewModel> GetAllUnsecure();
 
-        void Create(LeagueViewModel model);
+        LeagueUnsecureViewModel GetUnsecure(string leagueId);
 
-        void Update(LeagueViewModel model);
+        void Create(LeagueUnsecureViewModel model);
+
+        void Update(LeagueUnsecureViewModel model);
 
         void Delete(string leagueId);
     }

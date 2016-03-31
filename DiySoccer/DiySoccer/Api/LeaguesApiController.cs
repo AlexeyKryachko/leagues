@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using DiySoccer.Core.Attributes;
 using Interfaces.Leagues.BuisnessLogic;
 using Interfaces.Leagues.BuisnessLogic.Model;
 
@@ -24,13 +25,12 @@ namespace DiySoccer.Api
         }
 
         [Route("api/leagues/{leagueId}")]
+        [AdminRole]
         [HttpGet]
-        public IHttpActionResult Get(string leagueId)
+        public IHttpActionResult GetUnsecure(string leagueId)
         {
-            var league = _leaguesManager.Get(leagueId);
-            return league != null
-                ? Json(league)
-                : null;
+            var league = _leaguesManager.GetUnsecure(leagueId);
+            return Json(league);
         }
 
         [Route("api/leagues")]
@@ -46,8 +46,9 @@ namespace DiySoccer.Api
         #region PUT
 
         [Route("api/leagues/{leagueId}")]
+        [AdminRole]
         [HttpPut]
-        public IHttpActionResult Update(LeagueViewModel model)
+        public IHttpActionResult Update(LeagueUnsecureViewModel model)
         {
             _leaguesManager.Update(model);
 
@@ -59,8 +60,9 @@ namespace DiySoccer.Api
         #region POST
 
         [Route("api/leagues")]
+        [AdminRole]
         [HttpPost]
-        public IHttpActionResult Create(LeagueViewModel model)
+        public IHttpActionResult Create(LeagueUnsecureViewModel model)
         {
             _leaguesManager.Create(model);
 

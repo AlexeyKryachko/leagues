@@ -36,27 +36,39 @@ namespace Implementations.Leagues.BuisnessLogic
             });
         }
 
-        public LeagueViewModel Get(string leagueId)
+        public IEnumerable<LeagueUnsecureViewModel> GetAllUnsecure()
+        {
+            return _leaguesRepository.GetAll().Select(x => new LeagueUnsecureViewModel
+            {
+                Id = x.EntityId,
+                Name = x.Name,
+                Description = x.Description,
+                VkGroup = x.VkSecurityGroup
+            });
+        }
+
+        public LeagueUnsecureViewModel GetUnsecure(string leagueId)
         {
             var league = _leaguesRepository.Get(leagueId);
             return league == null
                 ? null
-                : new LeagueViewModel
+                : new LeagueUnsecureViewModel
                 {
                     Id = league.EntityId,
                     Name = league.Name,
-                    Description = league.Description
+                    Description = league.Description,
+                    VkGroup = league.VkSecurityGroup
                 };
         }
 
-        public void Create(LeagueViewModel model)
+        public void Create(LeagueUnsecureViewModel model)
         {
-            _leaguesRepository.Create(model.Name, model.Description);
+            _leaguesRepository.Create(model.Name, model.Description, model.VkGroup);
         }
 
-        public void Update(LeagueViewModel model)
+        public void Update(LeagueUnsecureViewModel model)
         {
-            _leaguesRepository.Update(model.Id, model.Name, model.Description);
+            _leaguesRepository.Update(model.Id, model.Name, model.Description, model.VkGroup);
         }
 
         public LeagueStatisticViewModel GetStatisticByLeague(string leagueId)

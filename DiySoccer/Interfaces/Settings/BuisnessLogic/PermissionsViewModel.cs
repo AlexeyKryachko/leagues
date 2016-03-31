@@ -5,6 +5,12 @@ namespace Interfaces.Settings.BuisnessLogic
 {
     public class PermissionsViewModel
     {
+        [JsonProperty("isAuthenticated")]
+        public bool IsAuthenticated { get; set; }
+
+        [JsonProperty("isAdmin")]
+        public bool IsAdmin { get; set; }
+
         [JsonProperty("relationships")]
         public Dictionary<string, string> Relationships { get; set; }
 

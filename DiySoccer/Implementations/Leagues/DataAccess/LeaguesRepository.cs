@@ -33,24 +33,26 @@ namespace Implementations.Leagues.DataAccess
             return Collection.AsQueryable().FirstOrDefault(x => x.EntityId == leagueId);
         }
 
-        public void Create(string name, string description)
+        public void Create(string name, string description, string vkGroup)
         {
             var entity = new LeagueDb
             {
                 EntityId = ObjectId.GenerateNewId().ToString(),
                 Name = name,
-                Description = description
+                Description = description,
+                VkSecurityGroup = vkGroup
             };
 
             Collection.InsertOne(entity);
         }
 
-        public void Update(string leagueId, string name, string description)
+        public void Update(string leagueId, string name, string description, string vkGroup)
         {
             var filter = Builders<LeagueDb>.Filter.Eq(x => x.EntityId, leagueId);
             var update = Builders<LeagueDb>.Update
                 .Set(x => x.Name, name)
-                .Set(x => x.Description, description);
+                .Set(x => x.Description, description)
+                .Set(x => x.VkSecurityGroup, vkGroup);
 
             Collection.UpdateOne(filter, update);
         }

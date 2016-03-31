@@ -16,6 +16,9 @@ namespace Interfaces.Users.DataAccess
         [BsonElement("email")]
         public string Email { get; set; }
 
+        [BsonElement("isAdmin")]
+        public bool IsAdmin { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<UserAuthDb> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

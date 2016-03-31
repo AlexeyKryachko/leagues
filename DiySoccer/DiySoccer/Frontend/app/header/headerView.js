@@ -10,11 +10,13 @@
     },
     serializeData: function() {
         var model = this.model.toJSON();
-        model.vk = true;
 
-        if (model.provider == 'vk') {
+        if (model.permissions.isAuthenticated) {
             model.logout = true;
             model.vk = false;
+        } else {
+            model.logout = false;
+            model.vk = true;
         }
 
         return model;

@@ -6,5 +6,10 @@ namespace Interfaces.Settings.BuisnessLogic
     {
         [JsonProperty("permissions")]
         public PermissionsViewModel Permissions { get; set; }
+
+        public SettingsViewModel()
+        {
+            Permissions = new PermissionsViewModel();
+        }
     }
 }

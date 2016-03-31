@@ -9,8 +9,8 @@ namespace Interfaces.Leagues.DataAccess
 
         LeagueDb Get(string leagueId);
 
-        void Create(string name, string description);
+        void Create(string name, string description, string vkGroup);
 
-        void Update(string leagueId, string name, string description);
+        void Update(string leagueId, string name, string description, string vkGroup);
     }
 }

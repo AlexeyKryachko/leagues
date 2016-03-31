@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
 using Authentication;
+using Interfaces.Core;
+using Interfaces.Leagues.BuisnessLogic;
 using Interfaces.Settings.BuisnessLogic;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -15,47 +18,81 @@ namespace DiySoccer.Api
 {
     public class SettingsApiController : BaseApiController
     {
+        private readonly ILeaguesManager _leaguesManager;
+
+        public SettingsApiController(ILeaguesManager leaguesManager)
+        {
+            _leaguesManager = leaguesManager;
+        }
+
         #region GET
 
         [Route("api/settings")]
         [HttpGet]
         public IHttpActionResult GetSettings()
         {
-            var model = new SettingsViewModel
+            var model = new SettingsViewModel();
+
+            model.Permissions.IsAuthenticated = User.Identity.IsAuthenticated;
+            model.Permissions.IsAdmin = User.Identity.IsAuthenticated && User.Identity.Name == "alexey.kryachko@gmail.com";
+
+            var relationships = new Dictionary<string, string>();
+            var leagues = _leaguesManager.GetAllUnsecure();
+            foreach (var league in leagues)
             {
-                Permissions = new PermissionsViewModel
+                if (model.Permissions.IsAdmin)
                 {
-                    Relationships = new Dictionary<string, string>() { { "1", "2" } }
+                    relationships.Add(league.Id, ((int)LeagueAccessStatus.Editor).ToString());
+                    continue;
                 }
-            };
 
-            var userId = User.Identity.GetUserId();
-            var context = HttpContext.Current.GetOwinContext();
-            var externalIdentity = context.Authentication.GetExternalIdentityAsync(DefaultAuthenticationTypes.ExternalCookie);
-            var loginInfo = context.Authentication.GetExternalLoginInfoAsync();
-            var firstNameClaim = loginInfo.Result.ExternalIdentity.Claims.First(c => c.Type == "VkAccessToken");
-            var vkUserId = loginInfo.Result.ExternalIdentity.Claims.First(c => c.Type == "VkUserId").Value;
+                if (string.IsNullOrEmpty(league.VkGroup))
+                {
+                    relationships.Add(league.Id, ((int)LeagueAccessStatus.Member).ToString());
+                    continue;
+                }
 
-            var api = new VkApi();
-            var list = new List<long>()
-            {
-                long.Parse(vkUserId)
-            };
-            var ismember = api.Groups.IsMember("spbdiyfootball", long.Parse(vkUserId), list, false);
+                var context = HttpContext.Current.GetOwinContext();
+                var loginInfo = context.Authentication.GetExternalLoginInfoAsync();
+                if (loginInfo == null || loginInfo.Result == null)
+                {
+                    relationships.Add(league.Id, ((int)LeagueAccessStatus.Undefined).ToString());
+                    continue;
+                }
+
+                var vkUserIdClaim = loginInfo.Result.ExternalIdentity.Claims.FirstOrDefault(c => c.Type == "VkUserId");
+                if (vkUserIdClaim == null)
+                {
+                    relationships.Add(league.Id, ((int)LeagueAccessStatus.Undefined).ToString());
+                    continue;
+                }
+
+                var api = new VkApi();
+                long vkUserId;
+                try
+                {
+                    vkUserId = long.Parse(vkUserIdClaim.Value);
+                }
+                catch (Exception)
+                {
+                    relationships.Add(league.Id, ((int)LeagueAccessStatus.Undefined).ToString());
+                    continue;
+                }
+                
+                var response = api.Groups.IsMember("spbdiyfootball", vkUserId, new long[] { vkUserId }, false);
+                if (!response[0].Member)
+                {
+                    relationships.Add(league.Id, ((int)LeagueAccessStatus.Undefined).ToString());
+                }
+
+                relationships.Add(league.Id, ((int)LeagueAccessStatus.Member).ToString());
+            }
+
+            model.Permissions.Relationships = relationships;
             
-            //bool isMember = new VkApi().Groups.IsMember(27134671);
-
             return Json(model);
         }
-
-        private ApplicationUser GetCurrentUser(ApplicationIdentityContext context)
-        {
-            var identity = User.Identity as ClaimsIdentity;
-            Claim identityClaim = identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
-            return context.Users.AsQueryable().FirstOrDefault(u => u.Id == identityClaim.Value);
-        }
-
+        
         #endregion
 
     }

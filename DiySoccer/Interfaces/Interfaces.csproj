@@ -64,6 +64,7 @@
     <Compile Include="Core\DataAccess\IBaseEntity.cs" />
     <Compile Include="Core\DataAccess\IBaseRepository.cs" />
     <Compile Include="Core\IdNameViewModel.cs" />
+    <Compile Include="Core\LeagueAccessStatus.cs" />
     <Compile Include="Core\ScoreCalculation.cs" />
     <Compile Include="Games\BuisnessLogic\IGamesManager.cs" />
     <Compile Include="Games\BuisnessLogic\Models\GameMemberViewModel.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Games\DataAccess\Model\GameDb.cs" />
     <Compile Include="Leagues\BuisnessLogic\ILeaguesManager.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueStatisticViewModel.cs" />
+    <Compile Include="Leagues\BuisnessLogic\Model\LeagueUnsecureViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\TeamStatisticViewModel.cs" />
     <Compile Include="Leagues\DataAccess\ILeaguesRepository.cs" />
