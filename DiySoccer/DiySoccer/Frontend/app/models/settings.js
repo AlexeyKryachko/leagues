@@ -9,5 +9,13 @@
         $.get('/api/logout', function() {
             self.trigger('needFetch');
         });
+    },
+    isEditor(leagueId) {
+        var permission = this.get('permissions').relationships[leagueId];
+        return permission == '2' || permission == '3';
+    },
+    isAdmin(leagueId) {
+        var permission = this.get('permissions');
+        return permission.isAdmin;
     }
 });

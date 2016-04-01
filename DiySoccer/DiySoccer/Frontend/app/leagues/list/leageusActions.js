@@ -8,5 +8,12 @@
     },
     addLeague: function () {
         document.location.href = '#leagues/new';
+    },
+    serializeData: function() {
+        var model = {};
+
+        model.showAdd = MyApp.Settings.isAdmin();
+
+        return model;
     }
 });

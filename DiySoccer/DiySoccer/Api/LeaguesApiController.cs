@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using DiySoccer.Core.Attributes;
+using Interfaces.Core;
 using Interfaces.Leagues.BuisnessLogic;
 using Interfaces.Leagues.BuisnessLogic.Model;
 
@@ -17,6 +18,7 @@ namespace DiySoccer.Api
         #region GET
 
         [Route("api/leagues/{leagueId}/statistic")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
         [HttpGet]
         public IHttpActionResult GetStatistic(string leagueId)
         {
@@ -25,7 +27,7 @@ namespace DiySoccer.Api
         }
 
         [Route("api/leagues/{leagueId}")]
-        [AdminRole]
+        [DiySoccerAuthorize(LeagueAccessStatus.Admin)]
         [HttpGet]
         public IHttpActionResult GetUnsecure(string leagueId)
         {
@@ -46,7 +48,7 @@ namespace DiySoccer.Api
         #region PUT
 
         [Route("api/leagues/{leagueId}")]
-        [AdminRole]
+        [DiySoccerAuthorize(LeagueAccessStatus.Admin)]
         [HttpPut]
         public IHttpActionResult Update(LeagueUnsecureViewModel model)
         {
@@ -60,7 +62,7 @@ namespace DiySoccer.Api
         #region POST
 
         [Route("api/leagues")]
-        [AdminRole]
+        [DiySoccerAuthorize(LeagueAccessStatus.Admin)]
         [HttpPost]
         public IHttpActionResult Create(LeagueUnsecureViewModel model)
         {

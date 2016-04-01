@@ -1,2 +1,8 @@
-﻿<button type="button" class="btn btn-primary add-new-team">Добавить команду</button>
-<button type="button" class="btn btn-primary add-new-game">Добавить игру</button>
+﻿<div class="form-group">
+    {{#if showAddTeam}}
+    <button type="button" class="btn btn-primary add-new-team">Добавить команду</button>
+    {{/if}}
+    {{#if showAddGame}}
+    <button type="button" class="btn btn-primary add-new-game">Добавить игру</button>
+    {{/if}}
+</div>

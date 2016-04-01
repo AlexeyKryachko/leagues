@@ -1,4 +1,7 @@
 ﻿var TeamListItemView = Backbone.Marionette.ItemView.extend({
+    initialize: function() {
+        this.options = {};
+    },
     tagName: 'tr',
     className: 'cursor-pointer',
     template: "#team-item",
@@ -19,8 +22,14 @@
     },
     serializeData: function () {
         var model = this.model.toJSON();
+
         model.goals = model.scores + '-' + model.missed + ' (' + (model.scores - model.missed) + ')';
+        model.showEdit = MyApp.Settings.isEditor(this.options.leagueId);
+
         return model;
+    },
+    setLeagueId: function(leagueId) {
+        this.options.leagueId = leagueId;
     }
 });
 
@@ -30,15 +39,23 @@ var TeamListView = Backbone.Marionette.CompositeView.extend({
     childView: TeamListItemView,
     emptyView: EmptyListView,
     initialize: function (options) {
-        this.options = {
-            leagueId: options.leagueId
-        }
+        this.options = options;
+    },
+    onBeforeAddChild: function(childView) {
+        childView.setLeagueId(this.options.leagueId);
     },
     modelEvents: {
         'sync': 'render'
     },
     collectionEvents: {
         'sync': 'render'
+    },
+    serializeData: function() {
+        var model = this.model.toJSON();
+
+        model.showEditColumn = MyApp.Settings.isEditor(this.options.leagueId);
+        
+        return model;
     }
 });
 
@@ -60,5 +77,13 @@ var TeamListActions = Backbone.Marionette.CompositeView.extend({
     },
     redirectAddGame: function (e) {
         document.location.href = "#leagues/" + this.options.leagueId + "/games/new";
+    },
+    serializeData: function() {
+        var model = {};
+
+        model.showAddTeam = MyApp.Settings.isEditor(this.options.leagueId);
+        model.showAddGame = model.showAddTeam;
+
+        return model;
     }
 });

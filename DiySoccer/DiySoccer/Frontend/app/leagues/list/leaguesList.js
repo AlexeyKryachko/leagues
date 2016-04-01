@@ -11,6 +11,11 @@
         e.stopPropagation();
 
         document.location.href = '#leagues/' + this.model.id + '/edit';
+    },
+    serializeData: function() {
+        var model = this.model.toJSON();
+        model.showEdit = MyApp.Settings.isAdmin();
+        return model;
     }
 });
 

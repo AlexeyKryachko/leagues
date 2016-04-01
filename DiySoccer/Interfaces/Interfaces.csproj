@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authenticate\BuisnessLogic\IAuthenticateManager.cs" />
     <Compile Include="Core\DataAccess\IBaseEntity.cs" />
     <Compile Include="Core\DataAccess\IBaseRepository.cs" />
     <Compile Include="Core\IdNameViewModel.cs" />
