@@ -1,6 +1,8 @@
 ﻿
 using System.Linq;
 using System.Web.Http;
+using DiySoccer.Core.Attributes;
+using Interfaces.Core;
 using Interfaces.Users.BuisnessLogic;
 
 namespace DiySoccer.Api
@@ -17,6 +19,7 @@ namespace DiySoccer.Api
         #region GET
 
         [Route("api/league/{leagueId}/users/")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
         [HttpGet]
         public IHttpActionResult Find(string leagueId, string query, string exceptTeamIds, int page, int pageSize)
         {

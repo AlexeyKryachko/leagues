@@ -6,6 +6,7 @@
     },
     logout: function () {
         var self = this;
+        self.deleteCookie('.AspNet.ExternalCookie');
         $.get('/api/logout', function() {
             self.trigger('needFetch');
         });
@@ -17,5 +18,8 @@
     isAdmin(leagueId) {
         var permission = this.get('permissions');
         return permission.isAdmin;
+    },
+    deleteCookie( name ) {
+        document.cookie = "username=" + name + "; expires=Thu, 01 Jan 1970 00:00:00 UTC";
     }
 });

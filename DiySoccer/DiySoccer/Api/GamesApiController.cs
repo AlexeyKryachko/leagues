@@ -1,5 +1,7 @@
 ﻿
 using System.Web.Http;
+using DiySoccer.Core.Attributes;
+using Interfaces.Core;
 using Interfaces.Games.BuisnessLogic;
 using Interfaces.Games.BuisnessLogic.Models;
 
@@ -17,6 +19,7 @@ namespace DiySoccer.Api
         #region GET
         
         [Route("api/leagues/{leagueId}/games/{gameId}/info")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
         [HttpGet]
         public IHttpActionResult GetGame(string leagueId, string gameId)
         {
@@ -29,6 +32,7 @@ namespace DiySoccer.Api
         #region PUT
 
         [Route("api/leagues/{leagueId}/games/{gameId}")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
         [HttpPut]
         public void Update([FromUri]string leagueId, [FromUri]string gameId, [FromBody]GameVewModel model)
         {
@@ -40,6 +44,7 @@ namespace DiySoccer.Api
         #region POST
 
         [Route("api/leagues/{leagueId}/games")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
         [HttpPost]
         public void Create([FromUri]string leagueId, [FromBody]GameVewModel model)
         {

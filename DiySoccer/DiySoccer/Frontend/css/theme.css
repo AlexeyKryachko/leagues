@@ -24,3 +24,11 @@
 .name-width {
     width: 300px;
 }
+
+.mb10 {
+    margin-bottom: 10px !important;
+}
+
+.mt10 {
+    margin-top: 10px !important;
+}

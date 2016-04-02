@@ -19,11 +19,14 @@ namespace DiySoccer.Core.Attributes
 
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
+            var leagueValue = actionContext.ControllerContext.RouteData.Values["leagueId"];
+            var leagueId = leagueValue == null ? string.Empty : leagueValue.ToString();
+
             switch (_accessStatus)
             {
+                case LeagueAccessStatus.Member:
+                    return AuthenticateManager.IsMember(leagueId);
                 case LeagueAccessStatus.Editor:
-                    var leagueValue = actionContext.ControllerContext.RouteData.Values["leagueId"];
-                    var leagueId = leagueValue == null ? string.Empty : leagueValue.ToString();
                     return AuthenticateManager.IsEditor(leagueId);
                 case LeagueAccessStatus.Admin:
                     return AuthenticateManager.IsAdmin();

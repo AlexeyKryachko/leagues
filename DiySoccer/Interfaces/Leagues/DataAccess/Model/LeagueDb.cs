@@ -17,5 +17,13 @@ namespace Interfaces.Leagues.DataAccess.Model
 
         [BsonElement("vkgroup")]
         public string VkSecurityGroup { get; set; }
+        
+        [BsonElement("admins")]
+        public IEnumerable<string> Admins { get; set; }
+
+        public LeagueDb()
+        {
+            Admins = Enumerable.Empty<string>();
+        }
     }
 }

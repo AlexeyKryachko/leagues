@@ -83,7 +83,7 @@ namespace DiySoccer
                         // on every successive request. 
                         var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
                         var userId = HttpContext.Current.User.Identity.GetUserId();
-                        var user = userManager.FindById(userId);
+                        var user = userManager.FindByName(context.UserName);
                         if (user == null)
                         {
                             user = new ApplicationUser {

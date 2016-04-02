@@ -19,6 +19,8 @@
             model.vk = true;
         }
 
+        model.url = document.location.hash.replace('#', '');
+
         return model;
     },
     modelEvents: {

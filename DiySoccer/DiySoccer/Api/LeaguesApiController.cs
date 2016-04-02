@@ -18,7 +18,7 @@ namespace DiySoccer.Api
         #region GET
 
         [Route("api/leagues/{leagueId}/statistic")]
-        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
         [HttpGet]
         public IHttpActionResult GetStatistic(string leagueId)
         {

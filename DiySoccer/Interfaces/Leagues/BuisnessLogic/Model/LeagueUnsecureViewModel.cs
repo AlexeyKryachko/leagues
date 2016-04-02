@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
 
 namespace Interfaces.Leagues.BuisnessLogic.Model
 {
@@ -15,5 +17,13 @@ namespace Interfaces.Leagues.BuisnessLogic.Model
 
         [JsonProperty("vkGroup")]
         public string VkGroup { get; set; }
+        
+        [JsonProperty("Admins")]
+        public IEnumerable<string> Admins { get; set; }
+
+        public LeagueUnsecureViewModel()
+        {
+            Admins = Enumerable.Empty<string>();
+        }
     }
 }

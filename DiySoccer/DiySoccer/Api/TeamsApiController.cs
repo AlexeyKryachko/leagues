@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Http;
+using DiySoccer.Core.Attributes;
+using Interfaces.Core;
 using Interfaces.Teams.BuisnessLogic;
 using Interfaces.Teams.BuisnessLogic.Models;
 
@@ -17,6 +19,7 @@ namespace DiySoccer.Api
         #region GET
 
         [Route("api/league/{leagueId}/teams/{teamId}")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
         [HttpGet]
         public IHttpActionResult GetTeamByLeague(string leagueId, string teamId)
         {
@@ -25,6 +28,7 @@ namespace DiySoccer.Api
         }
 
         [Route("api/leagues/{leagueId}/teams/{teamId}/info")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
         [HttpGet]
         public IHttpActionResult GetTeamInfo(string leagueId, string teamId)
         {
@@ -33,6 +37,7 @@ namespace DiySoccer.Api
         }
 
         [Route("api/leagues/{leagueId}/teams")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
         [HttpGet]
         public IHttpActionResult GetTeamsByLeague(string leagueId)
         {
@@ -45,6 +50,7 @@ namespace DiySoccer.Api
         #region PUT
 
         [Route("api/leagues/{leagueId}/teams/{teamId}")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
         [HttpPut]
         public IHttpActionResult Update([FromUri]string leagueId, [FromUri]string teamId, [FromBody]CreateTeamViewModel model)
         {
@@ -55,6 +61,7 @@ namespace DiySoccer.Api
         #endregion
 
         [Route("api/leagues/{leagueId}/teams")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
         [HttpPost]
         public void Create([FromUri]string leagueId, [FromBody]CreateTeamViewModel model)
         {

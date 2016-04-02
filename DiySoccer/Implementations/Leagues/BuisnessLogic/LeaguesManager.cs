@@ -43,7 +43,8 @@ namespace Implementations.Leagues.BuisnessLogic
                 Id = x.EntityId,
                 Name = x.Name,
                 Description = x.Description,
-                VkGroup = x.VkSecurityGroup
+                VkGroup = x.VkSecurityGroup,
+                Admins = x.Admins
             });
         }
 
@@ -57,7 +58,8 @@ namespace Implementations.Leagues.BuisnessLogic
                     Id = league.EntityId,
                     Name = league.Name,
                     Description = league.Description,
-                    VkGroup = league.VkSecurityGroup
+                    VkGroup = league.VkSecurityGroup,
+                    Admins = league.Admins
                 };
         }
 
@@ -129,6 +131,7 @@ namespace Implementations.Leagues.BuisnessLogic
                     Count = x.Count()
                 })
                 .OrderByDescending(x => x.Count)
+                .Take(15)
                 .ToList();
 
             var bestForwards = Enumerable.Concat(
@@ -141,6 +144,7 @@ namespace Implementations.Leagues.BuisnessLogic
                     Goals = x.Sum(y => y.Score)
                 })
                 .OrderByDescending(x => x.Goals)
+                .Take(15)
                 .ToList();
 
             var bestHelpers = Enumerable.Concat(
@@ -153,6 +157,7 @@ namespace Implementations.Leagues.BuisnessLogic
                     Helps = x.Sum(y => y.Help)
                 })
                 .OrderByDescending(x => x.Helps)
+                .Take(15)
                 .ToList();
 
             var userIds = new List<string>();

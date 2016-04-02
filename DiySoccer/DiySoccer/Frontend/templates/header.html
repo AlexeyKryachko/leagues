@@ -9,9 +9,18 @@
             </button>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav pull-right">
+            <ul class="nav navbar-nav pull-right mt10">
                 {{#if vk}}
-                <li><button class="btn btn-primary btn-vk-login">ВК</button></li>
+                <li>
+                    <form action="/Account/ExternalLogin" method="post">
+                        <input id="returnUrl" name="returnUrl" type="hidden" value="{{url}}">
+                        <div id="socialLoginList">
+                            <p>
+                                <button type="submit" class="btn btn-primary" id="Vkontakte" name="provider" value="Vkontakte" title="Log in using your Vkontakte account">Vkontakte</button>
+                            </p>
+                        </div>
+                    </form>
+                </li>
                 {{/if}}
                 {{#if logout}}
                 <li><button class="btn btn-primary btn-logout">Выйти</button></li>

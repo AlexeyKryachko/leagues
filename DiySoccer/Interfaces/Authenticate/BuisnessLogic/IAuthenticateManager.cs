@@ -6,6 +6,8 @@ namespace Interfaces.Authenticate.BuisnessLogic
     {
         SettingsViewModel GetSettings();
 
+        bool IsMember(string leagueId);
+
         bool IsEditor(string leagueId);
 
         bool IsAdmin();

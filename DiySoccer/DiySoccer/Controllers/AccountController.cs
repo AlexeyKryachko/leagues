@@ -285,7 +285,7 @@ namespace DiySoccer.Controllers
         // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Request a redirect to the external login provider
@@ -346,6 +346,7 @@ namespace DiySoccer.Controllers
                 return RedirectToAction("Login");
             }
 
+            return new RedirectResult(Url.Action("Index", "Home") + "#" + returnUrl);
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInHelper.ExternalSignIn(loginInfo, isPersistent: false);
             switch (result)
