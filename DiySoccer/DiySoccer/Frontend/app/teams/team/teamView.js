@@ -28,13 +28,15 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
         'createMember': '.create-team-member',
         'back': '.create-team-back',
         'memberName': '.member-name',
+        'hidden': '.team-hidden',
         'teamName': '.team-name',
         'submit': '.create-team'
     },
     events: {
         'click @ui.createMember': 'createMember',
         'click @ui.back': 'back',
-        'change @ui.teamName': 'writeTeamName'
+        'change @ui.teamName': 'writeTeamName',
+        'change @ui.hidden': 'changeHidden'
     },
     triggers: {
         'click @ui.submit': 'submit',
@@ -42,6 +44,9 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
     },
     writeTeamName: function() {
         this.model.set('name', this.ui.teamName.val());
+    },
+    changeHidden: function () {
+        this.model.set('hidden', this.ui.hidden.prop('checked'));
     },
     createMember: function () {
         var name = this.ui.memberName.val();
@@ -52,5 +57,10 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
         this.ui.memberName.val('');
     },
     initialize: function (options) {
+    },
+    serializeData: function() {
+        var model = this.model.toJSON();
+        console.log('[TeamView] ', model);
+        return model;
     }
 });

@@ -35,7 +35,7 @@ namespace Implementations.Teams.BuisnessLogic
 
             var userIds = userEntities.Select(x => x.EntityId);
             var memberIds = exitedIds.Concat(userIds);
-            _teamsRepository.Create(leagueId, model.Name, memberIds);
+            _teamsRepository.Create(leagueId, model.Name, model.Hidden, memberIds);
         }
 
         public TeamViewModel Get(string leagueId, string teamId)
@@ -49,6 +49,7 @@ namespace Implementations.Teams.BuisnessLogic
             {
                 Id = team.EntityId,
                 Name = team.Name,
+                Hidden = team.Hidden,
                 Members = members.Select(x => new IdNameViewModel
                 {
                     Id = x.EntityId,
@@ -97,7 +98,7 @@ namespace Implementations.Teams.BuisnessLogic
 
             var userIds = userEntities.Select(x => x.EntityId);
             var memberIds = exitedIds.Concat(userIds);
-            _teamsRepository.Update(leagueId, teamId, model.Name, memberIds);
+            _teamsRepository.Update(leagueId, teamId, model.Name, model.Hidden, memberIds);
         }
 
         public IEnumerable<TeamViewModel> GetByLeague(string id)
@@ -110,6 +111,7 @@ namespace Implementations.Teams.BuisnessLogic
             {
                 Id = x.EntityId,
                 Name = x.Name,
+                Hidden = x.Hidden,
                 Members = x.MemberIds.Select(y => new IdNameViewModel
                 {
                     Id = y,

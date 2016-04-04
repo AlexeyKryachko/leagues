@@ -82,6 +82,9 @@ namespace Implementations.Leagues.BuisnessLogic
 
             foreach (var team in teams)
             {
+                if (team.Hidden)
+                    continue;
+
                 var model = new TeamStatisticViewModel
                 {
                     Id = team.EntityId,
@@ -121,9 +124,11 @@ namespace Implementations.Leagues.BuisnessLogic
                 teamsStatistic.Add(model);
             }
 
+            var hiddenTeams = teams.Where(x => x.Hidden).SelectMany(x => x.MemberIds).Distinct();
             var bestPlayers = Enumerable.Concat(
                 games.Where(x => !string.IsNullOrEmpty(x.HomeTeam.BestMemberId)).Select(x => x.HomeTeam.BestMemberId),
                 games.Where(x => !string.IsNullOrEmpty(x.GuestTeam.BestMemberId)).Select(x => x.GuestTeam.BestMemberId))
+                .Where(x => !hiddenTeams.Contains(x))
                 .GroupBy(x => x)
                 .Select(x => new
                 {
@@ -137,6 +142,7 @@ namespace Implementations.Leagues.BuisnessLogic
             var bestForwards = Enumerable.Concat(
                 games.SelectMany(x => x.HomeTeam.Members),
                 games.SelectMany(x => x.GuestTeam.Members))
+                .Where(x => !hiddenTeams.Contains(x.Id))
                 .GroupBy(x => x.Id)
                 .Select(x => new
                 {
@@ -150,6 +156,7 @@ namespace Implementations.Leagues.BuisnessLogic
             var bestHelpers = Enumerable.Concat(
                 games.SelectMany(x => x.HomeTeam.Members),
                 games.SelectMany(x => x.GuestTeam.Members))
+                .Where(x => !hiddenTeams.Contains(x.Id))
                 .GroupBy(x => x.Id)
                 .Select(x => new
                 {

@@ -14,7 +14,10 @@ namespace Interfaces.Teams.DataAccess
         
         [BsonElement("name")]
         public string Name { get; set; }
-        
+
+        [BsonElement("hidden")]
+        public bool Hidden { get; set; }
+
         [BsonElement("members")]
         public IEnumerable<string> MemberIds { get; set; }
     }

@@ -10,11 +10,12 @@ namespace Implementations.Teams.DataAccess
     {
         protected override string CollectionName => "teams";
 
-        public void Create(string leagueId, string name, IEnumerable<string> memberIds)
+        public void Create(string leagueId, string name, bool hidden, IEnumerable<string> memberIds)
         {
             var entity = new TeamDb
             {
                 Name = name,
+                Hidden = hidden,
                 MemberIds = memberIds
             };
 
@@ -26,10 +27,13 @@ namespace Implementations.Teams.DataAccess
             return Collection.AsQueryable().Where(x => x.LeagueId == id);
         }
 
-        public void Update(string leagueId, string id, string name, IEnumerable<string> memberIds)
+        public void Update(string leagueId, string id, string name, bool hidden, IEnumerable<string> memberIds)
         {
             var filter = Builders<TeamDb>.Filter.Eq(x => x.LeagueId, leagueId) & Builders<TeamDb>.Filter.Eq(x => x.EntityId, id);
-            var update = Builders<TeamDb>.Update.Set(x => x.MemberIds, memberIds);
+            var update = Builders<TeamDb>.Update
+                .Set(x => x.Name, name)
+                .Set(x => x.Hidden, hidden)
+                .Set(x => x.MemberIds, memberIds);
 
             Collection.UpdateOne(filter, update);
         }

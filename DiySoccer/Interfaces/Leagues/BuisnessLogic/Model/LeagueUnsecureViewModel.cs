@@ -17,7 +17,7 @@ namespace Interfaces.Leagues.BuisnessLogic.Model
 
         [JsonProperty("vkGroup")]
         public string VkGroup { get; set; }
-        
+
         [JsonProperty("Admins")]
         public IEnumerable<string> Admins { get; set; }
 

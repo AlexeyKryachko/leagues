@@ -26,6 +26,7 @@
 
         var data = {
             name: self.model.get('name'),
+            hidden: self.model.get('hidden'),
             members: self.members.toJSON()
         }
 
@@ -43,6 +44,7 @@
 
         var data = {
             league: self.options.leagueId,
+            hidden: self.model.get('hidden'),
             name: self.model.get('name'),
             members: self.members.toJSON()
         }
