@@ -52,7 +52,7 @@ namespace DiySoccer.Api
         [Route("api/leagues/{leagueId}/teams/{teamId}")]
         [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
         [HttpPut]
-        public IHttpActionResult Update([FromUri]string leagueId, [FromUri]string teamId, [FromBody]CreateTeamViewModel model)
+        public IHttpActionResult Update([FromUri]string leagueId, [FromUri]string teamId, [FromBody]TeamViewModel model)
         {
             _teamsManager.Update(leagueId, teamId, model);
             return Ok();
@@ -63,7 +63,7 @@ namespace DiySoccer.Api
         [Route("api/leagues/{leagueId}/teams")]
         [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
         [HttpPost]
-        public void Create([FromUri]string leagueId, [FromBody]CreateTeamViewModel model)
+        public void Create([FromUri]string leagueId, [FromBody]TeamViewModel model)
         {
             _teamsManager.Create(leagueId, model);
         }

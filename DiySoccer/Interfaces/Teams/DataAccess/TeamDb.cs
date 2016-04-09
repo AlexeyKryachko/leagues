@@ -18,6 +18,9 @@ namespace Interfaces.Teams.DataAccess
         [BsonElement("hidden")]
         public bool Hidden { get; set; }
 
+        [BsonElement("mediaId")]
+        public string MediaId { get; set; }
+
         [BsonElement("members")]
         public IEnumerable<string> MemberIds { get; set; }
     }

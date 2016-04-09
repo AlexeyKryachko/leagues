@@ -22,7 +22,7 @@ namespace Implementations.Teams.BuisnessLogic
             _gamesRepository = gamesRepository;
         }
 
-        public void Create(string leagueId, CreateTeamViewModel model)
+        public void Create(string leagueId, TeamViewModel model)
         {
             var exitedIds = model.Members
                 .Where(x => !string.IsNullOrEmpty(x.Id))
@@ -35,7 +35,16 @@ namespace Implementations.Teams.BuisnessLogic
 
             var userIds = userEntities.Select(x => x.EntityId);
             var memberIds = exitedIds.Concat(userIds);
-            _teamsRepository.Create(leagueId, model.Name, model.Hidden, memberIds);
+
+            var entity = new TeamDb
+            {
+                LeagueId = leagueId,
+                Name = model.Name,
+                Hidden = model.Hidden,
+                MemberIds = memberIds,
+                MediaId = model.Media
+            };
+            _teamsRepository.Add(leagueId, entity);
         }
 
         public TeamViewModel Get(string leagueId, string teamId)
@@ -54,7 +63,8 @@ namespace Implementations.Teams.BuisnessLogic
                 {
                     Id = x.EntityId,
                     Name = x.Name
-                })
+                }),
+                Media = team.MediaId
             };
         }
 
@@ -85,7 +95,7 @@ namespace Implementations.Teams.BuisnessLogic
             };
         }
 
-        public void Update(string leagueId, string teamId, CreateTeamViewModel model)
+        public void Update(string leagueId, string teamId, TeamViewModel model)
         {
             var exitedIds = model.Members
                 .Where(x => !string.IsNullOrEmpty(x.Id))
@@ -98,7 +108,17 @@ namespace Implementations.Teams.BuisnessLogic
 
             var userIds = userEntities.Select(x => x.EntityId);
             var memberIds = exitedIds.Concat(userIds);
-            _teamsRepository.Update(leagueId, teamId, model.Name, model.Hidden, memberIds);
+
+            var entity = new TeamDb
+            {
+                EntityId = teamId,
+                LeagueId = leagueId,
+                Name = model.Name,
+                Hidden = model.Hidden,
+                MemberIds = memberIds,
+                MediaId = model.Media
+            };
+            _teamsRepository.Update(leagueId, entity);
         }
 
         public IEnumerable<TeamViewModel> GetByLeague(string id)

@@ -1,18 +1,18 @@
 ﻿<div class="form-group row">
-    <div class="col-sm-4">
+    <div class="col-sm-12">
         <input type="text" class="form-control team-name" placeholder="Название" value="{{name}}"/>
     </div>
 </div>
 <div class="form-group row">
-    <div class="col-sm-4">
+    <div class="col-sm-12">
         <input type="text" class="form-control member-name" placeholder="Имя"/>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-12">
         <button type="button" class="btn btn-primary create-team-member">Добавить игрока</button>
     </div>
 </div>
 <div class="form-group row">
-    <div class="col-sm-4">
+    <div class="col-sm-12">
         {{#if hidden}}
         <input type="checkbox" class="form-control team-hidden" placeholder="Скрыть" checked="checked"/> Скрыть
         {{else}}
@@ -22,7 +22,7 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -35,6 +35,18 @@
             </thead>
             <tbody></tbody>
         </table>
+    </div>
+    <div class="col-sm-6">
+        <form id="logo-upload-form" action="">
+            <input type="file" id="logo-file" name="logo-file"/>
+            <input id="btUpload" type="button" value="Upload File"/>
+            <p></p>
+        </form>
+        <div class="logo-container">
+            {{#if media}}
+            <img src="/api/image/{{media}}" />
+            {{/if}}
+        </div>
     </div>
 </div>
 

@@ -27,7 +27,8 @@
         var data = {
             name: self.model.get('name'),
             hidden: self.model.get('hidden'),
-            members: self.members.toJSON()
+            members: self.members.toJSON(),
+            media: self.model.get('media')
         }
 
         $.ajax({
@@ -46,7 +47,8 @@
             league: self.options.leagueId,
             hidden: self.model.get('hidden'),
             name: self.model.get('name'),
-            members: self.members.toJSON()
+            members: self.members.toJSON(),
+            media: self.model.get('media')
         }
 
         $.ajax({
@@ -76,6 +78,7 @@
         $.get('/api/league/' + options.leagueId + '/teams/' + options.teamId, function (response) {
             self.model.clear();
             self.model.set('name', response.name);
+            self.model.set('media', response.media);
             self.model.set('id', response.id);
             self.members.reset(response.members);
 

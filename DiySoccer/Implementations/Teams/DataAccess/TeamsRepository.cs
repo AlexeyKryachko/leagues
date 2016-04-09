@@ -9,31 +9,20 @@ namespace Implementations.Teams.DataAccess
     public class TeamsRepository : BaseRepository<TeamDb>, ITeamsRepository
     {
         protected override string CollectionName => "teams";
-
-        public void Create(string leagueId, string name, bool hidden, IEnumerable<string> memberIds)
-        {
-            var entity = new TeamDb
-            {
-                Name = name,
-                Hidden = hidden,
-                MemberIds = memberIds
-            };
-
-            Add(leagueId, entity);
-        }
-
+        
         public IEnumerable<TeamDb> GetByLeague(string id)
         {
             return Collection.AsQueryable().Where(x => x.LeagueId == id);
         }
 
-        public void Update(string leagueId, string id, string name, bool hidden, IEnumerable<string> memberIds)
+        public void Update(string leagueId, TeamDb entity)
         {
-            var filter = Builders<TeamDb>.Filter.Eq(x => x.LeagueId, leagueId) & Builders<TeamDb>.Filter.Eq(x => x.EntityId, id);
+            var filter = Builders<TeamDb>.Filter.Eq(x => x.LeagueId, leagueId) & Builders<TeamDb>.Filter.Eq(x => x.EntityId, entity.EntityId);
             var update = Builders<TeamDb>.Update
-                .Set(x => x.Name, name)
-                .Set(x => x.Hidden, hidden)
-                .Set(x => x.MemberIds, memberIds);
+                .Set(x => x.Name, entity.Name)
+                .Set(x => x.Hidden, entity.Hidden)
+                .Set(x => x.MemberIds, entity.MemberIds)
+                .Set(x => x.MediaId, entity.MediaId);
 
             Collection.UpdateOne(filter, update);
         }

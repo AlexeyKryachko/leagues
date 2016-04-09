@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using Implementations.Authenticate.BuisnessLogic;
+using Implementations.Core.Medias.BuisnessLogic;
+using Implementations.Core.Medias.DataAccess;
 using Implementations.Games.BuisnessLogic;
 using Implementations.Games.DataAccess;
 using Implementations.Leagues.BuisnessLogic;
@@ -9,6 +11,8 @@ using Implementations.Teams.DataAccess;
 using Implementations.Users.BuisnessLogic;
 using Implementations.Users.DataAccess;
 using Interfaces.Authenticate.BuisnessLogic;
+using Interfaces.Core.Services.Medias.BuisnessLogic;
+using Interfaces.Core.Services.Medias.DataAccess;
 using Interfaces.Games.BuisnessLogic;
 using Interfaces.Games.DataAccess;
 using Interfaces.Leagues.BuisnessLogic;
@@ -37,6 +41,9 @@ namespace Dependences
             builder.RegisterType(typeof(LeaguesRepository)).As<ILeaguesRepository>();
 
             builder.RegisterType(typeof(AuthenticateManager)).As<IAuthenticateManager>();
+
+            builder.RegisterType(typeof(MediaManager)).As<IMediaManager>();
+            builder.RegisterType(typeof(MediaRepository)).As<IMediaRepository>();
         }
     }
 }

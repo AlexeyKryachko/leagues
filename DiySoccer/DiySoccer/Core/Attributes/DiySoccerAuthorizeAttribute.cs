@@ -19,8 +19,9 @@ namespace DiySoccer.Core.Attributes
 
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
-            var leagueValue = actionContext.ControllerContext.RouteData.Values["leagueId"];
-            var leagueId = leagueValue == null ? string.Empty : leagueValue.ToString();
+            var leagueId = actionContext.ControllerContext.RouteData.Values.ContainsKey("leagueId") 
+                ? actionContext.ControllerContext.RouteData.Values["leagueId"].ToString() 
+                : string.Empty;
 
             switch (_accessStatus)
             {

@@ -30,17 +30,44 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
         'memberName': '.member-name',
         'hidden': '.team-hidden',
         'teamName': '.team-name',
-        'submit': '.create-team'
+        'submit': '.create-team',
+        'upload': '#btUpload',
+        'logoContainer': '.logo-container',
+        'logoValue': '#logo-file-id'
     },
     events: {
         'click @ui.createMember': 'createMember',
         'click @ui.back': 'back',
         'change @ui.teamName': 'writeTeamName',
-        'change @ui.hidden': 'changeHidden'
+        'change @ui.hidden': 'changeHidden',
+        'click @ui.upload': 'uploadImage'
     },
     triggers: {
         'click @ui.submit': 'submit',
         'click @ui.back': 'back'
+    },
+    uploadImage: function () {
+        var self = this;
+
+        var data = new FormData($('#logo-upload-form')[0]);
+        $.ajax({
+            type: "POST",
+            url: '/api/upload/logo/',    // CALL WEB API TO SAVE THE FILES.
+            enctype: 'multipart/form-data',
+            contentType: false,
+            processData: false,         // PREVENT AUTOMATIC DATA PROCESSING.
+            cache: false,
+            data: data, 		        // DATA OR FILES IN THIS CONTEXT.
+            success: function (data, textStatus, xhr) {
+                self.ui.logoContainer.html('<img src="/api/image/' + data.id + '" />');
+                self.model.set('media', data.id);
+                document.getElementById("logo-upload-form").reset();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                self.logoContainer.html('');
+                document.getElementById("logo-upload-form").reset();
+            }
+        });
     },
     writeTeamName: function() {
         this.model.set('name', this.ui.teamName.val());

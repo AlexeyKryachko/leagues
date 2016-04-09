@@ -206,6 +206,7 @@
   <ItemGroup>
     <Compile Include="Api\BaseApiController.cs" />
     <Compile Include="Api\AuthenticationApiController.cs" />
+    <Compile Include="Api\ImageApiController.cs" />
     <Compile Include="Api\SettingsApiController.cs" />
     <Compile Include="Api\GamesApiController.cs" />
     <Compile Include="Api\LeaguesApiController.cs" />

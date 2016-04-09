@@ -16,6 +16,9 @@ namespace Interfaces.Teams.BuisnessLogic.Models
         [JsonProperty("hidden")]
         public bool Hidden { get; set; }
 
+        [JsonProperty("media")]
+        public string Media { get; set; }
+
         [JsonProperty("members")]
         public IEnumerable<IdNameViewModel> Members { get; set; }
 

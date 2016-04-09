@@ -53,6 +53,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,6 +68,11 @@
     <Compile Include="Core\IdNameViewModel.cs" />
     <Compile Include="Core\LeagueAccessStatus.cs" />
     <Compile Include="Core\ScoreCalculation.cs" />
+    <Compile Include="Core\Services\Medias\BuisnessLogic\MediaIOViewModel.cs" />
+    <Compile Include="Core\Services\Medias\BuisnessLogic\MediaViewModel.cs" />
+    <Compile Include="Core\Services\Medias\DataAccess\IMediaRepository.cs" />
+    <Compile Include="Core\Services\Medias\BuisnessLogic\IMediaManager.cs" />
+    <Compile Include="Core\Services\Medias\DataAccess\MediaDb.cs" />
     <Compile Include="Games\BuisnessLogic\IGamesManager.cs" />
     <Compile Include="Games\BuisnessLogic\Models\GameMemberViewModel.cs" />
     <Compile Include="Games\BuisnessLogic\Models\GameTeamViewModel.cs" />
@@ -92,7 +98,6 @@
     <Compile Include="Users\DataAccess\IUsersRepository.cs" />
     <Compile Include="Users\DataAccess\UserAuthDb.cs" />
     <Compile Include="Users\DataAccess\UserDb.cs" />
-    <Compile Include="Teams\BuisnessLogic\Models\CreateTeamViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\ITeamsManager.cs" />
     <Compile Include="Teams\DataAccess\ITeamsRepository.cs" />
     <Compile Include="Teams\DataAccess\TeamDb.cs" />
