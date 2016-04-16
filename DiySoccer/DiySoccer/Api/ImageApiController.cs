@@ -5,6 +5,7 @@ using System.Web.Http;
 using DiySoccer.Core.Attributes;
 using Interfaces.Core;
 using Interfaces.Core.Services.Medias.BuisnessLogic;
+using WebApi.OutputCache.V2.TimeAttributes;
 
 namespace DiySoccer.Api
 {
@@ -20,6 +21,7 @@ namespace DiySoccer.Api
         #region GET
 
         [Route("api/image/{mediaId}")]
+        [CacheOutputUntilToday]
         [HttpGet]
         public HttpResponseMessage GetImage(string mediaId, int? width = null, int? height = null)
         {
