@@ -7,39 +7,22 @@
         self.app = app;
 
         self.league = new League();
+        self.admins = new Backbone.Collection();
     },
     onStart: function (options) {
         var self = this;
 
         self.options = options;
+        self.league.clear();
+        self.admins.reset();
+
+        self.createViews();
+        self.bindViews();
 
         if (options.leagueId) {
-            self._onEdit();
-        } else {
-            self._onNew();
+            self.league.set('id', self.options.leagueId);
+            self.league.fetch();
         }
-
-    },
-    _onNew: function () {
-        var self = this;
-
-        self.league.clear();
-        
-        self.createViews();
-        self.bindViews();
-        
-        self.app.mainRegion.show(self.layout);
-    },
-    _onEdit: function () {
-        var self = this;
-
-        self.league.clear();
-
-        self.createViews();
-        self.bindViews();
-
-        self.league.set('id', self.options.leagueId);
-        self.league.fetch();
 
         self.app.mainRegion.show(self.layout);
     },
@@ -47,7 +30,7 @@
         var self = this;
 
         self.layout = new LayoutView();
-        self.leagueView = new LeagueView({ model: self.league });
+        self.leagueView = new LeagueView({ model: self.league, collection: self.admins });
         self.saveView = new SaveView();
     },
     bindViews: function () {
@@ -58,10 +41,16 @@
             self.layout.down.show(self.saveView);
         });
 
+        self.listenToOnce(self.league, 'sync', function () {
+            self.admins.reset(self.league.get('admins'));
+        });
+
         self.listenTo(self.saveView, 'save', function () {
             self.listenToOnce(self.league, 'sync', function() {
                 document.location.href = '#leagues/';
             });
+
+            self.league.set('admins', self.admins.toJSON());
             self.league.save();
         });
 

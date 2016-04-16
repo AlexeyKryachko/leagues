@@ -3,26 +3,16 @@ using Interfaces.Leagues.DataAccess;
 using Interfaces.Leagues.DataAccess.Model;
 using MongoDB.Driver;
 using System.Linq;
-using Core;
+using Implementations.Core.DataAccess;
+using Interfaces.Leagues.BuisnessLogic.Model;
 using MongoDB.Bson;
 
 namespace Implementations.Leagues.DataAccess
 {
-    public sealed class LeaguesRepository : ILeaguesRepository
+    public sealed class LeaguesRepository : MongoRepository<LeagueDb>, ILeaguesRepository
     {
-        private readonly IMongoClient _client;
-        private readonly IMongoDatabase _database;
-
-        private const string CollectionName = "leagues";
-        private IMongoCollection<LeagueDb> Collection { get; }
-
-        public LeaguesRepository()
-        {
-            _client = new MongoClient(MongoConnetcionString.ConnectionString);
-            _database = _client.GetDatabase(MongoConnetcionString.Database);
-            Collection = _database.GetCollection<LeagueDb>(CollectionName);
-        }
-
+        protected override string CollectionName => "leagues";
+        
         public IEnumerable<LeagueDb> GetAll()
         {
             return Collection.AsQueryable().ToList();
@@ -33,26 +23,32 @@ namespace Implementations.Leagues.DataAccess
             return Collection.AsQueryable().FirstOrDefault(x => x.EntityId == leagueId);
         }
 
-        public void Create(string name, string description, string vkGroup)
+        public void Create(LeagueUnsecureViewModel model)
         {
+            var admins = model.Admins.Select(x => x.Id);
+
             var entity = new LeagueDb
             {
                 EntityId = ObjectId.GenerateNewId().ToString(),
-                Name = name,
-                Description = description,
-                VkSecurityGroup = vkGroup
+                Name = model.Name,
+                Description = model.Description,
+                VkSecurityGroup = model.VkGroup,
+                Admins = admins
             };
 
             Collection.InsertOne(entity);
         }
 
-        public void Update(string leagueId, string name, string description, string vkGroup)
+        public void Update(LeagueUnsecureViewModel model)
         {
-            var filter = Builders<LeagueDb>.Filter.Eq(x => x.EntityId, leagueId);
+            var admins = model.Admins.Select(x => x.Id);
+
+            var filter = Builders<LeagueDb>.Filter.Eq(x => x.EntityId, model.Id);
             var update = Builders<LeagueDb>.Update
-                .Set(x => x.Name, name)
-                .Set(x => x.Description, description)
-                .Set(x => x.VkSecurityGroup, vkGroup);
+                .Set(x => x.Name, model.Name)
+                .Set(x => x.Description, model.Description)
+                .Set(x => x.VkSecurityGroup, model.VkGroup)
+                .Set(x => x.Admins, admins);
 
             Collection.UpdateOne(filter, update);
         }

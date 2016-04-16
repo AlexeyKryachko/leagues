@@ -1,22 +1,22 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Interfaces.Users.DataAccess
 {
+    [BsonIgnoreExtraElements]
     public class UserAuthDb : IUser
     {
         [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-
-        [BsonElement("username")]
+        
         public string UserName { get; set; }
-
-        [BsonElement("email")]
+        
         public string Email { get; set; }
-
-        [BsonElement("isAdmin")]
+        
         public bool IsAdmin { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<UserAuthDb> manager)

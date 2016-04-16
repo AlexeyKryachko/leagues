@@ -30,5 +30,8 @@ namespace Interfaces.Leagues.BuisnessLogic.Model
 
         [JsonProperty("points")]
         public int Points { get; set; }
+
+        [JsonProperty("mediaId")]
+        public string MediaId { get; set; }
     }
 }

@@ -90,7 +90,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationIdentityContext.cs" />
-    <Compile Include="AuthenticationIdentityContext.cs" />
     <Compile Include="AuthenticationRoleManager.cs" />
     <Compile Include="AuthenticationUserManager.cs" />
     <Compile Include="EmailService.cs" />
@@ -98,7 +97,6 @@
     <Compile Include="IdentityModels.cs" />
     <Compile Include="Mongo\MongoRoleStore.cs" />
     <Compile Include="Mongo\MongoUserLoginStore.cs" />
-    <Compile Include="Mongo\MongoUserStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignInHelper.cs" />
     <Compile Include="SignInStatus.cs" />
@@ -108,6 +106,10 @@
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{43a4dc1a-0568-4360-92b1-cc1bf79beab8}</Project>
       <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Implementations\Implementations.csproj">
+      <Project>{88C02486-D4C0-4A2A-A411-89F1552E9BF5}</Project>
+      <Name>Implementations</Name>
     </ProjectReference>
     <ProjectReference Include="..\Interfaces\Interfaces.csproj">
       <Project>{36915eff-12cc-4f40-b4de-5b4bcff1332e}</Project>

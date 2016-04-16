@@ -13,12 +13,12 @@ namespace Implementations.Teams.BuisnessLogic
     {
         private readonly IGamesRepository _gamesRepository;
         private readonly ITeamsRepository _teamsRepository;
-        private readonly IUsersRepository _usersRepository;
+        private readonly IPlayersRepository _playersRepository;
         
-        public TeamsManager(ITeamsRepository teamsRepository, IUsersRepository usersRepository, IGamesRepository gamesRepository)
+        public TeamsManager(ITeamsRepository teamsRepository, IPlayersRepository playersRepository, IGamesRepository gamesRepository)
         {
             _teamsRepository = teamsRepository;
-            _usersRepository = usersRepository;
+            _playersRepository = playersRepository;
             _gamesRepository = gamesRepository;
         }
 
@@ -31,7 +31,7 @@ namespace Implementations.Teams.BuisnessLogic
                 .Where(x => string.IsNullOrEmpty(x.Id))
                 .Select(x => new UserDb {Name = x.Name})
                 .ToList();
-            _usersRepository.AddRange(leagueId, userEntities);
+            _playersRepository.AddRange(leagueId, userEntities);
 
             var userIds = userEntities.Select(x => x.EntityId);
             var memberIds = exitedIds.Concat(userIds);
@@ -53,7 +53,7 @@ namespace Implementations.Teams.BuisnessLogic
             if (team == null)
                 return null;
 
-            var members = _usersRepository.GetRange(team.MemberIds);
+            var members = _playersRepository.GetRange(team.MemberIds);
             return new TeamViewModel
             {
                 Id = team.EntityId,
@@ -104,7 +104,7 @@ namespace Implementations.Teams.BuisnessLogic
                 .Where(x => string.IsNullOrEmpty(x.Id))
                 .Select(x => new UserDb { Name = x.Name })
                 .ToList();
-            _usersRepository.AddRange(leagueId, userEntities);
+            _playersRepository.AddRange(leagueId, userEntities);
 
             var userIds = userEntities.Select(x => x.EntityId);
             var memberIds = exitedIds.Concat(userIds);
@@ -125,7 +125,7 @@ namespace Implementations.Teams.BuisnessLogic
         {
             var teams = _teamsRepository.GetByLeague(id).ToList();
             var userIds = teams.SelectMany(x => x.MemberIds).Distinct();
-            var users = _usersRepository.GetRange(userIds).ToDictionary(x => x.EntityId, y => y);
+            var users = _playersRepository.GetRange(userIds).ToDictionary(x => x.EntityId, y => y);
 
             return teams.Select(x => new TeamViewModel
             {

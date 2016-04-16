@@ -15,10 +15,18 @@
     deleteGame: function () {
         this.trigger('game:delete', this.model);
     },
+    setLeagueId: function(leagueId) {
+        this.options.leagueId = leagueId;
+    },
     onShow: function () {
     },
     serializeData: function () {
-        return  this.model.toJSON();
+        var model = this.model.toJSON();
+
+        model.showEdit = MyApp.Settings.isEditor(this.options.leagueId);
+        model.showDelete = MyApp.Settings.isEditor(this.options.leagueId);
+
+        return model;
     }
 });
 
@@ -30,6 +38,9 @@ var TeamGamesView = Backbone.Marionette.CompositeView.extend({
     childEvents: {
         'game:delete': 'deleteGame',
         'game:edit': 'editGame'
+    },
+    onBeforeAddChild: function (childView) {
+        childView.setLeagueId(this.options.leagueId);
     },
     editGame: function (view, model) {
         document.location.href = '#leagues/' + this.options.leagueId + '/games/' + model.get('id') + '/edit';

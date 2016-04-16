@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AspNet.Identity.MongoDB;
 using Core;
+using Interfaces.Users.DataAccess;
 using MongoDB.Driver;
 
 namespace Authentication
@@ -15,21 +16,21 @@ namespace Authentication
 			var client = new MongoClient(MongoConnetcionString.ConnectionString);
 			var database = client.GetDatabase(MongoConnetcionString.Database);
 			var users = database.GetCollection<ApplicationUser>("authUsers");
-			var roles = database.GetCollection<IdentityRole>("authRoles");
+			var roles = database.GetCollection<UserRoleDb>("authRoles");
 			return new ApplicationIdentityContext(users, roles);
 		}
 
-		private ApplicationIdentityContext(IMongoCollection<ApplicationUser> users, IMongoCollection<IdentityRole> roles)
+		private ApplicationIdentityContext(IMongoCollection<ApplicationUser> users, IMongoCollection<UserRoleDb> roles)
 		{
 			Users = users;
 			Roles = roles;
 		}
 
-		public IMongoCollection<IdentityRole> Roles { get; set; }
+		public IMongoCollection<UserRoleDb> Roles { get; set; }
 
 		public IMongoCollection<ApplicationUser> Users { get; set; }
 
-		public Task<List<IdentityRole>> AllRolesAsync()
+		public Task<List<UserRoleDb>> AllRolesAsync()
 		{
 			return Roles.Find(r => true).ToListAsync();
 		}

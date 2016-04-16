@@ -21,9 +21,9 @@ namespace DiySoccer.Api
 
         [Route("api/image/{mediaId}")]
         [HttpGet]
-        public HttpResponseMessage GetImage(string mediaId)
+        public HttpResponseMessage GetImage(string mediaId, int? width = null, int? height = null)
         {
-            var model = _mediaManager.Get(mediaId, 200, 200);
+            var model = _mediaManager.Get(mediaId, width, height);
             var response = new HttpResponseMessage()
             {
                 Content = new StreamContent(model.Stream)

@@ -21,10 +21,19 @@ namespace DiySoccer.Api
         [Route("api/league/{leagueId}/users/")]
         [DiySoccerAuthorize(LeagueAccessStatus.Member)]
         [HttpGet]
-        public IHttpActionResult Find(string leagueId, string query, string exceptTeamIds, int page, int pageSize)
+        public IHttpActionResult FindPlayer(string leagueId, string query, string exceptTeamIds, int page, int pageSize)
         {
             var exceptTeamIdsList = string.IsNullOrEmpty(exceptTeamIds) ? Enumerable.Empty<string>() : exceptTeamIds.Split(',').Where(x => !string.IsNullOrEmpty(x));
-            var results = _usersManager.Find(leagueId, query, exceptTeamIdsList, page, pageSize);
+            var results = _usersManager.FindPlayer(leagueId, query, exceptTeamIdsList, page, pageSize);
+            return Json(results);
+        }
+
+        [Route("api/users/")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Admin)]
+        [HttpGet]
+        public IHttpActionResult FindUser(string query, int page, int pageSize)
+        {
+            var results = _usersManager.FindUser(query, page, pageSize);
             return Json(results);
         }
 

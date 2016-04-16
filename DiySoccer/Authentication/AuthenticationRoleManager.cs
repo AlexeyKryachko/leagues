@@ -15,7 +15,7 @@ namespace Authentication
 
         public static AuthenticationRoleManager Create(IdentityFactoryOptions<AuthenticationRoleManager> options, IOwinContext context)
         {
-            var store = new MongoRoleStore(context.Get<AuthenticationIdentityContext>().Roles);
+            var store = new MongoRoleStore(context.Get<ApplicationIdentityContext>().Roles);
             var manager = new AuthenticationRoleManager(store);
 
             return manager;

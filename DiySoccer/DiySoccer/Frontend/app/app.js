@@ -8,7 +8,7 @@ MyApp.addRegions({
 MyApp.on('start', function () {
     var templateIds = ['layout', 'splitted-layout', 'leagues-actions', 'leagues-list', 'leagues-item', 'team-list', 'team-item', 'team', 'team-member', 'empty-list-view',
         'game-new', 'game-new-member', 'save', 'team-list-actions', 'custom-game', 'team-games', 'team-game', 'cancel', 'header',
-        'league'];
+        'league', 'league-admin'];
     var preloading = Backbone.Marionette.TemplateCache.preloadTemplates(templateIds, this);
     MyApp.Settings = new Settings();
 

@@ -112,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authenticate\BuisnessLogic\AuthenticateManager.cs" />
+    <Compile Include="Core\DataAccess\MongoRepository.cs" />
     <Compile Include="Core\DataAccess\BaseRepository.cs" />
     <Compile Include="Core\Medias\BuisnessLogic\MediaManager.cs" />
     <Compile Include="Core\Medias\DataAccess\MediaRepository.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Users\BuisnessLogic\UsersManager.cs" />
     <Compile Include="Users\DataAccess\UsersRepository.cs" />
+    <Compile Include="Users\DataAccess\PlayersRepository.cs" />
     <Compile Include="Teams\BuisnessLogic\TeamsManager.cs" />
     <Compile Include="Teams\DataAccess\TeamsRepository.cs" />
   </ItemGroup>

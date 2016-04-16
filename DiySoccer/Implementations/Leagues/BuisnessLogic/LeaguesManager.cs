@@ -16,13 +16,15 @@ namespace Implementations.Leagues.BuisnessLogic
         private readonly ILeaguesRepository _leaguesRepository;
         private readonly ITeamsRepository _teamsRepository;
         private readonly IGamesRepository _gamesRepository;
+        private readonly IPlayersRepository _playersRepository;
         private readonly IUsersRepository _usersRepository;
 
-        public LeaguesManager(ILeaguesRepository leaguesRepository, ITeamsRepository teamsRepository, IGamesRepository gamesRepository, IUsersRepository usersRepository)
+        public LeaguesManager(ILeaguesRepository leaguesRepository, ITeamsRepository teamsRepository, IGamesRepository gamesRepository, IPlayersRepository playersRepository, IUsersRepository usersRepository)
         {
             _leaguesRepository = leaguesRepository;
             _teamsRepository = teamsRepository;
             _gamesRepository = gamesRepository;
+            _playersRepository = playersRepository;
             _usersRepository = usersRepository;
         }
 
@@ -38,39 +40,63 @@ namespace Implementations.Leagues.BuisnessLogic
 
         public IEnumerable<LeagueUnsecureViewModel> GetAllUnsecure()
         {
-            return _leaguesRepository.GetAll().Select(x => new LeagueUnsecureViewModel
+            var leagues = _leaguesRepository.GetAll().ToList();
+            var userIds = leagues.SelectMany(x => x.Admins).ToList();
+            var users = _usersRepository.GetRange(userIds).ToDictionary(x => x.Id, y => y.UserName);
+
+            return leagues.Select(x => new LeagueUnsecureViewModel
             {
                 Id = x.EntityId,
                 Name = x.Name,
                 Description = x.Description,
                 VkGroup = x.VkSecurityGroup,
                 Admins = x.Admins
+                    .Select(y => users.ContainsKey(y) 
+                        ? new IdNameViewModel
+                        {
+                            Id = y,
+                            Name = users[y]
+                        }  
+                        : null)
+                    .Where(y => y != null)
             });
         }
 
         public LeagueUnsecureViewModel GetUnsecure(string leagueId)
         {
             var league = _leaguesRepository.Get(leagueId);
-            return league == null
-                ? null
-                : new LeagueUnsecureViewModel
+            if (league == null)
+                return null;
+
+            var userIds = league.Admins;
+            var users = _usersRepository.GetRange(userIds).ToDictionary(x => x.Id, y => y.UserName);
+
+            return new LeagueUnsecureViewModel
                 {
                     Id = league.EntityId,
                     Name = league.Name,
                     Description = league.Description,
                     VkGroup = league.VkSecurityGroup,
                     Admins = league.Admins
-                };
+                        .Select(y => users.ContainsKey(y)
+                            ? new IdNameViewModel
+                            {
+                                Id = y,
+                                Name = users[y]
+                            }
+                            : null)
+                        .Where(y => y != null)
+            };
         }
 
         public void Create(LeagueUnsecureViewModel model)
         {
-            _leaguesRepository.Create(model.Name, model.Description, model.VkGroup);
+            _leaguesRepository.Create(model);
         }
 
         public void Update(LeagueUnsecureViewModel model)
         {
-            _leaguesRepository.Update(model.Id, model.Name, model.Description, model.VkGroup);
+            _leaguesRepository.Update(model);
         }
 
         public LeagueStatisticViewModel GetStatisticByLeague(string leagueId)
@@ -88,7 +114,8 @@ namespace Implementations.Leagues.BuisnessLogic
                 var model = new TeamStatisticViewModel
                 {
                     Id = team.EntityId,
-                    Name = team.Name
+                    Name = team.Name,
+                    MediaId = team.MediaId
                 };
 
                 model.GamesCount = games.Count(x => x.GuestTeam.Id == team.EntityId || x.HomeTeam.Id == team.EntityId);
@@ -169,7 +196,7 @@ namespace Implementations.Leagues.BuisnessLogic
             userIds.AddRange(bestForwards.Select(x => x.Id));
             userIds.AddRange(bestHelpers.Select(x => x.Id));
             userIds = userIds.Distinct().ToList();
-            var users = _usersRepository
+            var users = _playersRepository
                 .GetRange(userIds)
                 .ToDictionary(x => x.EntityId, 
                     y => teams.Exists(x => x.MemberIds.Contains(y.EntityId)) 

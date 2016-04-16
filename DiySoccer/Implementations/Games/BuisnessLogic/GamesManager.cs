@@ -10,19 +10,19 @@ namespace Implementations.Games.BuisnessLogic
     public class GamesManager : IGamesManager
     {
         private readonly IGamesRepository _gamesRepository;
-        private readonly IUsersRepository _usersRepository;
+        private readonly IPlayersRepository _playersRepository;
 
-        public GamesManager(IGamesRepository gamesRepository, IUsersRepository usersRepository)
+        public GamesManager(IGamesRepository gamesRepository, IPlayersRepository playersRepository)
         {
             _gamesRepository = gamesRepository;
-            _usersRepository = usersRepository;
+            _playersRepository = playersRepository;
         }
 
         public GameVewModel Get(string leagueId, string gameId)
         {
             var game = _gamesRepository.Get(gameId);
             var userIds = game.HomeTeam.Members.Select(x => x.Id).Concat(game.GuestTeam.Members.Select(x => x.Id));
-            var users = _usersRepository.GetRange(userIds).ToDictionary(x => x.EntityId, y => y.Name);
+            var users = _playersRepository.GetRange(userIds).ToDictionary(x => x.EntityId, y => y.Name);
 
             return new GameVewModel
             {

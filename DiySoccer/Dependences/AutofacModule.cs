@@ -30,8 +30,9 @@ namespace Dependences
         {
             builder.RegisterType(typeof(TeamsManager)).As<ITeamsManager>();
             builder.RegisterType(typeof(TeamsRepository)).As<ITeamsRepository>();
-            
+
             builder.RegisterType(typeof(UsersRepository)).As<IUsersRepository>();
+            builder.RegisterType(typeof(PlayersRepository)).As<IPlayersRepository>();
             builder.RegisterType(typeof(UsersManager)).As<IUsersManager>();
 
             builder.RegisterType(typeof(GamesManager)).As<IGamesManager>();

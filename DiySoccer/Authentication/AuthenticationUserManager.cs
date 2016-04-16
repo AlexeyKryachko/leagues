@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Authentication.Mongo;
+using Implementations.Users.DataAccess;
 using Interfaces.Users.DataAccess;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -18,7 +19,7 @@ namespace Authentication
 
         public static AuthenticationUserManager Create(IdentityFactoryOptions<AuthenticationUserManager> options, IOwinContext context)
         {
-            var store = new MongoUserStore(context.Get<AuthenticationIdentityContext>().Users);
+            var store = new UsersRepository();
 
             var manager = new AuthenticationUserManager(store);
             // Configure validation logic for usernames

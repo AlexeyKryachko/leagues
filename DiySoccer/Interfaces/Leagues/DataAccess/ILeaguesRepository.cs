@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Interfaces.Leagues.BuisnessLogic.Model;
 using Interfaces.Leagues.DataAccess.Model;
 
 namespace Interfaces.Leagues.DataAccess
@@ -9,8 +10,8 @@ namespace Interfaces.Leagues.DataAccess
 
         LeagueDb Get(string leagueId);
 
-        void Create(string name, string description, string vkGroup);
+        void Create(LeagueUnsecureViewModel model);
 
-        void Update(string leagueId, string name, string description, string vkGroup);
+        void Update(LeagueUnsecureViewModel model);
     }
 }

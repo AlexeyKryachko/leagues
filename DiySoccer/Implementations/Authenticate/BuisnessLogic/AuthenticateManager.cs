@@ -9,6 +9,7 @@ using Interfaces.Leagues.BuisnessLogic.Model;
 using Interfaces.Settings.BuisnessLogic;
 using Interfaces.Users.DataAccess;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using VkNet;
 
@@ -36,11 +37,13 @@ namespace Implementations.Authenticate.BuisnessLogic
             model.Permissions.IsAuthenticated = HttpContext.Current.User.Identity.IsAuthenticated ||
                 (externalIdentity != null && externalIdentity.IsAuthenticated);
 
+            var currentUserId = GetCurrentUserId(context);
+
             var relationships = new Dictionary<string, string>();
             var leagues = _leaguesManager.GetAllUnsecure();
             foreach (var league in leagues)
             {
-                var access = GetAccess(league);
+                var access = GetAccess(league, context, currentUserId);
                 relationships.Add(league.Id, ((int)access).ToString());
             }
 
@@ -49,20 +52,35 @@ namespace Implementations.Authenticate.BuisnessLogic
             return model;
         }
 
-        private LeagueAccessStatus GetAccess(LeagueUnsecureViewModel league)
+        public string GetCurrentUserId(IOwinContext context)
+        {
+            var id = HttpContext.Current.User.Identity.GetUserId();
+            if (id == null)
+            {
+                var externalIdentity = context.Authentication.GetExternalIdentity(DefaultAuthenticationTypes.ExternalCookie);
+                if (externalIdentity != null)
+                {
+                    var user = _usersRepository.GetByUserName(externalIdentity.Name);
+                    if (user != null)
+                        id = user.Id;
+                }
+            }
+
+            return id;
+        }
+
+        private LeagueAccessStatus GetAccess(LeagueUnsecureViewModel league, IOwinContext context, string currentUserId)
         {
             if (IsAdmin())
                 return LeagueAccessStatus.Admin;
             
-            var id = HttpContext.Current.User.Identity.GetUserId();
             if (string.IsNullOrEmpty(league.VkGroup))
             {
-                return league.Admins.Contains(id)
+                return league.Admins.Any(x => x.Id == currentUserId)
                     ? LeagueAccessStatus.Editor
                     : LeagueAccessStatus.Member;
             }
 
-            var context = HttpContext.Current.GetOwinContext();
             var loginInfo = context.Authentication.GetExternalLoginInfoAsync();
             if (loginInfo == null || loginInfo.Result == null)
                 return LeagueAccessStatus.Undefined;
@@ -86,7 +104,7 @@ namespace Implementations.Authenticate.BuisnessLogic
             if (!response[0].Member)
                 return LeagueAccessStatus.Undefined;
             
-            return league.Admins.Contains(id)
+            return league.Admins.Any(x => x.Id == currentUserId)
                 ? LeagueAccessStatus.Editor
                 : LeagueAccessStatus.Member;
         }
@@ -100,7 +118,10 @@ namespace Implementations.Authenticate.BuisnessLogic
             if (league == null)
                 return false;
 
-            var access = GetAccess(league);
+            var context = HttpContext.Current.GetOwinContext();
+            var currentUserId = GetCurrentUserId(context);
+
+            var access = GetAccess(league, context, currentUserId);
             return access == LeagueAccessStatus.Member ||
                 access == LeagueAccessStatus.Editor || 
                 access == LeagueAccessStatus.Admin;
@@ -115,7 +136,10 @@ namespace Implementations.Authenticate.BuisnessLogic
             if (league == null)
                 return false;
 
-            var access = GetAccess(league);
+            var context = HttpContext.Current.GetOwinContext();
+            var currentUserId = GetCurrentUserId(context);
+
+            var access = GetAccess(league, context, currentUserId);
             return access == LeagueAccessStatus.Editor || access == LeagueAccessStatus.Admin;
         }
 

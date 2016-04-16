@@ -11,18 +11,20 @@ namespace Implementations.Users.BuisnessLogic
 {
     public class UsersManager : IUsersManager
     {
+        private readonly IPlayersRepository _playersRepository;
         private readonly IUsersRepository _usersRepository;
         private readonly ITeamsRepository _teamsRepository;
 
-        public UsersManager(IUsersRepository usersRepository, ITeamsRepository teamsRepository)
+        public UsersManager(IPlayersRepository playersRepository, ITeamsRepository teamsRepository, IUsersRepository usersRepository)
         {
-            _usersRepository = usersRepository;
+            _playersRepository = playersRepository;
             _teamsRepository = teamsRepository;
+            _usersRepository = usersRepository;
         }
 
-        public IEnumerable<IdNameViewModel> Find(string leagueId, string query, IEnumerable<string> excludeTeamsId, int page, int pageSize)
+        public IEnumerable<IdNameViewModel> FindPlayer(string leagueId, string query, IEnumerable<string> excludeTeamsId, int page, int pageSize)
         {
-            var users = _usersRepository.Find(leagueId, query, 0, int.MaxValue).ToList();
+            var users = _playersRepository.Find(leagueId, query, 0, int.MaxValue).ToList();
             var userIds = users.Select(x => x.EntityId).ToList();
 
             var teams = _teamsRepository
@@ -45,6 +47,15 @@ namespace Implementations.Users.BuisnessLogic
                 result.Add(model);
             }
             return result;
+        }
+
+        public IEnumerable<IdNameViewModel> FindUser(string query, int page, int pageSize)
+        {
+            return _usersRepository.Find(query, 0, int.MaxValue).Select(x => new IdNameViewModel
+            {
+                Id = x.Id,
+                Name = x.UserName
+            });
         }
     }
 }

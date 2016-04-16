@@ -96,6 +96,7 @@
     <Compile Include="Teams\BuisnessLogic\Models\TeamViewModel.cs" />
     <Compile Include="Users\BuisnessLogic\IUsersManager.cs" />
     <Compile Include="Users\DataAccess\IUsersRepository.cs" />
+    <Compile Include="Users\DataAccess\IPlayersRepository.cs" />
     <Compile Include="Users\DataAccess\UserAuthDb.cs" />
     <Compile Include="Users\DataAccess\UserDb.cs" />
     <Compile Include="Teams\BuisnessLogic\ITeamsManager.cs" />

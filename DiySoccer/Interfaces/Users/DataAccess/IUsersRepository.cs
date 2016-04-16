@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
-using Interfaces.Core.DataAccess;
+using Microsoft.AspNet.Identity;
 
 namespace Interfaces.Users.DataAccess
 {
-    public interface IUsersRepository : IBaseRepository<UserDb>
+    public interface IUsersRepository : IUserStore<UserAuthDb>
     {
-        IEnumerable<UserDb> Find(string leagueId, string query, int page, int pageSize);
+        IEnumerable<UserAuthDb> GetRange(IEnumerable<string> ids);
+
+        UserAuthDb GetByUserName(string userName);
+
+        IEnumerable<UserAuthDb> Find(string query, int page, int pageSize);
     }
 }

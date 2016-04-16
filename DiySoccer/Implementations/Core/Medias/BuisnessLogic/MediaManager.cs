@@ -21,7 +21,7 @@ namespace Implementations.Core.Medias.BuisnessLogic
             _mediaRepository = mediaRepository;
         }
 
-        public MediaIOViewModel Get(string mediaId, int width, int height)
+        public MediaIOViewModel Get(string mediaId, int? width, int? height)
         {
             var media = _mediaRepository.Get(mediaId);
 
@@ -29,9 +29,20 @@ namespace Implementations.Core.Medias.BuisnessLogic
             var extenstion = Path.GetExtension(path);
             var pathWithoutExtension = path.Replace(extenstion, "");
 
-            var targetPath = pathWithoutExtension + "_" + width + "_" + height + extenstion;
-            if (!File.Exists(targetPath))
-                CreateImage(path, targetPath);
+            var targetPath = string.Empty;
+            if (width.HasValue && height.HasValue)
+            {
+                targetPath = pathWithoutExtension + "_" + width + "_" + height + extenstion;
+                if (!File.Exists(targetPath))
+                    CreateImage(path, targetPath, new Size(width.Value, height.Value));
+            }
+            else
+            {
+                targetPath = pathWithoutExtension;
+                if (!File.Exists(targetPath))
+                    CreateImage(path, targetPath);
+            }
+            
             
             return new MediaIOViewModel
             {
@@ -47,7 +58,35 @@ namespace Implementations.Core.Medias.BuisnessLogic
                 byte[] photoBytes = File.ReadAllBytes(sourcePath); // change imagePath with a valid image path
                 int quality = 70;
                 var format = new PngFormat(); // we gonna convert a jpeg image to a png one
-                var size = new Size(200, 200);
+
+                using (var inStream = new MemoryStream(photoBytes))
+                {
+                    using (var outStream = new MemoryStream())
+                    {
+                        // Initialize the ImageFactory using the overload to preserve EXIF metadata.
+                        using (var imageFactory = new ImageFactory(preserveExifData: true))
+                        {
+                            // Do your magic here
+                            imageFactory.Load(inStream)
+                                .RoundedCorners(new RoundedCornerLayer(190, true, true, true, true))
+                                .Format(format)
+                                .Quality(quality)
+                                .Save(outStream);
+
+                            outStream.WriteTo(fileStream);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void CreateImage(string sourcePath, string targetPath, Size size)
+        {
+            using (var fileStream = new FileStream(targetPath, FileMode.Create))
+            {
+                byte[] photoBytes = File.ReadAllBytes(sourcePath); // change imagePath with a valid image path
+                int quality = 70;
+                var format = new PngFormat(); // we gonna convert a jpeg image to a png one
 
                 using (var inStream = new MemoryStream(photoBytes))
                 {
