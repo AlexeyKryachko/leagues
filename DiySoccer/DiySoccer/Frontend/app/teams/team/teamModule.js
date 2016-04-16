@@ -105,7 +105,7 @@
         var self = this;
 
         self.layout = new LayoutView();
-        self.teamView = new TeamView({ model: this.model, collection: this.members });
+        self.teamView = new TeamView({ model: this.model, collection: this.members, leagueId: this.options.leagueId });
     },
     bindViews: function () {
         var self = this;

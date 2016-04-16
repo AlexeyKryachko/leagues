@@ -21,7 +21,7 @@ namespace DiySoccer.Api
         [Route("api/league/{leagueId}/users/")]
         [DiySoccerAuthorize(LeagueAccessStatus.Member)]
         [HttpGet]
-        public IHttpActionResult FindPlayer(string leagueId, string query, string exceptTeamIds, int page, int pageSize)
+        public IHttpActionResult FindPlayer(string leagueId, string query, int page, int pageSize, string exceptTeamIds = null)
         {
             var exceptTeamIdsList = string.IsNullOrEmpty(exceptTeamIds) ? Enumerable.Empty<string>() : exceptTeamIds.Split(',').Where(x => !string.IsNullOrEmpty(x));
             var results = _usersManager.FindPlayer(leagueId, query, exceptTeamIdsList, page, pageSize);

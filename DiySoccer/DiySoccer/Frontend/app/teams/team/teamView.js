@@ -26,6 +26,7 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
     emptyView: EmptyListView,
     ui: {
         'createMember': '.create-team-member',
+        'existMember': '.exist-member-name',
         'back': '.create-team-back',
         'memberName': '.member-name',
         'hidden': '.team-hidden',
@@ -83,7 +84,29 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
         this.collection.add({ name: name });
         this.ui.memberName.val('');
     },
+    onRender: function () {
+        var self = this;
+
+        $(this.ui.existMember).typeahead({
+            source: function (query, process) {
+                var url = '/api/league/' + self.options.leagueId + '/users?page=0&pageSize=10';
+                if (self.model.get('id'))
+                    url += '&exceptTeamIds=' + self.model.get('id');
+                return $.get(url, { query: query }, function (response) {
+                    return process(response);
+                });
+            },
+            displayText: function (item) {
+                return item.name;
+            },
+            updater: function (item) {
+                self.collection.add(item);
+                return '';
+            }
+        });
+    },
     initialize: function (options) {
+        this.options = options;
     },
     serializeData: function() {
         var model = this.model.toJSON();
