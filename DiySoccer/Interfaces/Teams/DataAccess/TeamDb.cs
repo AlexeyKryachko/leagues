@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Interfaces.Teams.DataAccess
 {
+    [BsonIgnoreExtraElements]
     public class TeamDb : IBaseEntity
     {
         [BsonId]
@@ -20,6 +21,9 @@ namespace Interfaces.Teams.DataAccess
 
         [BsonElement("mediaId")]
         public string MediaId { get; set; }
+
+        [BsonElement("description")]
+        public string Description { get; set; }
 
         [BsonElement("members")]
         public IEnumerable<string> MemberIds { get; set; }

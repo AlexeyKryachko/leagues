@@ -18,7 +18,7 @@ namespace DiySoccer.Api
 
         #region GET
 
-        [Route("api/league/{leagueId}/teams/{teamId}")]
+        [Route("api/leagues/{leagueId}/teams/{teamId}")]
         [DiySoccerAuthorize(LeagueAccessStatus.Member)]
         [HttpGet]
         public IHttpActionResult GetTeamByLeague(string leagueId, string teamId)
@@ -55,7 +55,7 @@ namespace DiySoccer.Api
         public IHttpActionResult Update([FromUri]string leagueId, [FromUri]string teamId, [FromBody]TeamViewModel model)
         {
             _teamsManager.Update(leagueId, teamId, model);
-            return Ok();
+            return Json(model);
         }
 
         #endregion
@@ -63,9 +63,10 @@ namespace DiySoccer.Api
         [Route("api/leagues/{leagueId}/teams")]
         [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
         [HttpPost]
-        public void Create([FromUri]string leagueId, [FromBody]TeamViewModel model)
+        public IHttpActionResult Create([FromUri]string leagueId, [FromBody]TeamViewModel model)
         {
             _teamsManager.Create(leagueId, model);
+            return Json(model);
         }
     }
 }

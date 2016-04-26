@@ -31,7 +31,7 @@
 });
 
 var TeamGamesView = Backbone.Marionette.CompositeView.extend({
-    template: "#team-games",    
+    template: "#team-info",    
     childViewContainer: "tbody",
     childView: TeamGameView,
     emptyView: EmptyListView,

@@ -234,7 +234,6 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Startup.cs" />
-    <Content Include="Content\Site.css" />
     <Content Include="Frontend\app\games\game\gameActions.js" />
     <Content Include="Frontend\app\header\headerModule.js" />
     <Content Include="Frontend\app\leagues\league\leagueModule.js" />
@@ -267,13 +266,45 @@
     <Content Include="Frontend\js\static\jquery.validate.min.js" />
     <Content Include="Frontend\js\static\jquery.validate.unobtrusive.js" />
     <Content Include="Frontend\js\static\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\advlist\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\anchor\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\autolink\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\charmap\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\code\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\contextmenu\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\fullscreen\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\image\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\insertdatetime\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\link\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\lists\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\media\moxieplayer.swf" />
+    <Content Include="Frontend\js\static\tinymce\plugins\media\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\paste\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\preview\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\print\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\searchreplace\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\table\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\plugins\visualblocks\css\visualblocks.css" />
+    <Content Include="Frontend\js\static\tinymce\plugins\visualblocks\plugin.min.js" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\content.inline.min.css" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\content.min.css" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\fonts\tinymce-small.svg" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\fonts\tinymce.svg" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\img\anchor.gif" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\img\loader.gif" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\img\object.gif" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\img\trans.gif" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\skin.ie7.min.css" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\skin.min.css" />
+    <Content Include="Frontend\js\static\tinymce\themes\modern\theme.min.js" />
+    <Content Include="Frontend\js\static\tinymce\tinymce.min.js" />
     <Content Include="Frontend\templates\header.html" />
     <Content Include="Frontend\templates\custom-game.html" />
     <Content Include="Frontend\templates\cancel.html" />
     <Content Include="Frontend\templates\league.html" />
     <Content Include="Frontend\templates\leagues-actions.html" />
     <Content Include="Frontend\templates\team-game.html" />
-    <Content Include="Frontend\templates\team-games.html" />
+    <Content Include="Frontend\templates\team-info.html" />
     <Content Include="Frontend\templates\team-list-actions.html" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -350,6 +381,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\fonts\tinymce-small.ttf" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\fonts\tinymce-small.woff" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\fonts\tinymce.eot" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\fonts\tinymce.ttf" />
+    <Content Include="Frontend\js\static\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <None Include="Properties\PublishProfiles\diysoccer - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\diysoccer - Web Deploy.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
