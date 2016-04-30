@@ -29,6 +29,14 @@
     margin-bottom: 10px !important;
 }
 
+.mb15 {
+    margin-bottom: 10px;
+}
+
+.tab-inner {
+    margin: 10px;
+}
+
 .mt10 {
     margin-top: 10px !important;
 }

@@ -1,38 +1,95 @@
-﻿<div class="row">
-    <div></div>
-    <div>
-        Город:
-        Дата основания:
+﻿<div class="row mb15">
+    <div class="col-sm-3">
+        {{#if mediaId}}
+        <img src="/api/image/{{mediaId}}?width=150&height=150" />
+        {{/if}}
+    </div>
+    <div class="col-sm-9">
+        <div>
+            Город: Город
+        </div>
+        <div>
+            Дата основания: 01.01.2017
+        </div>
     </div>
 </div>
 
 <ul class="nav nav-tabs">
+    {{#if description}}
     <li class="active"><a data-toggle="tab" href="#description">Описание</a></li>
+    {{/if}}
+    {{#if players}}
     <li><a data-toggle="tab" href="#players">Состав</a></li>
+    {{/if}}
     <li><a data-toggle="tab" href="#games">Игры</a></li>
+    {{#if stats}}
     <li><a data-toggle="tab" href="#statistic">Статистика</a></li>
+    {{/if}}
 </ul>
 
 <div class="tab-content">
-    <div id="description" class="tab-pane fade in active">
-        <p>Some content.</p>
+    {{#if description}}
+    <div id="description" class="tab-pane fade in active tab-inner">
+        {{{description}}}
     </div>
-    <div id="players" class="tab-pane fade">
-        Игроки
-    </div>
-    <div id="games" class="tab-pane fade">
+    {{/if}}
+    {{#if players}}
+    <div id="players" class="tab-pane fade tab-inner">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Счет</th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th>Имя</th>
+            </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+            {{#each players}}
+            <tr><td>{{name}}</td></tr>
+            {{/each}}
+            </tbody>
         </table>
     </div>
-    <div id="statistic" class="tab-pane fade">
-        Статистика
+    {{/if}}
+    <div id="games" class="tab-pane fade tab-inner">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Счет</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody class="games-container"></tbody>
+        </table>
     </div>
+    {{#if stats}}
+    <div id="statistic" class="tab-pane fade tab-inner">
+        {{#each stats}}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Кол-во игр</th>
+                <th>Победы</th>
+                <th>Поражения</th>
+                <th>Ничьи</th>
+                <th>Голы</th>
+                <th>Пропущенные</th>
+                <th>Очки</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{gamesCount}}</td>
+                <td>{{wins}}</td>
+                <td>{{loses}}</td>
+                <td>{{draw}}</td>
+                <td>{{scores}}</td>
+                <td>{{missed}}</td>
+                <td>{{points}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        {{/each}}
+    </div>
+    {{/if}}
 </div>
