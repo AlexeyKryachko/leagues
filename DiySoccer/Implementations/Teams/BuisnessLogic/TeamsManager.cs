@@ -42,7 +42,8 @@ namespace Implementations.Teams.BuisnessLogic
                 Name = model.Name,
                 Hidden = model.Hidden,
                 MemberIds = memberIds,
-                MediaId = model.Media
+                MediaId = model.Media,
+                Description = model.Description
             };
             _teamsRepository.Add(leagueId, entity);
         }
@@ -64,7 +65,8 @@ namespace Implementations.Teams.BuisnessLogic
                     Id = x.EntityId,
                     Name = x.Name
                 }),
-                Media = team.MediaId
+                Media = team.MediaId,
+                Description = team.Description
             };
         }
 
@@ -116,7 +118,8 @@ namespace Implementations.Teams.BuisnessLogic
                 Name = model.Name,
                 Hidden = model.Hidden,
                 MemberIds = memberIds,
-                MediaId = model.Media
+                MediaId = model.Media,
+                Description = model.Description
             };
             _teamsRepository.Update(leagueId, entity);
         }

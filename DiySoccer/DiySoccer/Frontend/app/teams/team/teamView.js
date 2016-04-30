@@ -84,9 +84,26 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
         this.collection.add({ name: name });
         this.ui.memberName.val('');
     },
-    onRender: function () {
+    onShow: function () {
         var self = this;
 
+        tinymce.init({
+            selector: '#description',
+            height: 300,
+            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+            setup: function (ed) {
+                ed.on('change', function(e) {
+                    self.changeDescription(ed.getContent());
+                });
+            }
+        });
+    },
+    changeDescription: function(content) {
+        this.model.set('description', content);
+    },
+    onRender: function () {
+        var self = this;
+        
         $(this.ui.existMember).typeahead({
             source: function (query, process) {
                 var url = '/api/league/' + self.options.leagueId + '/users?page=0&pageSize=10';

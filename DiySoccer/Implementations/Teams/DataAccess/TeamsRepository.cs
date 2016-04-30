@@ -22,7 +22,8 @@ namespace Implementations.Teams.DataAccess
                 .Set(x => x.Name, entity.Name)
                 .Set(x => x.Hidden, entity.Hidden)
                 .Set(x => x.MemberIds, entity.MemberIds)
-                .Set(x => x.MediaId, entity.MediaId);
+                .Set(x => x.MediaId, entity.MediaId)
+                .Set(x => x.Description, entity.Description);
 
             Collection.UpdateOne(filter, update);
         }

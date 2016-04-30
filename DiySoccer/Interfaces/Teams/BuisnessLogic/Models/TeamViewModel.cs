@@ -19,6 +19,9 @@ namespace Interfaces.Teams.BuisnessLogic.Models
         [JsonProperty("media")]
         public string Media { get; set; }
 
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
         [JsonProperty("members")]
         public IEnumerable<IdNameViewModel> Members { get; set; }
 

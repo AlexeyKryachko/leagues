@@ -25,9 +25,7 @@
 
         model.goals = model.scores + '-' + model.missed + ' (' + (model.scores - model.missed) + ')';
         model.showEdit = MyApp.Settings.isEditor(this.options.leagueId);
-
-        console.log('Team: ' + model.name, model);
-
+        
         return model;
     },
     setLeagueId: function(leagueId) {
