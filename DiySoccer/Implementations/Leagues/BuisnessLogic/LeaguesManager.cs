@@ -162,7 +162,7 @@ namespace Implementations.Leagues.BuisnessLogic
                     Count = x.Count()
                 })
                 .OrderByDescending(x => x.Count)
-                .Take(15)
+                .Take(7)
                 .ToList();
 
             var bestForwards = Enumerable.Concat(
@@ -175,7 +175,7 @@ namespace Implementations.Leagues.BuisnessLogic
                     Goals = x.Sum(y => y.Score)
                 })
                 .OrderByDescending(x => x.Goals)
-                .Take(15)
+                .Take(7)
                 .ToList();
 
             var bestHelpers = Enumerable.Concat(
@@ -188,7 +188,7 @@ namespace Implementations.Leagues.BuisnessLogic
                     Helps = x.Sum(y => y.Help)
                 })
                 .OrderByDescending(x => x.Helps)
-                .Take(15)
+                .Take(7)
                 .ToList();
 
             var userIds = new List<string>();
@@ -205,26 +205,29 @@ namespace Implementations.Leagues.BuisnessLogic
 
             return new LeagueStatisticViewModel
             {
-                BestPlayers = bestPlayers.Select(x => new IdNameViewModel
+                BestPlayers = bestPlayers.Select(x => new LeagueMemberStatisticViewModel
                 {
                     Id = x.Id,
                     Name = users.ContainsKey(x.Id) 
-                        ? users[x.Id] + " " + x.Count
-                        : null
+                        ? users[x.Id]
+                        : null,
+                    Number = x.Count
                 }),
-                BestForwards = bestForwards.Select(x => new IdNameViewModel
+                BestForwards = bestForwards.Select(x => new LeagueMemberStatisticViewModel
                 {
                     Id = x.Id,
                     Name = users.ContainsKey(x.Id)
-                        ? users[x.Id] + " " + x.Goals
-                        : null
+                        ? users[x.Id]
+                        : null,
+                    Number = x.Goals
                 }),
-                BestHelpers = bestHelpers.Select(x => new IdNameViewModel
+                BestHelpers = bestHelpers.Select(x => new LeagueMemberStatisticViewModel
                 {
                     Id = x.Id,
                     Name = users.ContainsKey(x.Id)
-                        ? users[x.Id] + " " + x.Helps
-                        : null
+                        ? users[x.Id]
+                        : null,
+                    Number = x.Helps
                 }),
                 TeamStatistics = teamsStatistic
                     .OrderByDescending(x => x.Points)

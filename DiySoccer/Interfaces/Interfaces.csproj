@@ -82,6 +82,7 @@
     <Compile Include="Games\DataAccess\IGamesRepository.cs" />
     <Compile Include="Games\DataAccess\Model\GameDb.cs" />
     <Compile Include="Leagues\BuisnessLogic\ILeaguesManager.cs" />
+    <Compile Include="Leagues\BuisnessLogic\Model\LeagueMemberStatisticViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueStatisticViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueUnsecureViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueViewModel.cs" />

@@ -20,19 +20,28 @@
     <div class="col-sm-4">
         <h4><strong>Лучшие игроки</strong></h4>
         {{#each bestPlayers}}
-        <div>{{name}}</div>
+        <div class="row">
+            <div class="col-sm-10">{{name}}</div>
+            <div class="col-sm-2">{{num}}</div>
+        </div>
         {{/each}}
     </div>
     <div class="col-sm-4">
         <h4><strong>Лучшие ассисстенты</strong></h4>
         {{#each bestHelpers}}
-        <div>{{name}}</div>
+        <div class="row">
+            <div class="col-sm-10">{{name}}</div>
+            <div class="col-sm-2">{{num}}</div>
+        </div>
         {{/each}}
     </div>
     <div class="col-sm-4">
         <h4><strong>Лучшие забивалы</strong></h4>
         {{#each bestForwards}}
-        <div>{{name}}</div>
+        <div class="row">
+            <div class="col-sm-10">{{name}}</div>
+            <div class="col-sm-2">{{num}}</div>
+        </div>
         {{/each}}
     </div>
 </div>
