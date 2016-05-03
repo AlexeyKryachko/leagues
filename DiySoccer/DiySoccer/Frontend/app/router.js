@@ -17,10 +17,15 @@
         "leagues/:leagueId/teams/:teamId/edit": "editTeamRoute",
         "leagues/:leagueId/teams/:teamId": "infoTeamRoute",
         "leagues/:leagueId/games/new": "newGameRoute",
-        "leagues/:leagueId/games/:gameId/edit": "editGameRoute"
+        "leagues/:leagueId/games/:gameId/edit": "editGameRoute",
+        "leagues/:leagueId/calendar": "calendarRoute"
     },
     defaultRoute: function () {
         this.changeModule(MyApp.submodules.leagues);
+    },
+    calendarRoute: function(leagueId) {
+        var options = { leagueId: leagueId };
+        this.changeModule(MyApp.submodules.calendar, options);
     },
     newLeagueRoute: function (leagueId) {
         var options = { leagueId: leagueId };

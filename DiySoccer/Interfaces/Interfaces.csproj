@@ -73,6 +73,12 @@
     <Compile Include="Core\Services\Medias\DataAccess\IMediaRepository.cs" />
     <Compile Include="Core\Services\Medias\BuisnessLogic\IMediaManager.cs" />
     <Compile Include="Core\Services\Medias\DataAccess\MediaDb.cs" />
+    <Compile Include="Events\BuisnessLogic\IEventsManager.cs" />
+    <Compile Include="Events\BuisnessLogic\Models\EventGameVewModel.cs" />
+    <Compile Include="Events\BuisnessLogic\Models\EventVewModel.cs" />
+    <Compile Include="Events\DataAccess\IEventsRepository.cs" />
+    <Compile Include="Events\DataAccess\Model\EventDb.cs" />
+    <Compile Include="Events\DataAccess\Model\EventGameDb.cs" />
     <Compile Include="Games\BuisnessLogic\IGamesManager.cs" />
     <Compile Include="Games\BuisnessLogic\Models\GameMemberViewModel.cs" />
     <Compile Include="Games\BuisnessLogic\Models\GameTeamViewModel.cs" />
@@ -108,6 +114,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

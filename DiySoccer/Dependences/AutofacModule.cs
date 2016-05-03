@@ -2,6 +2,9 @@
 using Implementations.Authenticate.BuisnessLogic;
 using Implementations.Core.Medias.BuisnessLogic;
 using Implementations.Core.Medias.DataAccess;
+using Implementations.Events;
+using Implementations.Events.BuisnessLogic;
+using Implementations.Events.DataAccess;
 using Implementations.Games.BuisnessLogic;
 using Implementations.Games.DataAccess;
 using Implementations.Leagues.BuisnessLogic;
@@ -13,6 +16,8 @@ using Implementations.Users.DataAccess;
 using Interfaces.Authenticate.BuisnessLogic;
 using Interfaces.Core.Services.Medias.BuisnessLogic;
 using Interfaces.Core.Services.Medias.DataAccess;
+using Interfaces.Events.BuisnessLogic;
+using Interfaces.Events.DataAccess;
 using Interfaces.Games.BuisnessLogic;
 using Interfaces.Games.DataAccess;
 using Interfaces.Leagues.BuisnessLogic;
@@ -45,6 +50,10 @@ namespace Dependences
 
             builder.RegisterType(typeof(MediaManager)).As<IMediaManager>();
             builder.RegisterType(typeof(MediaRepository)).As<IMediaRepository>();
+
+            builder.RegisterType(typeof(EventsManager)).As<IEventsManager>();
+            builder.RegisterType(typeof(EventsRepository)).As<IEventsRepository>();
+            builder.RegisterType(typeof (EventsMapper)).AsSelf();
         }
     }
 }

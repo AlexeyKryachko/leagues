@@ -116,6 +116,9 @@
     <Compile Include="Core\DataAccess\BaseRepository.cs" />
     <Compile Include="Core\Medias\BuisnessLogic\MediaManager.cs" />
     <Compile Include="Core\Medias\DataAccess\MediaRepository.cs" />
+    <Compile Include="Events\BuisnessLogic\EventsManager.cs" />
+    <Compile Include="Events\DataAccess\EventsRepository.cs" />
+    <Compile Include="Events\EventsMapper.cs" />
     <Compile Include="Games\BuisnessLogic\GamesManager.cs" />
     <Compile Include="Games\DataAccess\GamesRepository.cs" />
     <Compile Include="Leagues\BuisnessLogic\LeaguesManager.cs" />

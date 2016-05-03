@@ -63,11 +63,13 @@ var TeamListActions = Backbone.Marionette.CompositeView.extend({
     template: "#team-list-actions",
     ui: {
         'addBtn': '.add-new-team',
-        'addGame': '.add-new-game'
+        'addGame': '.add-new-game',
+        'calendarLink': '.calendar-link'
     },
     events: {
         'click @ui.addBtn': 'redirectAddTeam',
-        'click @ui.addGame': 'redirectAddGame'
+        'click @ui.addGame': 'redirectAddGame',
+        'click @ui.calendarLink': 'redirectCalendar'
     },
     initialize: function (options) {
         this.options = options;
@@ -77,6 +79,9 @@ var TeamListActions = Backbone.Marionette.CompositeView.extend({
     },
     redirectAddGame: function (e) {
         document.location.href = "#leagues/" + this.options.leagueId + "/games/new";
+    },
+    redirectCalendar: function (e) {
+        document.location.href = "#leagues/" + this.options.leagueId + "/calendar";
     },
     serializeData: function() {
         var model = {};

@@ -2,8 +2,10 @@
     initialize: function () {
         this.leagueId = 0;
     },
-    url: function() {
-        return '/api/leagues/' + this.leagueId + '/teams/' + this.id;
+    url: function () {
+        return this.id 
+            ? '/api/leagues/' + this.leagueId + '/teams/' + this.id
+            : '/api/leagues/' + this.leagueId + '/teams/';
     },
     setLeagueId: function (leagueId) {
         this.leagueId = leagueId;

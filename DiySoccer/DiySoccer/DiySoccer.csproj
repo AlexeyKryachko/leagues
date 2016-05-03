@@ -215,6 +215,7 @@
   <ItemGroup>
     <Compile Include="Api\BaseApiController.cs" />
     <Compile Include="Api\AuthenticationApiController.cs" />
+    <Compile Include="Api\CalendarApiController.cs" />
     <Compile Include="Api\ImageApiController.cs" />
     <Compile Include="Api\SettingsApiController.cs" />
     <Compile Include="Api\GamesApiController.cs" />
@@ -234,6 +235,8 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Startup.cs" />
+    <Content Include="Frontend\app\calendar\calendarModule.js" />
+    <Content Include="Frontend\app\calendar\calendarView.js" />
     <Content Include="Frontend\app\games\game\gameActions.js" />
     <Content Include="Frontend\app\header\headerModule.js" />
     <Content Include="Frontend\app\leagues\league\leagueModule.js" />
@@ -244,6 +247,7 @@
     <Content Include="Frontend\app\games\game\gameView.js" />
     <Content Include="Frontend\app\models\settings.js" />
     <Content Include="Frontend\app\models\leagues.js" />
+    <Content Include="Frontend\app\models\calendars.js" />
     <Content Include="Frontend\app\models\teams.js" />
     <Content Include="Frontend\app\shared\bottom\cancelView.js" />
     <Content Include="Frontend\app\shared\emptyListView.js" />
@@ -298,6 +302,8 @@
     <Content Include="Frontend\js\static\tinymce\skins\lightgray\skin.min.css" />
     <Content Include="Frontend\js\static\tinymce\themes\modern\theme.min.js" />
     <Content Include="Frontend\js\static\tinymce\tinymce.min.js" />
+    <Content Include="Frontend\templates\calendar.html" />
+    <Content Include="Frontend\templates\calendar-event.html" />
     <Content Include="Frontend\templates\header.html" />
     <Content Include="Frontend\templates\custom-game.html" />
     <Content Include="Frontend\templates\cancel.html" />
