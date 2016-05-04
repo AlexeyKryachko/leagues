@@ -7,7 +7,7 @@ namespace Interfaces.Events.BuisnessLogic
     {
         IEnumerable<EventVewModel> GetRange(string leagueId);
 
-        void Create(string leagueId, EventVewModel model);
+        EventVewModel Create(string leagueId);
 
         void Update(string leagueId, EventVewModel model);
 

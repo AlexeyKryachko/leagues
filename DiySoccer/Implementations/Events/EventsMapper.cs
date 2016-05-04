@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Interfaces.Events.BuisnessLogic.Models;
 using Interfaces.Events.DataAccess.Model;
-using Interfaces.Teams.DataAccess;
 
 namespace Implementations.Events
 {
@@ -13,24 +11,24 @@ namespace Implementations.Events
             return new EventGameDb
             {
                 GuestTeamId = eventGameModel.GuestTeamId,
-                HomeTeamId = eventGameModel.HomeTeamId
+                HomeTeamId = eventGameModel.HomeTeamId,
+                Id = eventGameModel.Id
             };
         }
 
-        public EventGameVewModel Map(EventGameDb eventGameEntity, Dictionary<string, TeamDb> teams)
+        public EventGameVewModel Map(EventGameDb eventGameEntity)
         {
             return new EventGameVewModel
             {
+                Id = eventGameEntity.Id,
                 GuestTeamId = eventGameEntity.GuestTeamId,
-                GuestTeamName = teams[eventGameEntity.GuestTeamId].Name,
                 HomeTeamId = eventGameEntity.HomeTeamId,
-                HomeTeamName = teams[eventGameEntity.HomeTeamId].Name
             };
         }
 
-        public EventVewModel Map(EventDb entity, Dictionary<string, TeamDb> teams)
+        public EventVewModel Map(EventDb entity)
         {
-            var games = entity.Games.Select(x => Map(x, teams));
+            var games = entity.Games.Select(Map);
 
             return new EventVewModel
             {

@@ -4,6 +4,8 @@ namespace Interfaces.Core.DataAccess
 {
     public interface IBaseRepository<T> where T: IBaseEntity
     {
+        T Create(string leagueId);
+
         void Add(string leagueId, T entity);
 
         void AddRange(string leagueId, IEnumerable<T> entities);

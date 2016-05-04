@@ -24,21 +24,6 @@ namespace Implementations.Events.DataAccess
             return Collection.AsQueryable().Where(x => x.LeagueId == leagueId).ToList();
         }
         
-        public void Create(string leagueId, EventVewModel model)
-        {
-            var games = model.Games.Select(_eventMapper.Map); 
-
-            var eventDb = new EventDb
-            {
-                Name = model.Name,
-                StartDate = model.StartDate,
-                EndDate = model.EndDate,
-                Games = games
-            };
-
-            Add(leagueId, eventDb);
-        }
-
         public void Update(string leagueId, EventVewModel model)
         {
             var filter = Builders<EventDb>.Filter.Eq(x => x.LeagueId, leagueId) & Builders<EventDb>.Filter.Eq(x => x.EntityId, model.Id);

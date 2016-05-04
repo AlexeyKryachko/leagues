@@ -63,6 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authenticate\BuisnessLogic\IAuthenticateManager.cs" />
+    <Compile Include="Calendar\ICalendarManager.cs" />
+    <Compile Include="Calendar\Models\CalendarViewModel.cs" />
     <Compile Include="Core\DataAccess\IBaseEntity.cs" />
     <Compile Include="Core\DataAccess\IBaseRepository.cs" />
     <Compile Include="Core\IdNameViewModel.cs" />

@@ -1,1 +1,13 @@
-﻿Event
+﻿<td>{{name}}</td>
+<td>
+    games
+    {{#if showAddEventGame}}
+    <button class="btn btn-primary add-event-game">Добавить игру</button>
+    {{/if}}
+</td>
+<td>date</td>
+<td>
+    {{#if showRemoveEvent}}
+    <button class="btn btn-primary delete-event">Удалить тур</button>
+    {{/if}}
+</td>

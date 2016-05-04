@@ -9,33 +9,24 @@ namespace Implementations.Events.BuisnessLogic
 {
     public class EventsManager : IEventsManager
     {
-        private readonly ITeamsRepository _teamsRepository;
         private readonly IEventsRepository _eventsRepository;
         private readonly EventsMapper _eventMapper;
 
-        public EventsManager(IEventsRepository eventsRepository, EventsMapper eventMapper, ITeamsRepository teamsRepository)
+        public EventsManager(IEventsRepository eventsRepository, EventsMapper eventMapper)
         {
             _eventsRepository = eventsRepository;
             _eventMapper = eventMapper;
-            _teamsRepository = teamsRepository;
         }
 
         public IEnumerable<EventVewModel> GetRange(string leagueId)
         {
             var events = _eventsRepository.GetByLeague(leagueId);
-
-            var gamesIds = events.SelectMany(x => x.Games);
-            var guestIds = gamesIds.Select(x => x.GuestTeamId);
-            var homeIds = gamesIds.Select(x => x.HomeTeamId);
-            var teamIds = guestIds.Concat(homeIds);
-            var teams = _teamsRepository.GetRange(teamIds).ToDictionary(x => x.EntityId, y => y);
-
-            return events.Select(x => _eventMapper.Map(x, teams)); 
+            return events.Select(x => _eventMapper.Map(x)); 
         }
 
-        public void Create(string leagueId, EventVewModel model)
+        public EventVewModel Create(string leagueId)
         {
-            _eventsRepository.Create(leagueId, model);
+            return _eventMapper.Map(_eventsRepository.Create(leagueId));
         }
 
         public void Update(string leagueId, EventVewModel model)

@@ -6,8 +6,15 @@ using MongoDB.Driver;
 
 namespace Implementations.Core.DataAccess
 {
-    public abstract class BaseRepository<T> : MongoRepository<T>, IBaseRepository<T> where T: IBaseEntity
+    public abstract class BaseRepository<T> : MongoRepository<T>, IBaseRepository<T> where T: IBaseEntity, new()
     {
+        public T Create(string leagueId)
+        {
+            var entity = new T();
+            Add(leagueId, entity);
+            return entity;
+        }
+
         public void Add(string leagueId, T entity)
         {
             if (entity == null)

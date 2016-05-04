@@ -8,9 +8,7 @@ namespace Interfaces.Events.DataAccess
     public interface IEventsRepository : IBaseRepository<EventDb>
     {
         IEnumerable<EventDb> GetByLeague(string leagueId);
-
-        void Create(string leagueId, EventVewModel model);
-
+        
         void Update(string leagueId, EventVewModel model);
     }
 }

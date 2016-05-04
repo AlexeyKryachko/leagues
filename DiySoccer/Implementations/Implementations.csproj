@@ -112,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authenticate\BuisnessLogic\AuthenticateManager.cs" />
+    <Compile Include="Calendar\CalendarManager.cs" />
     <Compile Include="Core\DataAccess\MongoRepository.cs" />
     <Compile Include="Core\DataAccess\BaseRepository.cs" />
     <Compile Include="Core\Medias\BuisnessLogic\MediaManager.cs" />

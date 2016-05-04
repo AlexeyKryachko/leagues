@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Implementations.Authenticate.BuisnessLogic;
+using Implementations.Calendar;
 using Implementations.Core.Medias.BuisnessLogic;
 using Implementations.Core.Medias.DataAccess;
 using Implementations.Events;
@@ -14,6 +15,7 @@ using Implementations.Teams.DataAccess;
 using Implementations.Users.BuisnessLogic;
 using Implementations.Users.DataAccess;
 using Interfaces.Authenticate.BuisnessLogic;
+using Interfaces.Calendar;
 using Interfaces.Core.Services.Medias.BuisnessLogic;
 using Interfaces.Core.Services.Medias.DataAccess;
 using Interfaces.Events.BuisnessLogic;
@@ -51,6 +53,7 @@ namespace Dependences
             builder.RegisterType(typeof(MediaManager)).As<IMediaManager>();
             builder.RegisterType(typeof(MediaRepository)).As<IMediaRepository>();
 
+            builder.RegisterType(typeof(CalendarManager)).As<ICalendarManager>();
             builder.RegisterType(typeof(EventsManager)).As<IEventsManager>();
             builder.RegisterType(typeof(EventsRepository)).As<IEventsRepository>();
             builder.RegisterType(typeof (EventsMapper)).AsSelf();
