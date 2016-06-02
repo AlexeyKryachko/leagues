@@ -6,7 +6,7 @@
 
         self.app = app;
 
-        self.model = new TeamInfo();
+        self.model = new Team();
         self.members = new Backbone.Collection();
     },
     onSubmit: function () {

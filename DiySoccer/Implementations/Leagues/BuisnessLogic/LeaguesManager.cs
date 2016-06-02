@@ -5,6 +5,7 @@ using Interfaces.Games.DataAccess;
 using Interfaces.Leagues.BuisnessLogic;
 using Interfaces.Leagues.BuisnessLogic.Model;
 using Interfaces.Leagues.DataAccess;
+using Interfaces.Teams.BuisnessLogic;
 using Interfaces.Teams.BuisnessLogic.Models;
 using Interfaces.Teams.DataAccess;
 using Interfaces.Users.DataAccess;
@@ -19,13 +20,16 @@ namespace Implementations.Leagues.BuisnessLogic
         private readonly IPlayersRepository _playersRepository;
         private readonly IUsersRepository _usersRepository;
 
-        public LeaguesManager(ILeaguesRepository leaguesRepository, ITeamsRepository teamsRepository, IGamesRepository gamesRepository, IPlayersRepository playersRepository, IUsersRepository usersRepository)
+        private readonly ITeamsManager _teamsManager;
+
+        public LeaguesManager(ILeaguesRepository leaguesRepository, ITeamsRepository teamsRepository, IGamesRepository gamesRepository, IPlayersRepository playersRepository, IUsersRepository usersRepository, ITeamsManager teamsManager)
         {
             _leaguesRepository = leaguesRepository;
             _teamsRepository = teamsRepository;
             _gamesRepository = gamesRepository;
             _playersRepository = playersRepository;
             _usersRepository = usersRepository;
+            _teamsManager = teamsManager;
         }
 
         public IEnumerable<LeagueViewModel> GetAll()
@@ -103,55 +107,11 @@ namespace Implementations.Leagues.BuisnessLogic
         {
             var teams = _teamsRepository.GetByLeague(leagueId).ToList();
             var games = _gamesRepository.GetByLeague(leagueId).ToList();
-            var teamsStatistic = new List<TeamStatisticViewModel>();
-            var scoreCalculation = new ScoreCalculation();
 
-            foreach (var team in teams)
-            {
-                if (team.Hidden)
-                    continue;
-
-                var model = new TeamStatisticViewModel
-                {
-                    Id = team.EntityId,
-                    Name = team.Name,
-                    MediaId = team.MediaId
-                };
-
-                model.GamesCount = games.Count(x => x.GuestTeam.Id == team.EntityId || x.HomeTeam.Id == team.EntityId);
-
-                model.Wins = games.Count(x =>
-                    (x.GuestTeam.Id == team.EntityId && x.GuestTeam.Score > x.HomeTeam.Score) ||
-                    (x.HomeTeam.Id == team.EntityId && x.HomeTeam.Score > x.GuestTeam.Score));
-
-                model.Loses = games.Count(x =>
-                    (x.GuestTeam.Id == team.EntityId && x.GuestTeam.Score < x.HomeTeam.Score) ||
-                    (x.HomeTeam.Id == team.EntityId && x.HomeTeam.Score < x.GuestTeam.Score));
-
-                model.Draws = games.Count(x =>
-                    (x.GuestTeam.Id == team.EntityId && x.GuestTeam.Score == x.HomeTeam.Score) ||
-                    (x.HomeTeam.Id == team.EntityId && x.HomeTeam.Score == x.GuestTeam.Score));
-
-                model.Scores = games
-                    .Where(x => x.GuestTeam.Id == team.EntityId)
-                    .Sum(x => x.GuestTeam.Score);
-                model.Scores += games
-                    .Where(x => x.HomeTeam.Id == team.EntityId)
-                    .Sum(x => x.HomeTeam.Score);
-
-                model.Missed = games
-                    .Where(x => x.GuestTeam.Id == team.EntityId)
-                    .Sum(x => x.HomeTeam.Score);
-                model.Missed += games
-                    .Where(x => x.HomeTeam.Id == team.EntityId)
-                    .Sum(x => x.GuestTeam.Score);
-
-                model.Points = scoreCalculation.Default(model.Wins, model.Loses, model.Draws);
-
-                teamsStatistic.Add(model);
-            }
-
-            var hiddenTeams = teams.Where(x => x.Hidden).SelectMany(x => x.MemberIds).Distinct();
+            var teamsStatistic = teams
+                .Where(x => !x.Hidden)
+                .Select(x => _teamsManager.GetStatistic(x, games));
+            
             var bestPlayers = Enumerable.Concat(
                 games.Where(x => !string.IsNullOrEmpty(x.HomeTeam.BestMemberId)).Select(x => x.HomeTeam.BestMemberId),
                 games.Where(x => !string.IsNullOrEmpty(x.GuestTeam.BestMemberId)).Select(x => x.GuestTeam.BestMemberId))
@@ -162,7 +122,7 @@ namespace Implementations.Leagues.BuisnessLogic
                     Count = x.Count()
                 })
                 .OrderByDescending(x => x.Count)
-                .Take(15)
+                .Take(7)
                 .ToList();
 
             var bestForwards = Enumerable.Concat(
@@ -175,7 +135,7 @@ namespace Implementations.Leagues.BuisnessLogic
                     Goals = x.Sum(y => y.Score)
                 })
                 .OrderByDescending(x => x.Goals)
-                .Take(15)
+                .Take(7)
                 .ToList();
 
             var bestHelpers = Enumerable.Concat(
@@ -188,7 +148,7 @@ namespace Implementations.Leagues.BuisnessLogic
                     Helps = x.Sum(y => y.Help)
                 })
                 .OrderByDescending(x => x.Helps)
-                .Take(15)
+                .Take(7)
                 .ToList();
 
             var userIds = new List<string>();
@@ -205,26 +165,29 @@ namespace Implementations.Leagues.BuisnessLogic
 
             return new LeagueStatisticViewModel
             {
-                BestPlayers = bestPlayers.Select(x => new IdNameViewModel
+                BestPlayers = bestPlayers.Select(x => new LeagueMemberStatisticViewModel
                 {
                     Id = x.Id,
                     Name = users.ContainsKey(x.Id) 
-                        ? users[x.Id] + " " + x.Count
-                        : null
+                        ? users[x.Id]
+                        : null,
+                    Number = x.Count
                 }),
-                BestForwards = bestForwards.Select(x => new IdNameViewModel
+                BestForwards = bestForwards.Select(x => new LeagueMemberStatisticViewModel
                 {
                     Id = x.Id,
                     Name = users.ContainsKey(x.Id)
-                        ? users[x.Id] + " " + x.Goals
-                        : null
+                        ? users[x.Id]
+                        : null,
+                    Number = x.Goals
                 }),
-                BestHelpers = bestHelpers.Select(x => new IdNameViewModel
+                BestHelpers = bestHelpers.Select(x => new LeagueMemberStatisticViewModel
                 {
                     Id = x.Id,
                     Name = users.ContainsKey(x.Id)
-                        ? users[x.Id] + " " + x.Helps
-                        : null
+                        ? users[x.Id]
+                        : null,
+                    Number = x.Helps
                 }),
                 TeamStatistics = teamsStatistic
                     .OrderByDescending(x => x.Points)

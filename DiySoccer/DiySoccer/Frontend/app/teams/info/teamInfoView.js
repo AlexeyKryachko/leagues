@@ -32,7 +32,7 @@
 
 var TeamGamesView = Backbone.Marionette.CompositeView.extend({
     template: "#team-info",    
-    childViewContainer: "tbody",
+    childViewContainer: ".games-container",
     childView: TeamGameView,
     emptyView: EmptyListView,
     childEvents: {

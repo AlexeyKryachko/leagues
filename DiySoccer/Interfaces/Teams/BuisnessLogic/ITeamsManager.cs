@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using Interfaces.Games.DataAccess.Model;
+using Interfaces.Leagues.BuisnessLogic.Model;
 using Interfaces.Teams.BuisnessLogic.Models;
+using Interfaces.Teams.DataAccess;
 
 namespace Interfaces.Teams.BuisnessLogic
 {
@@ -14,5 +17,7 @@ namespace Interfaces.Teams.BuisnessLogic
         void Update(string leagueId, string teamId, TeamViewModel model);
 
         IEnumerable<TeamViewModel> GetByLeague(string id);
+
+        TeamStatisticViewModel GetStatistic(TeamDb team, IEnumerable<GameDb> games);
     }
 }

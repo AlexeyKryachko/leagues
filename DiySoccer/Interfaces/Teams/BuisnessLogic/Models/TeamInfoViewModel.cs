@@ -12,12 +12,26 @@ namespace Interfaces.Teams.BuisnessLogic.Models
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("mediaId")]
+        public string MediaId { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
         [JsonProperty("games")]
         public IEnumerable<TeamInfoGameViewModel> Games { get; set; }
+
+        [JsonProperty("players")]
+        public IEnumerable<TeamInfoMemberViewModel> Players { get; set; }
+
+        [JsonProperty("stats")]
+        public IEnumerable<TeamInfoStatisticViewModel> Statistics { get; set; }
 
         public TeamInfoViewModel()
         {
             Games = Enumerable.Empty<TeamInfoGameViewModel>();
+            Players = Enumerable.Empty<TeamInfoMemberViewModel>();
+            Statistics = Enumerable.Empty<TeamInfoStatisticViewModel>();
         }
     }
 }
