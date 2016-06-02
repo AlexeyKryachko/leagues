@@ -9,8 +9,12 @@ namespace Interfaces.Events.BuisnessLogic
 
         EventVewModel Create(string leagueId);
 
-        void Update(string leagueId, EventVewModel model);
+        EventGameVewModel CreateEventGame(string leagueId, string eventId);
+
+        EventVewModel Update(string leagueId, EventVewModel model);
 
         void Delete(string eventId);
+
+        void DeleteEventGame(string eventId, int eventGameId);
     }
 }

@@ -38,5 +38,18 @@ namespace Implementations.Events.DataAccess
 
             Collection.UpdateOne(filter, update);
         }
+
+        public void Update(EventDb entity)
+        {
+            var filter = Builders<EventDb>.Filter.Eq(x => x.LeagueId, entity.LeagueId) & Builders<EventDb>.Filter.Eq(x => x.EntityId, entity.EntityId);
+            
+            var update = Builders<EventDb>.Update
+                .Set(x => x.Name, entity.Name)
+                .Set(x => x.StartDate, entity.StartDate)
+                .Set(x => x.EndDate, entity.EndDate)
+                .Set(x => x.Games, entity.Games);
+
+            Collection.UpdateOne(filter, update);
+        }
     }
 }

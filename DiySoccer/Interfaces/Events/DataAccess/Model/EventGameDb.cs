@@ -5,7 +5,7 @@ namespace Interfaces.Events.DataAccess.Model
     public class EventGameDb
     {
         [BsonElement("id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [BsonElement("homeTeamId")]
         public string HomeTeamId { get; set; }

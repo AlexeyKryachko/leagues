@@ -12,6 +12,8 @@
     onSubmit: function () {
         var self = this;
 
+        self.model.set('members', self.members.toJSON());
+
         self.model.save(null, {
             success: function(model, response) {
                 document.location.href = '#leagues/' + self.options.leagueId;

@@ -10,5 +10,7 @@ namespace Interfaces.Events.DataAccess
         IEnumerable<EventDb> GetByLeague(string leagueId);
         
         void Update(string leagueId, EventVewModel model);
+
+        void Update(EventDb entity);
     }
 }

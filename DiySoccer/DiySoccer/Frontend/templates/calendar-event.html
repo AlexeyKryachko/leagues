@@ -1,13 +1,55 @@
 ﻿<td>{{name}}</td>
 <td>
-    games
-    {{#if showAddEventGame}}
+    {{#if isEditor}}
+    {{#each games}}
+    <div class="row">
+        <div class="col-sm-5">
+            <select class="form-control home-team-change" data-id="{{id}}">
+                {{#if homeTeamName}}
+                <option disabled="disabled" selected="selected">{{homeTeamName}}</option>
+                {{else}}
+                {{/if}}
+                {{#each teams}}
+                <option value="{{id}}">{{name}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="col-sm-5">
+            <select class="form-control guest-team-change" data-id="{{id}}">
+                {{#if guestTeamName}}
+                <option disabled="disabled" selected="selected">{{guestTeamName}}</option>
+                {{else}}
+                {{/if}}
+                {{#each teams}}
+                <option value="{{id}}">{{name}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-primary delete-event-game">Удалить</button>
+        </div>
+    </div>
+    {{/each}}
+    {{else}}
+    {{#each games}}
+    <div class="row">
+        <div class="col-sm-6">
+            {{homeTeamName}}
+        </div>
+        <div class="col-sm-6">
+            {{guestTeamName}}
+        </div>
+    </div>
+    {{/each}}
+    {{/if}}
+
+    {{#if isEditor}}
     <button class="btn btn-primary add-event-game">Добавить игру</button>
     {{/if}}
 </td>
 <td>date</td>
 <td>
-    {{#if showRemoveEvent}}
+    {{#if isEditor}}
     <button class="btn btn-primary delete-event">Удалить тур</button>
     {{/if}}
 </td>

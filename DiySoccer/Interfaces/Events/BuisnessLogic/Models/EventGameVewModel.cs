@@ -5,7 +5,7 @@ namespace Interfaces.Events.BuisnessLogic.Models
     public class EventGameVewModel
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("homeTeamId")]
         public string HomeTeamId { get; set; }

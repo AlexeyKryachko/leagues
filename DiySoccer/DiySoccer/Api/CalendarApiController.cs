@@ -5,6 +5,7 @@ using DiySoccer.Core.Attributes;
 using Interfaces.Calendar;
 using Interfaces.Core;
 using Interfaces.Events.BuisnessLogic;
+using Interfaces.Events.BuisnessLogic.Models;
 
 namespace DiySoccer.Api
 {
@@ -34,6 +35,15 @@ namespace DiySoccer.Api
 
         #region PUT
 
+        [Route("api/leagues/{leagueId}/events/{eventId}")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
+        [HttpPut]
+        public IHttpActionResult Update([FromUri]string leagueId, [FromBody]EventVewModel model)
+        {
+            var updated = _eventsManager.Update(leagueId, model);
+            return Json(updated);
+        }
+
         #endregion
 
         #region POST
@@ -47,6 +57,15 @@ namespace DiySoccer.Api
             return Json(model);
         }
 
+        [Route("api/leagues/{leagueId}/events/{eventId}")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
+        [HttpPost]
+        public IHttpActionResult CreateEventGame([FromUri]string leagueId, [FromUri]string eventId)
+        {
+            var model = _eventsManager.CreateEventGame(leagueId, eventId);
+            return Json(model);
+        }
+
         #endregion
 
         #region DELETE
@@ -56,6 +75,13 @@ namespace DiySoccer.Api
         public void Delete(string leagueId, string eventId)
         {
             _eventsManager.Delete(eventId);
+        }
+
+        [Route("api/leagues/{leagueId}/events/{eventId}/{eventGameId}")]
+        [HttpDelete]
+        public void Delete(string leagueId, string eventId, int eventGameId)
+        {
+            _eventsManager.DeleteEventGame(eventId, eventGameId);
         }
 
         #endregion
