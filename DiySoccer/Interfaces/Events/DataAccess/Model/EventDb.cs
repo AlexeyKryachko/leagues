@@ -25,11 +25,11 @@ namespace Interfaces.Events.DataAccess.Model
         public DateTime? EndDate { get; set; }
 
         [BsonElement("games")]
-        public IList<EventGameDb> Games { get; set; }
+        public IEnumerable<EventGameDb> Games { get; set; }
 
         public EventDb()
         {
-            Games = new List<EventGameDb>();
+            Games = Enumerable.Empty<EventGameDb>();
         }
     }
 }

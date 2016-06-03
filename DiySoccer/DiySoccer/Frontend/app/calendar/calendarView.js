@@ -6,34 +6,31 @@
         'addEventGame': '.add-event-game',
         'deleteEventGame': '.delete-event-game',
         'homeTeamChange': '.home-team-change',
-        'guestTeamChange': '.guest-team-change'
+        'guestTeamChange': '.guest-team-change',
+        'nameTeam': '.name-event',
+        'startDate': '.date',
+        'startDateInput': '.start-date'
     },
     events: {
         'click @ui.deleteEvent': 'deleteEvent',
         'click @ui.addEventGame': 'addEventGame',
         'click @ui.deleteEventGame': 'deleteEventGame',
         'change @ui.homeTeamChange': 'homeTeamChange',
-        'change @ui.guestTeamChange': 'guestTeamChange'
+        'change @ui.guestTeamChange': 'guestTeamChange',
+        'change @ui.startDateInput': 'timeChange',
+        'change @ui.nameTeam': 'nameChange'
     },
     homeTeamChange: function (e) {
         var val = $(e.currentTarget).val();
         var eventGameId = $(e.currentTarget).data('id');
 
-        _.each(model.games, function () {
-            if (this.id == eventGameId) {
-                this.homeTeamId = val;
-            }
-        });
+        this.model.changeHomeTeam(eventGameId, val);
     },
     guestTeamChange: function (e) {
         var val = $(e.currentTarget).val();
         var eventGameId = $(e.currentTarget).data('id');
 
-        _.each(model.games, function () {
-            if (this.id == eventGameId) {
-                this.guestTeamId = val;
-            }
-        });
+        this.model.changeGuestTeam(eventGameId, val);
     },
     deleteEventGame: function (e) {
         var eventGameId = $(e.currentTarget).data('id');
@@ -46,12 +43,28 @@
     deleteEvent: function () {
         this.model.destroy();
     },
-    onShow: function () {
-        
+    nameChange: function(e) {
+        var val = this.ui.nameTeam.val();
+
+        this.model.set('name', val);
+        this.model.save();
+    },
+    onRender: function () {
+        var self = this;
+
+        this.ui.startDate.datetimepicker({
+                defaultDate: self.model.get('startDate')
+            })
+            .on('dp.change', function (e) {
+                var date = new Date(e.date);
+                console.log(date);
+                self.model.set('startDate', date);
+            });
     },
     setOptions: function(options) {
         this.options.teams = options.teams;
         this.options.leagueId = options.leagueId;
+        this.model.setLeagueId(options.leagueId);
     },
     serializeData: function () {
         var self = this;
@@ -70,9 +83,10 @@
             obj.teams = self.options.teams.toJSON();
         });
         
-        console.log(model);
-
         return model;
+    },
+    modelEvents: {
+        'change:games': 'render'
     }
 });
 

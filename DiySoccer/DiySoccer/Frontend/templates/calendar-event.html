@@ -1,4 +1,10 @@
-﻿<td>{{name}}</td>
+﻿<td>
+    {{#if isEditor}}
+    <input type="text" class="form-control name-event" data-id="{{id}}" value="{{name}}" />
+    {{else}}
+    {{name}}
+    {{/if}}
+</td>
 <td>
     {{#if isEditor}}
     {{#each games}}
@@ -8,6 +14,7 @@
                 {{#if homeTeamName}}
                 <option disabled="disabled" selected="selected">{{homeTeamName}}</option>
                 {{else}}
+                <option disabled="disabled" selected="selected">Выбрать команду</option>
                 {{/if}}
                 {{#each teams}}
                 <option value="{{id}}">{{name}}</option>
@@ -19,6 +26,7 @@
                 {{#if guestTeamName}}
                 <option disabled="disabled" selected="selected">{{guestTeamName}}</option>
                 {{else}}
+                <option disabled="disabled" selected="selected">Выбрать команду</option>
                 {{/if}}
                 {{#each teams}}
                 <option value="{{id}}">{{name}}</option>
@@ -26,7 +34,7 @@
             </select>
         </div>
         <div class="col-sm-2">
-            <button class="btn btn-primary delete-event-game">Удалить</button>
+            <button class="btn btn-primary delete-event-game" data-id="{{id}}">Удалить</button>
         </div>
     </div>
     {{/each}}
@@ -47,7 +55,16 @@
     <button class="btn btn-primary add-event-game">Добавить игру</button>
     {{/if}}
 </td>
-<td>date</td>
+<td>
+    <div class="form-group">
+        <div class='input-group date'>
+            <input type='text' class="form-control start-date" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
+</td>
 <td>
     {{#if isEditor}}
     <button class="btn btn-primary delete-event">Удалить тур</button>

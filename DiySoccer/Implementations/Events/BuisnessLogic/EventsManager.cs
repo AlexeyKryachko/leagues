@@ -36,7 +36,10 @@ namespace Implementations.Events.BuisnessLogic
 
             var eventItem = new EventGameDb();
             eventItem.Id = eventEntity.Games.Any() ? eventEntity.Games.Max(x => x.Id) + 1 : 0;
-            eventEntity.Games.Add(eventItem);
+
+            var games = eventEntity.Games.ToList();
+            games.Add(eventItem);
+            eventEntity.Games = games;
 
             _eventsRepository.Update(eventEntity);
 
@@ -62,7 +65,10 @@ namespace Implementations.Events.BuisnessLogic
             if (eventGame == null)
                 return;
 
-            eventEntity.Games.Remove(eventGame);
+            var games = eventEntity.Games.ToList();
+            games.Remove(eventGame);
+            eventEntity.Games = games;
+
             _eventsRepository.Update(eventEntity);
         }
     }

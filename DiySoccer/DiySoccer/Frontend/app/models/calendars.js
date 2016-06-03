@@ -15,9 +15,35 @@ var Event = Backbone.Model.extend({
         this.leagueId = 0;
     },
     url: function () {
-        return '/api/leagues/' + this.leagueId + '/events';
+        return this.id
+            ? '/api/leagues/' + this.leagueId + '/events/' + this.id
+            : '/api/leagues/' + this.leagueId + '/events/';
     },
-    createGame: function () {
+    changeGuestTeam: function (eventGameId, val) {
+        var games = this.get('games');
+
+        _.each(games, function (obj) {
+            if (obj.id == eventGameId) {
+                obj.guestTeamId = val;
+            }
+        });
+
+        this.set('games', games);
+        this.save();
+    },
+    changeHomeTeam: function (eventGameId, val) {
+        var games = this.get('games');
+
+        _.each(games, function (obj) {
+            if (obj.id == eventGameId) {
+                obj.homeTeamId = val;
+            }
+        });
+
+        this.set('games', games);
+        this.save();
+    },
+    createGame: function() {
         var self = this;
 
         $.ajax({
@@ -27,10 +53,13 @@ var Event = Backbone.Model.extend({
                 var games = self.get('games');
                 games.push(eventGame);
                 self.set('games', games);
+                self.trigger('change:games');
             }
         });
     },
     deleteGame: function (eventGameId) {
+        var self = this;
+
         $.ajax({
             type: "DELETE",
             url: '/api/leagues/' + self.leagueId + '/events/' + this.id + '/' + eventGameId,
@@ -39,11 +68,12 @@ var Event = Backbone.Model.extend({
                 var games = self.get('games');
 
                 _.each(games, function (obj) {
-                    if (id != obj.id)
+                    if (eventGameId != obj.id)
                         newGames.push(obj);
                 });
 
                 self.set('games', newGames);
+                self.trigger('change:games');
             }
         });
     },

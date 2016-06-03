@@ -40,3 +40,11 @@
 .mt10 {
     margin-top: 10px !important;
 }
+
+.date {
+    width: 100px;
+}
+
+.name-event {
+    width: 100px;
+}
