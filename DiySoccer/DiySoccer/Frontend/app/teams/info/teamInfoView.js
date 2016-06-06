@@ -1,18 +1,31 @@
 ﻿var TeamGameView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
     template: "#team-game",
+    className: 'cursor-pointer',
     ui: {
         'edit': '.edit-game',
         'delete': '.delete-game'
     },
     events: {
         'click @ui.edit': 'editRedirect',
-        'click @ui.delete': 'deleteGame'
+        'click @ui.delete': 'deleteGame',
+        'click': 'viewRedirect'
     },
-    editRedirect: function() {
+    viewRedirect: function() {
+        document.location.href = '#leagues/' + this.options.leagueId + '/games/' + this.model.get('id');
+    },
+    editRedirect: function (e) {
+        e.preventDefault();
+        if (e.stopPropagation)
+            e.stopPropagation();
+
         this.trigger('game:edit', this.model);
     },
-    deleteGame: function () {
+    deleteGame: function (e) {
+        e.preventDefault();
+        if (e.stopPropagation)
+            e.stopPropagation();
+
         this.trigger('game:delete', this.model);
     },
     setLeagueId: function(leagueId) {
@@ -23,8 +36,7 @@
     serializeData: function () {
         var model = this.model.toJSON();
 
-        model.showEdit = MyApp.Settings.isEditor(this.options.leagueId);
-        model.showDelete = MyApp.Settings.isEditor(this.options.leagueId);
+        model.isEditor = MyApp.Settings.isEditor(this.options.leagueId);
 
         return model;
     }

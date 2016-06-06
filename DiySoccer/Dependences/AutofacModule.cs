@@ -6,6 +6,7 @@ using Implementations.Core.Medias.DataAccess;
 using Implementations.Events;
 using Implementations.Events.BuisnessLogic;
 using Implementations.Events.DataAccess;
+using Implementations.Games;
 using Implementations.Games.BuisnessLogic;
 using Implementations.Games.DataAccess;
 using Implementations.Leagues.BuisnessLogic;
@@ -56,7 +57,9 @@ namespace Dependences
             builder.RegisterType(typeof(CalendarManager)).As<ICalendarManager>();
             builder.RegisterType(typeof(EventsManager)).As<IEventsManager>();
             builder.RegisterType(typeof(EventsRepository)).As<IEventsRepository>();
+
             builder.RegisterType(typeof (EventsMapper)).AsSelf();
+            builder.RegisterType(typeof(GamesMapper)).AsSelf();
         }
     }
 }

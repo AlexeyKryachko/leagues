@@ -1,4 +1,12 @@
-﻿body {
+﻿.main-league-title {
+    text-align: center;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+body {
   padding-top: 70px;
   padding-bottom: 30px;
 }

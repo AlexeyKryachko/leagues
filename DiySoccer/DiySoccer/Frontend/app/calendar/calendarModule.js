@@ -58,16 +58,18 @@
             collection: self.events
         };
         self.calendarView = new CalendarView(viewOptions);
+        self.bottomView = new CancelView();
     },
     bindViews: function() {
         var self = this;
 
         self.listenTo(self.layout, 'show', function() {
             self.layout.center.show(self.calendarView);
+            self.layout.down.show(self.bottomView);
         });
 
         self.listenTo(self.calendarView, 'submit', this.onSubmit);
-        self.listenTo(self.calendarView, 'back', this.onCancel);
+        self.listenTo(self.bottomView, 'cancel', this.onCancel);
         self.listenTo(self.calendarView, 'event:add', this.addEvent);
 
     },
@@ -85,6 +87,7 @@
     onStop: function (options) {
         var self = this;
 
+        self.bottomView.destroy();
         self.calendarView.destroy();
         self.layout.destroy();
     }

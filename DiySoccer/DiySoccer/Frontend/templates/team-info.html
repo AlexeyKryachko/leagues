@@ -15,21 +15,35 @@
 </div>
 
 <ul class="nav nav-tabs">
+    <li class="active">
+        <a data-toggle="tab" href="#games">Игры</a>
+    </li>
     {{#if description}}
-    <li class="active"><a data-toggle="tab" href="#description">Описание</a></li>
+    <li><a data-toggle="tab" href="#description">Описание</a></li>
     {{/if}}
     {{#if players}}
     <li><a data-toggle="tab" href="#players">Состав</a></li>
     {{/if}}
-    <li><a data-toggle="tab" href="#games">Игры</a></li>
     {{#if stats}}
     <li><a data-toggle="tab" href="#statistic">Статистика</a></li>
     {{/if}}
 </ul>
 
 <div class="tab-content">
+    <div id="games" class="tab-pane fade tab-inner active in">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Счет</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="games-container"></tbody>
+        </table>
+    </div>
     {{#if description}}
-    <div id="description" class="tab-pane fade in active tab-inner">
+    <div id="description" class="tab-pane fade tab-inner">
         {{{description}}}
     </div>
     {{/if}}
@@ -49,18 +63,6 @@
         </table>
     </div>
     {{/if}}
-    <div id="games" class="tab-pane fade tab-inner">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Название</th>
-                <th>Счет</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody class="games-container"></tbody>
-        </table>
-    </div>
     {{#if stats}}
     <div id="statistic" class="tab-pane fade tab-inner">
         {{#each stats}}

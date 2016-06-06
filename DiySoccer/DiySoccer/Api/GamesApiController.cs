@@ -27,6 +27,15 @@ namespace DiySoccer.Api
             return Json(game);
         }
 
+        [Route("api/leagues/{leagueId}/games/{gameId}")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
+        [HttpGet]
+        public IHttpActionResult GetGameInfo(string leagueId, string gameId)
+        {
+            var game = _gamesManager.GetInfo(leagueId, gameId);
+            return Json(game);
+        }
+
         #endregion
 
         #region PUT

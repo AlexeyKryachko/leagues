@@ -6,6 +6,8 @@ namespace Interfaces.Games.BuisnessLogic
     {
         GameVewModel Get(string leagueId, string gameId);
 
+        GameInfoViewModel GetInfo(string leagueId, string gameId);
+
         void Create(string leagueId, GameVewModel model);
 
         void Update(string leagueId, string gameId, GameVewModel model);

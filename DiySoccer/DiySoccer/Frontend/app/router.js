@@ -17,6 +17,7 @@
         "leagues/:leagueId/teams/:teamId/edit": "editTeamRoute",
         "leagues/:leagueId/teams/:teamId": "infoTeamRoute",
         "leagues/:leagueId/games/new": "newGameRoute",
+        "leagues/:leagueId/games/:gameId": "gameInfoRoute",
         "leagues/:leagueId/games/:gameId/edit": "editGameRoute",
         "leagues/:leagueId/calendar": "calendarRoute"
     },
@@ -54,6 +55,10 @@
     newGameRoute: function (leagueId) {
         var options = { leagueId: leagueId };
         this.changeModule(MyApp.submodules.game, options);
+    },
+    gameInfoRoute: function (leagueId, gameId) {
+        var options = { leagueId: leagueId, gameId: gameId };
+        this.changeModule(MyApp.submodules.gameInfo, options);
     },
     editGameRoute: function (leagueId, gameId) {
         var options = { leagueId: leagueId, gameId: gameId };
