@@ -42,12 +42,12 @@ namespace Implementations.Teams
                     continue;
                 }
 
-                model.Event = ev.StartDate.Value.ToLongDateString();
+                model.Event = ev.Name;
                 result.Add(new Tuple<DateTime?, TeamInfoGameViewModel>(ev.StartDate, model));
             }
 
             return result
-                .OrderBy(x => x.Item1)
+                .OrderByDescending(x => x.Item1)
                 .Select(x => x.Item2);
         }
 
