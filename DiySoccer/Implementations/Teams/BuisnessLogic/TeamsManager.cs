@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Interfaces.Core;
+using Interfaces.Events.DataAccess;
 using Interfaces.Games.DataAccess;
-using Interfaces.Games.DataAccess.Model;
-using Interfaces.Leagues.BuisnessLogic.Model;
 using Interfaces.Leagues.DataAccess;
 using Interfaces.Teams.BuisnessLogic;
 using Interfaces.Teams.BuisnessLogic.Models;
@@ -18,15 +17,18 @@ namespace Implementations.Teams.BuisnessLogic
         private readonly IGamesRepository _gamesRepository;
         private readonly ITeamsRepository _teamsRepository;
         private readonly IPlayersRepository _playersRepository;
+        private readonly IEventsRepository _eventsRepository;
 
-        private readonly ScoreCalculation _scoreCalculation = new ScoreCalculation();
+        private readonly TeamsMapper _teamMapper;
 
-        public TeamsManager(ITeamsRepository teamsRepository, IPlayersRepository playersRepository, IGamesRepository gamesRepository, ILeaguesRepository leaguesRepository)
+        public TeamsManager(ITeamsRepository teamsRepository, IPlayersRepository playersRepository, IGamesRepository gamesRepository, ILeaguesRepository leaguesRepository, TeamsMapper teamMapper, IEventsRepository eventsRepository)
         {
             _teamsRepository = teamsRepository;
             _playersRepository = playersRepository;
             _gamesRepository = gamesRepository;
             _leaguesRepository = leaguesRepository;
+            _teamMapper = teamMapper;
+            _eventsRepository = eventsRepository;
         }
 
         public void Create(string leagueId, TeamViewModel model)
@@ -80,7 +82,8 @@ namespace Implementations.Teams.BuisnessLogic
         public TeamInfoViewModel GetInfo(string leagueId, string teamId)
         {
             var league = _leaguesRepository.Get(leagueId);
-            var games = _gamesRepository.GetByTeam(leagueId, teamId);
+            var events = _eventsRepository.GetByLeague(leagueId).ToList();
+            var games = _gamesRepository.GetByTeam(leagueId, teamId).ToList();
             var teamIds = games.Select(x => x.GuestTeam.Id).Concat(games.Select(x => x.HomeTeam.Id)).ToList();
             teamIds.Add(teamId);
             teamIds = teamIds.Distinct().ToList();
@@ -90,35 +93,9 @@ namespace Implementations.Teams.BuisnessLogic
                 .ToDictionary(x => x.EntityId, y => y);
 
             var userIds = teams[teamId].MemberIds;
-            var users = _playersRepository.GetRange(userIds);
+            var users = _playersRepository.GetRange(userIds).ToList();
 
-            var stats = new List<TeamInfoStatisticViewModel>();
-            var currentStatisticLeague = new TeamInfoStatisticViewModel(GetStatistic(teams[teamId], games), teams[teamId]);
-            stats.Add(currentStatisticLeague);
-
-            return new TeamInfoViewModel
-            {
-                Id = teamId,
-                Name = teams[teamId].Name,
-                MediaId = teams[teamId].MediaId,
-                Description = teams[teamId].Description,
-                Games = games.Select(x => new TeamInfoGameViewModel
-                {
-                    Id = x.EntityId,
-                    OpponentName = x.GuestTeam.Id == teamId
-                        ? teams[x.HomeTeam.Id].Name
-                        : teams[x.GuestTeam.Id].Name,
-                    Goals = x.GuestTeam.Id == teamId
-                        ? x.HomeTeam.Score + ":" + x.GuestTeam.Score + "*"
-                        : x.GuestTeam.Score + ":" + x.HomeTeam.Score + "*"
-                }),
-                Players = users.Select(y => new TeamInfoMemberViewModel
-                {
-                    Id = y.EntityId,
-                    Name = y.Name
-                }),
-                Statistics = stats
-            };
+            return _teamMapper.MapTeamInfoViewModel(games, teamId, teams, users, events);
         }
 
         public void Update(string leagueId, string teamId, TeamViewModel model)
@@ -167,46 +144,6 @@ namespace Implementations.Teams.BuisnessLogic
             });
         }
 
-        public TeamStatisticViewModel GetStatistic(TeamDb team, IEnumerable<GameDb> games)
-        {
-            var model = new TeamStatisticViewModel
-            {
-                Id = team.EntityId,
-                Name = team.Name,
-                MediaId = team.MediaId
-            };
-
-            model.GamesCount = games.Count(x => x.GuestTeam.Id == team.EntityId || x.HomeTeam.Id == team.EntityId);
-
-            model.Wins = games.Count(x =>
-                (x.GuestTeam.Id == team.EntityId && x.GuestTeam.Score > x.HomeTeam.Score) ||
-                (x.HomeTeam.Id == team.EntityId && x.HomeTeam.Score > x.GuestTeam.Score));
-
-            model.Loses = games.Count(x =>
-                (x.GuestTeam.Id == team.EntityId && x.GuestTeam.Score < x.HomeTeam.Score) ||
-                (x.HomeTeam.Id == team.EntityId && x.HomeTeam.Score < x.GuestTeam.Score));
-
-            model.Draws = games.Count(x =>
-                (x.GuestTeam.Id == team.EntityId && x.GuestTeam.Score == x.HomeTeam.Score) ||
-                (x.HomeTeam.Id == team.EntityId && x.HomeTeam.Score == x.GuestTeam.Score));
-
-            model.Scores = games
-                .Where(x => x.GuestTeam.Id == team.EntityId)
-                .Sum(x => x.GuestTeam.Score);
-            model.Scores += games
-                .Where(x => x.HomeTeam.Id == team.EntityId)
-                .Sum(x => x.HomeTeam.Score);
-
-            model.Missed = games
-                .Where(x => x.GuestTeam.Id == team.EntityId)
-                .Sum(x => x.HomeTeam.Score);
-            model.Missed += games
-                .Where(x => x.HomeTeam.Id == team.EntityId)
-                .Sum(x => x.GuestTeam.Score);
-
-            model.Points = _scoreCalculation.Default(model.Wins, model.Loses, model.Draws);
-
-            return model;
-        }
+        
     }
 }

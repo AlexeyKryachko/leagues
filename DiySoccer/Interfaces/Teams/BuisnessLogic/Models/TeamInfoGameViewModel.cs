@@ -7,8 +7,11 @@ namespace Interfaces.Teams.BuisnessLogic.Models
         [JsonProperty("id")]
         public string Id { get; set; }
 
+        [JsonProperty("event")]
+        public string Event { get; set; }
+
         [JsonProperty("name")]
-        public string OpponentName { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty("goals")]
         public string Goals { get; set; }

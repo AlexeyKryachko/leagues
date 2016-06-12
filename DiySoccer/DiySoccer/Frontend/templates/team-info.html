@@ -1,22 +1,18 @@
-﻿<div class="row mb15">
+﻿<div class="row mb30">
     <div class="col-sm-3">
         {{#if mediaId}}
-        <img src="/api/image/{{mediaId}}?width=150&height=150" />
+        <img class="img-150-150" src="/api/image/uncut/{{mediaId}}?width=150&height=150"/>
+        {{else}}
+        <img class="img-150-150" src="/Frontend/img/DefaultLogo_150x150.png" />
         {{/if}}
     </div>
     <div class="col-sm-9">
-        <div>
-            Город: Город
-        </div>
-        <div>
-            Дата основания: 01.01.2017
-        </div>
     </div>
 </div>
 
 <ul class="nav nav-tabs">
     <li class="active">
-        <a data-toggle="tab" href="#games">Игры</a>
+        <a data-toggle="tab" href="#games">Календарь</a>
     </li>
     {{#if description}}
     <li><a data-toggle="tab" href="#description">Описание</a></li>
@@ -25,7 +21,10 @@
     <li><a data-toggle="tab" href="#players">Состав</a></li>
     {{/if}}
     {{#if stats}}
-    <li><a data-toggle="tab" href="#statistic">Статистика</a></li>
+    <li><a data-toggle="tab" href="#statistic">Статистика команды</a></li>
+    {{/if}}
+    {{#if playersStats}}
+    <li><a data-toggle="tab" href="#players-statistic">Статистика игроков</a></li>
     {{/if}}
 </ul>
 
@@ -34,8 +33,9 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Название</th>
-                    <th>Счет</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -92,6 +92,32 @@
         </table>
 
         {{/each}}
+    </div>
+    {{/if}}
+    {{#if playersStats}}
+    <div id="players-statistic" class="tab-pane fade tab-inner">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-left width-100">Номер</th>
+                    <th class="text-left width-720">Имя</th>
+                    <th class="text-right width-100">Гол</th>
+                    <th class="text-right width-100">Пас</th>
+                    <th class="text-right width-100">Гол + пас</th>
+                </tr>
+            </thead>
+            <tbody>
+            {{#each playersStats}}
+            <tr>
+                <td class="text-left width-100">{{num}}</td>
+                <td class="text-left width-720">{{name}}</td>
+                <td class="text-right width-100">{{goal}}</td>
+                <td class="text-right width-100">{{help}}</td>
+                <td class="text-right width-100">{{sum}}</td>
+            </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
     {{/if}}
 </div>

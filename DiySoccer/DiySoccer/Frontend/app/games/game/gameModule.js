@@ -29,6 +29,7 @@
 
         return {
             customScores: self.optionsModel.get('customScores'),
+            eventId: self.optionsModel.get('eventId'),
             homeTeam: homeTeam,
             guestTeam: guestTeam
         }
@@ -41,8 +42,9 @@
             type: "POST",
             url: '/api/leagues/' + self.options.leagueId + '/games',
             data: data,
-            success: function() {
-                document.location.href = '#leagues/' + self.options.leagueId;
+            success: function () {
+                window.history.back();
+                //document.location.href = '#leagues/' + self.options.leagueId;
             }
         });
     },
@@ -55,7 +57,8 @@
             url: '/api/leagues/' + self.options.leagueId + '/games/' + self.options.gameId,
             data: data,
             success: function () {
-                document.location.href = '#leagues/' + self.options.leagueId;
+                window.history.back();
+                //document.location.href = '#leagues/' + self.options.leagueId;
             }
         });
     },
@@ -103,6 +106,8 @@
             self.rightScores.reset(response.guestTeam.members);
             self.teams.setLeagueId(self.options.leagueId);
             self.optionsModel.set('customScores', response.customScores);
+            self.optionsModel.set('eventId', response.eventId);
+            self.optionsModel.set('events', response.events);
 
             self.rightModel.set('disableScoreValue', !response.customScores);
             self.leftModel.set('disableScoreValue', !response.customScores);
@@ -146,7 +151,8 @@
         });
 
         self.listenTo(self.saveView, 'cancel', function () {
-            document.location.href = '#leagues/' + self.options.leagueId;
+            window.history.back();
+            //document.location.href = '#leagues/' + self.options.leagueId;
         });
 
         self.listenTo(self.teams, 'sync', function () {

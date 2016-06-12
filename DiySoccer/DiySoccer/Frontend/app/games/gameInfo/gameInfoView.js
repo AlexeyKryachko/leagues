@@ -1,4 +1,4 @@
-﻿var GameScoresView = Backbone.Marionette.ItemView.extend({
+﻿var GameInfoScoresView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
     template: "#game-info-scores",
     ui: {
@@ -13,10 +13,10 @@
     }
 });
 
-var GameView = Backbone.Marionette.CompositeView.extend({
+var GameInfoView = Backbone.Marionette.CompositeView.extend({
     template: "#game-info",    
     childViewContainer: "tbody",
-    childView: GameScoresView,
+    childView: GameInfoScoresView,
     emptyView: EmptyListView,
     ui: {
     },

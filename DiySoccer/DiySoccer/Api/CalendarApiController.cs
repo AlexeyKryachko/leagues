@@ -71,6 +71,7 @@ namespace DiySoccer.Api
         #region DELETE
 
         [Route("api/leagues/{leagueId}/events/{eventId}")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
         [HttpDelete]
         public void Delete(string leagueId, string eventId)
         {
@@ -78,6 +79,7 @@ namespace DiySoccer.Api
         }
 
         [Route("api/leagues/{leagueId}/events/{eventId}/{eventGameId}")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
         [HttpDelete]
         public void Delete(string leagueId, string eventId, int eventGameId)
         {

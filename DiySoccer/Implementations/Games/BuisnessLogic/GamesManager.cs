@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Interfaces.Core;
+using Interfaces.Events.DataAccess;
 using Interfaces.Games.BuisnessLogic;
 using Interfaces.Games.BuisnessLogic.Models;
 using Interfaces.Games.DataAccess;
-using Interfaces.Games.DataAccess.Model;
 using Interfaces.Teams.DataAccess;
 using Interfaces.Users.DataAccess;
 
@@ -14,15 +15,17 @@ namespace Implementations.Games.BuisnessLogic
         private readonly IGamesRepository _gamesRepository;
         private readonly IPlayersRepository _playersRepository;
         private readonly ITeamsRepository _teamsRepository;
+        private readonly IEventsRepository _eventsRepository;
 
         private readonly GamesMapper _gameMapper;
 
-        public GamesManager(IGamesRepository gamesRepository, IPlayersRepository playersRepository, GamesMapper gameMapper, ITeamsRepository teamsRepository)
+        public GamesManager(IGamesRepository gamesRepository, IPlayersRepository playersRepository, GamesMapper gameMapper, ITeamsRepository teamsRepository, IEventsRepository eventsRepository)
         {
             _gamesRepository = gamesRepository;
             _playersRepository = playersRepository;
             _gameMapper = gameMapper;
             _teamsRepository = teamsRepository;
+            _eventsRepository = eventsRepository;
         }
 
         public GameVewModel Get(string leagueId, string gameId)
@@ -30,11 +33,18 @@ namespace Implementations.Games.BuisnessLogic
             var game = _gamesRepository.Get(gameId);
             var userIds = game.HomeTeam.Members.Select(x => x.Id).Concat(game.GuestTeam.Members.Select(x => x.Id));
             var users = _playersRepository.GetRange(userIds).ToDictionary(x => x.EntityId, y => y.Name);
+            var events = _eventsRepository.GetByLeague(leagueId);
 
             return new GameVewModel
             {
                 Id = game.EntityId,
                 CustomScores = game.CustomScores,
+                EventId = game.EventId,
+                Events = events.Select(x => new IdNameViewModel
+                {
+                   Id = x.EntityId,
+                   Name = x.Name
+                }),
                 HomeTeam = new GameTeamViewModel
                 {
                     Id = game.HomeTeam.Id,
@@ -98,22 +108,7 @@ namespace Implementations.Games.BuisnessLogic
 
         public void Update(string leagueId, string gameId, GameVewModel model)
         {
-            var guestMemberScores = model.GuestTeam.Members.Select(x => new GameMemberDb
-            {
-                Id = x.Id,
-                Help = x.Help,
-                Score = x.Score
-            });
-            
-            var homeMemberScores = model.HomeTeam.Members.Select(x => new GameMemberDb
-            {
-                Id = x.Id,
-                Help = x.Help,
-                Score = x.Score
-            });
-
-            _gamesRepository.Update(leagueId, gameId, model.CustomScores, model.GuestTeam.Score, model.GuestTeam.BestId, guestMemberScores,
-                model.HomeTeam.Score, model.HomeTeam.BestId, homeMemberScores);
+            _gamesRepository.Update(leagueId, gameId, model);
         }
 
         public void Delete(string gameId)

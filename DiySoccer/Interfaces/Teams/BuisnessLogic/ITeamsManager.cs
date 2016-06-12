@@ -17,7 +17,5 @@ namespace Interfaces.Teams.BuisnessLogic
         void Update(string leagueId, string teamId, TeamViewModel model);
 
         IEnumerable<TeamViewModel> GetByLeague(string id);
-
-        TeamStatisticViewModel GetStatistic(TeamDb team, IEnumerable<GameDb> games);
     }
 }

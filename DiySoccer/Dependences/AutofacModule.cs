@@ -11,6 +11,7 @@ using Implementations.Games.BuisnessLogic;
 using Implementations.Games.DataAccess;
 using Implementations.Leagues.BuisnessLogic;
 using Implementations.Leagues.DataAccess;
+using Implementations.Teams;
 using Implementations.Teams.BuisnessLogic;
 using Implementations.Teams.DataAccess;
 using Implementations.Users.BuisnessLogic;
@@ -60,6 +61,7 @@ namespace Dependences
 
             builder.RegisterType(typeof (EventsMapper)).AsSelf();
             builder.RegisterType(typeof(GamesMapper)).AsSelf();
+            builder.RegisterType(typeof(TeamsMapper)).AsSelf();
         }
     }
 }

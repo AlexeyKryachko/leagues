@@ -126,6 +126,7 @@
     <Compile Include="Leagues\BuisnessLogic\LeaguesManager.cs" />
     <Compile Include="Leagues\DataAccess\LeaguesRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Teams\TeamsMapper.cs" />
     <Compile Include="Users\BuisnessLogic\UsersManager.cs" />
     <Compile Include="Users\DataAccess\UsersRepository.cs" />
     <Compile Include="Users\DataAccess\PlayersRepository.cs" />

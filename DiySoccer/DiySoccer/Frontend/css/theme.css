@@ -38,7 +38,11 @@ body {
 }
 
 .mb15 {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.mb30 {
+    margin-bottom: 30px;
 }
 
 .tab-inner {
@@ -55,4 +59,39 @@ body {
 
 .name-event {
     width: 100px;
+}
+
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.width-100 {
+    width: 100px;
+}
+
+.width-125 {
+    width: 125px;
+}
+
+.width-150 {
+    width: 150px;
+}
+
+.width-720 {
+    width: 720px;
+}
+
+.img-120-120 {
+    height: 120px;
+    width: 120px;
+}
+
+.img-150-150 {
+    height: 150px;
+    width: 150px;
 }

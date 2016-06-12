@@ -4,8 +4,8 @@ namespace Interfaces.Core.Services.Medias.BuisnessLogic
 {
     public interface IMediaManager
     {
-        MediaIOViewModel Get(string mediaId, int? width, int? height);
-
+        MediaIOViewModel GetCutImage(string mediaId, int? width, int? height);
+        MediaIOViewModel GetImage(string mediaId, int? width, int? height);
         MediaViewModel Upload(HttpPostedFile file);
     }
 }

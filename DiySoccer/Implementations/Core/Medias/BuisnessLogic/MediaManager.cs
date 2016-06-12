@@ -21,7 +21,7 @@ namespace Implementations.Core.Medias.BuisnessLogic
             _mediaRepository = mediaRepository;
         }
 
-        public MediaIOViewModel Get(string mediaId, int? width, int? height)
+        public MediaIOViewModel GetCutImage(string mediaId, int? width, int? height)
         {
             var media = _mediaRepository.Get(mediaId);
 
@@ -34,13 +34,13 @@ namespace Implementations.Core.Medias.BuisnessLogic
             {
                 targetPath = pathWithoutExtension + "_" + width + "_" + height + extenstion;
                 if (!File.Exists(targetPath))
-                    CreateImage(path, targetPath, new Size(width.Value, height.Value));
+                    CreateImage(path, targetPath, new Size(width.Value, height.Value), true);
             }
             else
             {
                 targetPath = pathWithoutExtension;
                 if (!File.Exists(targetPath))
-                    CreateImage(path, targetPath);
+                    CreateImage(path, targetPath, true);
             }
             
             
@@ -51,7 +51,37 @@ namespace Implementations.Core.Medias.BuisnessLogic
             };
         }
 
-        private void CreateImage(string sourcePath, string targetPath)
+        public MediaIOViewModel GetImage(string mediaId, int? width, int? height)
+        {
+            var media = _mediaRepository.Get(mediaId);
+
+            var path = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + media.RelativeUrl;
+            var extenstion = Path.GetExtension(path);
+            var pathWithoutExtension = path.Replace(extenstion, "");
+
+            var targetPath = string.Empty;
+            if (width.HasValue && height.HasValue)
+            {
+                targetPath = pathWithoutExtension + "_" + width + "_" + height + "_uncut" + extenstion;
+                if (!File.Exists(targetPath))
+                    CreateImage(path, targetPath, new Size(width.Value, height.Value), false);
+            }
+            else
+            {
+                targetPath = pathWithoutExtension + "_uncut";
+                if (!File.Exists(targetPath))
+                    CreateImage(path, targetPath, false);
+            }
+
+
+            return new MediaIOViewModel
+            {
+                Stream = new FileStream(targetPath, FileMode.Open),
+                ContentType = media.ContentType
+            };
+        }
+
+        private void CreateImage(string sourcePath, string targetPath, bool cut)
         {
             using (var fileStream = new FileStream(targetPath, FileMode.Create))
             {
@@ -67,11 +97,21 @@ namespace Implementations.Core.Medias.BuisnessLogic
                         using (var imageFactory = new ImageFactory(preserveExifData: true))
                         {
                             // Do your magic here
-                            imageFactory.Load(inStream)
-                                .RoundedCorners(new RoundedCornerLayer(190, true, true, true, true))
-                                .Format(format)
-                                .Quality(quality)
-                                .Save(outStream);
+                            if (cut)
+                            {
+                                imageFactory.Load(inStream)
+                                    .RoundedCorners(new RoundedCornerLayer(190, true, true, true, true))
+                                    .Format(format)
+                                    .Quality(quality)
+                                    .Save(outStream);
+                            }
+                            else
+                            {
+                                imageFactory.Load(inStream)
+                                    .Format(format)
+                                    .Quality(quality)
+                                    .Save(outStream);
+                            }
 
                             outStream.WriteTo(fileStream);
                         }
@@ -80,7 +120,7 @@ namespace Implementations.Core.Medias.BuisnessLogic
             }
         }
 
-        private void CreateImage(string sourcePath, string targetPath, Size size)
+        private void CreateImage(string sourcePath, string targetPath, Size size, bool cut)
         {
             using (var fileStream = new FileStream(targetPath, FileMode.Create))
             {
@@ -96,12 +136,22 @@ namespace Implementations.Core.Medias.BuisnessLogic
                         using (var imageFactory = new ImageFactory(preserveExifData: true))
                         {
                             // Do your magic here
-                            imageFactory.Load(inStream)
-                                .RoundedCorners(new RoundedCornerLayer(190, true, true, true, true))
-                                .Resize(size)
-                                .Format(format)
-                                .Quality(quality)
-                                .Save(outStream);
+                            if (cut)
+                            {
+                                imageFactory.Load(inStream)
+                                    .Resize(size)
+                                    .Format(format)
+                                    .Quality(quality)
+                                    .Save(outStream);
+                            }
+                            else
+                            {
+                                imageFactory.Load(inStream)
+                                    .Resize(size)
+                                    .Format(format)
+                                    .Quality(quality)
+                                    .Save(outStream);
+                            }
 
                             outStream.WriteTo(fileStream);
                         }

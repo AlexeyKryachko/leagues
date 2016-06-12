@@ -27,6 +27,9 @@ namespace Interfaces.Teams.BuisnessLogic.Models
         [JsonProperty("stats")]
         public IEnumerable<TeamInfoStatisticViewModel> Statistics { get; set; }
 
+        [JsonProperty("playersStats")]
+        public IEnumerable<TeamInfoPlayersStatisticViewModel> PlayersStatistics { get; set; }
+
         public TeamInfoViewModel()
         {
             Games = Enumerable.Empty<TeamInfoGameViewModel>();

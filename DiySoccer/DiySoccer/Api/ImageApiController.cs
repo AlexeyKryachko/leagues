@@ -21,11 +21,27 @@ namespace DiySoccer.Api
         #region GET
 
         [Route("api/image/{mediaId}")]
-        [CacheOutputUntilToday]
+        [CacheOutputUntil(2017, 1, 1)]
+        [HttpGet]
+        public HttpResponseMessage GetCutImage(string mediaId, int? width = null, int? height = null)
+        {
+            var model = _mediaManager.GetCutImage(mediaId, width, height);
+            var response = new HttpResponseMessage()
+            {
+                Content = new StreamContent(model.Stream)
+            };
+
+            // Find the MIME type
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(model.ContentType);
+            return response;
+        }
+
+        [Route("api/image/uncut/{mediaId}")]
+        [CacheOutputUntil(2017, 1, 1)]
         [HttpGet]
         public HttpResponseMessage GetImage(string mediaId, int? width = null, int? height = null)
         {
-            var model = _mediaManager.Get(mediaId, width, height);
+            var model = _mediaManager.GetImage(mediaId, width, height);
             var response = new HttpResponseMessage()
             {
                 Content = new StreamContent(model.Stream)

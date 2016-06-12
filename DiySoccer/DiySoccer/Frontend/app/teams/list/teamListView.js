@@ -86,8 +86,7 @@ var TeamListActions = Backbone.Marionette.CompositeView.extend({
     serializeData: function() {
         var model = {};
 
-        model.showAddTeam = MyApp.Settings.isEditor(this.options.leagueId);
-        model.showAddGame = model.showAddTeam;
+        model.isEditor = MyApp.Settings.isEditor(this.options.leagueId);
 
         return model;
     }

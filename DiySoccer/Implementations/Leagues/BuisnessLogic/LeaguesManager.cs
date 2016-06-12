@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Implementations.Teams;
 using Interfaces.Core;
 using Interfaces.Games.DataAccess;
 using Interfaces.Leagues.BuisnessLogic;
 using Interfaces.Leagues.BuisnessLogic.Model;
 using Interfaces.Leagues.DataAccess;
-using Interfaces.Teams.BuisnessLogic;
-using Interfaces.Teams.BuisnessLogic.Models;
 using Interfaces.Teams.DataAccess;
 using Interfaces.Users.DataAccess;
 
@@ -19,17 +18,17 @@ namespace Implementations.Leagues.BuisnessLogic
         private readonly IGamesRepository _gamesRepository;
         private readonly IPlayersRepository _playersRepository;
         private readonly IUsersRepository _usersRepository;
+        
+        private readonly TeamsMapper _teamMapper;
 
-        private readonly ITeamsManager _teamsManager;
-
-        public LeaguesManager(ILeaguesRepository leaguesRepository, ITeamsRepository teamsRepository, IGamesRepository gamesRepository, IPlayersRepository playersRepository, IUsersRepository usersRepository, ITeamsManager teamsManager)
+        public LeaguesManager(ILeaguesRepository leaguesRepository, ITeamsRepository teamsRepository, IGamesRepository gamesRepository, IPlayersRepository playersRepository, IUsersRepository usersRepository, TeamsMapper teamMapper)
         {
             _leaguesRepository = leaguesRepository;
             _teamsRepository = teamsRepository;
             _gamesRepository = gamesRepository;
             _playersRepository = playersRepository;
             _usersRepository = usersRepository;
-            _teamsManager = teamsManager;
+            _teamMapper = teamMapper;
         }
 
         public IEnumerable<LeagueViewModel> GetAll()
@@ -110,7 +109,7 @@ namespace Implementations.Leagues.BuisnessLogic
 
             var teamsStatistic = teams
                 .Where(x => !x.Hidden)
-                .Select(x => _teamsManager.GetStatistic(x, games));
+                .Select(x => _teamMapper.MapTeamStatistic(x, games));
             
             var bestPlayers = Enumerable.Concat(
                 games.Where(x => !string.IsNullOrEmpty(x.HomeTeam.BestMemberId)).Select(x => x.HomeTeam.BestMemberId),

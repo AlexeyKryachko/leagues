@@ -1,6 +1,14 @@
 ﻿<td>
     {{#if isEditor}}
-    <input type="text" class="form-control name-event" data-id="{{id}}" value="{{name}}" />
+    <div class="mb10">
+        <input type="text" class="form-control name-event" data-id="{{id}}" value="{{name}}" />
+    </div>
+    <div class="mb10">
+        <button class="btn btn-primary add-event-game">Добавить игру</button>
+    </div>
+    <div class="mb10">
+        <button class="btn btn-primary delete-event">Удалить тур</button>
+    </div>
     {{else}}
     {{name}}
     {{/if}}
@@ -50,10 +58,6 @@
     </div>
     {{/each}}
     {{/if}}
-
-    {{#if isEditor}}
-    <button class="btn btn-primary add-event-game">Добавить игру</button>
-    {{/if}}
 </td>
 <td>
     <div class="form-group">
@@ -64,9 +68,4 @@
             </span>
         </div>
     </div>
-</td>
-<td>
-    {{#if isEditor}}
-    <button class="btn btn-primary delete-event">Удалить тур</button>
-    {{/if}}
 </td>

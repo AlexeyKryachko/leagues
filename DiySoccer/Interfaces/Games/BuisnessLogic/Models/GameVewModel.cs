@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Interfaces.Core;
+using Newtonsoft.Json;
 
 namespace Interfaces.Games.BuisnessLogic.Models
 {
@@ -6,6 +8,12 @@ namespace Interfaces.Games.BuisnessLogic.Models
     {
         [JsonProperty("id")]
         public string Id { get; set; }
+
+        [JsonProperty("eventId")]
+        public string EventId { get; set; }
+
+        [JsonProperty("events")]
+        public IEnumerable<IdNameViewModel> Events { get; set; }
 
         [JsonProperty("customScores")]
         public bool CustomScores { get; set; }

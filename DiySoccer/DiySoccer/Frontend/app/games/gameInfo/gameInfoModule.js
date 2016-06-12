@@ -35,8 +35,8 @@
         var self = this;
 
         self.layout = new SplittedLayout();
-        self.leftGameView = new GameView({ model: self.leftModel, collection: self.leftScores, teams: self.teams, leagueId: self.options.leagueId });
-        self.rightGameView = new GameView({ model: self.rightModel, collection: self.rightScores, teams: self.teams, leagueId: self.options.leagueId });
+        self.leftGameView = new GameInfoView({ model: self.leftModel, collection: self.leftScores, teams: self.teams, leagueId: self.options.leagueId });
+        self.rightGameView = new GameInfoView({ model: self.rightModel, collection: self.rightScores, teams: self.teams, leagueId: self.options.leagueId });
         self.cancelView = new CancelView();
     },
     bindViews: function () {

@@ -3,15 +3,13 @@
     <img src="/api/image/{{mediaId}}?width=25&height=25" />
     {{/if}}
     {{name}}
+    {{#if showEdit}}
+    <button class="btn btn-primary edit-team pull-right">Редактировать</button>
+    {{/if}}
 </td>
-<td>{{gamesCount}}</td>
-<td>{{wins}}</td>
-<td>{{loses}}</td>
-<td>{{draw}}</td>
-<td>{{goals}}</td>
-<td>{{points}}</td>
-{{#if showEdit}}
-<td>
-    <button class="btn btn-primary edit-team">Редактировать</button>
-</td>
-{{/if}}
+<td class="width-100 text-right">{{gamesCount}}</td>
+<td class="width-100 text-right">{{wins}}</td>
+<td class="width-100 text-right">{{draw}}</td>
+<td class="width-100 text-right">{{loses}}</td>
+<td class="width-100 text-right">{{goals}}</td>
+<td class="width-100 text-right">{{points}}</td>

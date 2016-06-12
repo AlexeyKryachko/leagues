@@ -1,7 +1,6 @@
 ﻿using Interfaces.Leagues.BuisnessLogic.Model;
 using Interfaces.Teams.DataAccess;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Interfaces.Teams.BuisnessLogic.Models
 {

@@ -39,7 +39,7 @@
         });
 
         self.listenTo(self.bottomView, 'cancel', function () {
-            document.location.href = '#leagues/' + self.options.leagueId;
+            window.history.back();
         });
 
         self.listenTo(self.teamInfo, 'sync', function () {
