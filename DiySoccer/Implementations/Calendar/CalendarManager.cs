@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Interfaces.Calendar;
 using Interfaces.Calendar.Models;
 using Interfaces.Core;
@@ -33,6 +34,17 @@ namespace Implementations.Calendar
                     Name = x.Name
                 })
             };
+        }
+
+        public IEnumerable<IdNameViewModel> GetEvents(string leagueId)
+        {
+            var events = _eventsManager.GetRange(leagueId);
+
+            return events.Select(x => new IdNameViewModel
+            {
+                Id = x.Id,
+                Name = x.Name
+            });
         }
     }
 }

@@ -83,5 +83,11 @@ var Event = Backbone.Model.extend({
 });
 
 var Events = Backbone.Collection.extend({
-    model: Event
+    url: function () {
+        return '/api/leagues/' + this.leagueId + '/events';
+    },
+    model: Event,
+    setLeagueId: function (leagueId) {
+        this.leagueId = leagueId;
+    }
 });

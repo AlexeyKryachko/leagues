@@ -31,6 +31,15 @@ namespace DiySoccer.Api
             return Json(model);
         }
 
+        [Route("api/leagues/{leagueId}/events")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
+        [HttpGet]
+        public IHttpActionResult GetEvents(string leagueId)
+        {
+            var model = _calendarManager.GetEvents(leagueId);
+            return Json(model);
+        }
+
         #endregion
 
         #region PUT

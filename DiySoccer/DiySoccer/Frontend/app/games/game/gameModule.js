@@ -7,6 +7,7 @@
         self.app = app;
 
         self.teams = new Teams();
+        self.events = new Events();
 
         self.optionsModel = new Backbone.Model();
         self.leftModel = new Backbone.Model();
@@ -75,6 +76,7 @@
     _onNew: function () {
         var self = this;
 
+        self.optionsModel.clear();
         self.leftModel.clear();
         self.leftModel.set('disableScoreValue', true);
         self.leftScores.reset();
@@ -82,11 +84,13 @@
         self.rightModel.set('disableScoreValue', true);
         self.rightScores.reset();
         self.teams.setLeagueId(self.options.leagueId);
+        self.events.setLeagueId(self.options.leagueId);
 
         self.createViews();
         self.bindViews();
 
         self.teams.fetch();
+        self.events.fetch();
 
         self.app.mainRegion.show(self.layout);
     },
@@ -155,6 +159,11 @@
         self.listenTo(self.teams, 'sync', function () {
             self.leftGameView.render();
             self.rightGameView.render();
+        });
+
+        self.listenTo(self.events, 'sync', function () {
+            self.optionsModel.set('events', self.events.toJSON());
+            self.optionsView.render();
         });
     },
     scoringShowing: function (disabled) {
