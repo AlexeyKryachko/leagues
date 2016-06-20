@@ -95,7 +95,7 @@ namespace Implementations.Teams
                     guestTeamScores.Where(x => x.Id == user.EntityId).Sum(x => x.Help);
 
                 var best = homeTeams.Count(x => x.HomeTeam.BestMemberId == user.EntityId) +
-                    homeTeams.Count(x => x.HomeTeam.BestMemberId == user.EntityId);
+                    guestTeams.Count(x => x.GuestTeam.BestMemberId == user.EntityId);
 
                 result.Add(new TeamInfoPlayersStatisticViewModel
                 {

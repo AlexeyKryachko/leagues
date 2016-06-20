@@ -43,8 +43,7 @@
             url: '/api/leagues/' + self.options.leagueId + '/games',
             data: data,
             success: function () {
-                window.history.back();
-                //document.location.href = '#leagues/' + self.options.leagueId;
+                document.location.href = '#leagues/' + self.options.leagueId;
             }
         });
     },
@@ -57,8 +56,7 @@
             url: '/api/leagues/' + self.options.leagueId + '/games/' + self.options.gameId,
             data: data,
             success: function () {
-                window.history.back();
-                //document.location.href = '#leagues/' + self.options.leagueId;
+                document.location.href = '#leagues/' + self.options.leagueId;
             }
         });
     },
@@ -152,7 +150,6 @@
 
         self.listenTo(self.saveView, 'cancel', function () {
             window.history.back();
-            //document.location.href = '#leagues/' + self.options.leagueId;
         });
 
         self.listenTo(self.teams, 'sync', function () {

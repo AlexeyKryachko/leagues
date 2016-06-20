@@ -100,7 +100,8 @@
             <thead>
                 <tr>
                     <th class="text-left width-100">Номер</th>
-                    <th class="text-left width-720">Имя</th>
+                    <th class="text-left width-620">Имя</th>
+                    <th class="text-right width-100">Лучший</th>
                     <th class="text-right width-100">Гол</th>
                     <th class="text-right width-100">Пас</th>
                     <th class="text-right width-100">Гол + пас</th>
@@ -110,7 +111,8 @@
             {{#each playersStats}}
             <tr>
                 <td class="text-left width-100">{{num}}</td>
-                <td class="text-left width-720">{{name}}</td>
+                <td class="text-left width-620">{{name}}</td>
+                <td class="text-right width-100">{{best}}</td>
                 <td class="text-right width-100">{{goal}}</td>
                 <td class="text-right width-100">{{help}}</td>
                 <td class="text-right width-100">{{sum}}</td>

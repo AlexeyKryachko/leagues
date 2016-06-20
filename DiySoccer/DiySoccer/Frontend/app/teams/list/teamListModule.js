@@ -46,7 +46,7 @@
         });
 
         self.listenTo(self.bottomView, 'cancel', function () {
-            document.location.href = '#leagues/';
+            window.history.back();
         });
     },
     onStop: function (options) {
