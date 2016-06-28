@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Implementations.Core;
 using Implementations.Teams;
 using Interfaces.Core;
+using Interfaces.Events.DataAccess;
 using Interfaces.Games.DataAccess;
 using Interfaces.Leagues.BuisnessLogic;
 using Interfaces.Leagues.BuisnessLogic.Model;
@@ -18,10 +20,13 @@ namespace Implementations.Leagues.BuisnessLogic
         private readonly IGamesRepository _gamesRepository;
         private readonly IPlayersRepository _playersRepository;
         private readonly IUsersRepository _usersRepository;
-        
-        private readonly TeamsMapper _teamMapper;
+        private readonly IEventsRepository _eventsRepository;
 
-        public LeaguesManager(ILeaguesRepository leaguesRepository, ITeamsRepository teamsRepository, IGamesRepository gamesRepository, IPlayersRepository playersRepository, IUsersRepository usersRepository, TeamsMapper teamMapper)
+        private readonly TeamsMapper _teamMapper;
+        private readonly LeaguesMapper _leaguesMapper;
+        private readonly UserStatisticCalculation _userStatisticCalculation;
+
+        public LeaguesManager(ILeaguesRepository leaguesRepository, ITeamsRepository teamsRepository, IGamesRepository gamesRepository, IPlayersRepository playersRepository, IUsersRepository usersRepository, TeamsMapper teamMapper, UserStatisticCalculation userStatisticCalculation, LeaguesMapper leaguesMapper, IEventsRepository eventsRepository)
         {
             _leaguesRepository = leaguesRepository;
             _teamsRepository = teamsRepository;
@@ -29,6 +34,23 @@ namespace Implementations.Leagues.BuisnessLogic
             _playersRepository = playersRepository;
             _usersRepository = usersRepository;
             _teamMapper = teamMapper;
+            _userStatisticCalculation = userStatisticCalculation;
+            _leaguesMapper = leaguesMapper;
+            _eventsRepository = eventsRepository;
+        }
+
+        public LeagueInfoViewModel LeagueInfoViewModel(string leagueId)
+        {
+            var league = _leaguesRepository.Get(leagueId);
+            var teams = _teamsRepository.GetByLeague(leagueId);
+            var games = _gamesRepository.GetByLeague(leagueId);
+            var events = _eventsRepository.GetByLeague(leagueId);
+
+            var userIds = teams.SelectMany(x => x.MemberIds);
+            var users = _playersRepository.GetRange(userIds)
+                .ToDictionary(x => x.EntityId, x => x);
+
+            return _leaguesMapper.MapInfo(league, teams, games, events, users);
         }
 
         public IEnumerable<LeagueViewModel> GetAll()
@@ -111,42 +133,18 @@ namespace Implementations.Leagues.BuisnessLogic
                 .Where(x => !x.Hidden)
                 .Select(x => _teamMapper.MapTeamStatistic(x, games));
             
-            var bestPlayers = Enumerable.Concat(
-                games.Where(x => !string.IsNullOrEmpty(x.HomeTeam.BestMemberId)).Select(x => x.HomeTeam.BestMemberId),
-                games.Where(x => !string.IsNullOrEmpty(x.GuestTeam.BestMemberId)).Select(x => x.GuestTeam.BestMemberId))
-                .GroupBy(x => x)
-                .Select(x => new
-                {
-                    Id = x.Key,
-                    Count = x.Count()
-                })
-                .OrderByDescending(x => x.Count)
+            var bestPlayers = _userStatisticCalculation.GetBestStatistic(games) 
+                .OrderByDescending(x => x.Value)
                 .Take(7)
                 .ToList();
 
-            var bestForwards = Enumerable.Concat(
-                games.SelectMany(x => x.HomeTeam.Members),
-                games.SelectMany(x => x.GuestTeam.Members))
-                .GroupBy(x => x.Id)
-                .Select(x => new
-                {
-                    Id = x.Key,
-                    Goals = x.Sum(y => y.Score)
-                })
-                .OrderByDescending(x => x.Goals)
+            var bestForwards = _userStatisticCalculation.GetGoalsStatistic(games)
+                .OrderByDescending(x => x.Value)
                 .Take(7)
                 .ToList();
 
-            var bestHelpers = Enumerable.Concat(
-                games.SelectMany(x => x.HomeTeam.Members),
-                games.SelectMany(x => x.GuestTeam.Members))
-                .GroupBy(x => x.Id)
-                .Select(x => new
-                {
-                    Id = x.Key,
-                    Helps = x.Sum(y => y.Help)
-                })
-                .OrderByDescending(x => x.Helps)
+            var bestHelpers = _userStatisticCalculation.GetHelpsStatistic(games)
+                .OrderByDescending(x => x.Value)
                 .Take(7)
                 .ToList();
 
@@ -170,7 +168,7 @@ namespace Implementations.Leagues.BuisnessLogic
                     Name = users.ContainsKey(x.Id) 
                         ? users[x.Id]
                         : null,
-                    Number = x.Count
+                    Number = x.Value
                 }),
                 BestForwards = bestForwards.Select(x => new LeagueMemberStatisticViewModel
                 {
@@ -178,7 +176,7 @@ namespace Implementations.Leagues.BuisnessLogic
                     Name = users.ContainsKey(x.Id)
                         ? users[x.Id]
                         : null,
-                    Number = x.Goals
+                    Number = x.Value
                 }),
                 BestHelpers = bestHelpers.Select(x => new LeagueMemberStatisticViewModel
                 {
@@ -186,7 +184,7 @@ namespace Implementations.Leagues.BuisnessLogic
                     Name = users.ContainsKey(x.Id)
                         ? users[x.Id]
                         : null,
-                    Number = x.Helps
+                    Number = x.Value
                 }),
                 TeamStatistics = teamsStatistic
                     .OrderByDescending(x => x.Points)

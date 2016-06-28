@@ -1,4 +1,10 @@
-﻿var League = Backbone.Model.extend({
+﻿var LeagueInfo = Backbone.Model.extend({
+    url: function () {
+        return '/api/leagues/' + this.id + '/info/';
+    }
+});
+
+var League = Backbone.Model.extend({
     url: function() {
         return this.id 
             ? '/api/leagues/' + this.id

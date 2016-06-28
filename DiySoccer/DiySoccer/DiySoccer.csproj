@@ -241,6 +241,8 @@
     <Content Include="Frontend\app\games\gameInfo\gameInfoView.js" />
     <Content Include="Frontend\app\games\game\gameActions.js" />
     <Content Include="Frontend\app\header\headerModule.js" />
+    <Content Include="Frontend\app\leagues\info\leagueInfoModule.js" />
+    <Content Include="Frontend\app\leagues\info\leagueInfoView.js" />
     <Content Include="Frontend\app\leagues\league\leagueModule.js" />
     <Content Include="Frontend\app\leagues\league\leagueView.js" />
     <Content Include="Frontend\app\leagues\list\leageusActions.js" />
@@ -314,6 +316,7 @@
     <Content Include="Frontend\templates\header.html" />
     <Content Include="Frontend\templates\custom-game.html" />
     <Content Include="Frontend\templates\cancel.html" />
+    <Content Include="Frontend\templates\league-info.html" />
     <Content Include="Frontend\templates\league.html" />
     <Content Include="Frontend\templates\leagues-actions.html" />
     <Content Include="Frontend\templates\team-game.html" />

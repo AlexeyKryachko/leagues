@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Implementations.Authenticate.BuisnessLogic;
 using Implementations.Calendar;
+using Implementations.Core;
 using Implementations.Core.Medias.BuisnessLogic;
 using Implementations.Core.Medias.DataAccess;
 using Implementations.Events;
@@ -9,6 +10,7 @@ using Implementations.Events.DataAccess;
 using Implementations.Games;
 using Implementations.Games.BuisnessLogic;
 using Implementations.Games.DataAccess;
+using Implementations.Leagues;
 using Implementations.Leagues.BuisnessLogic;
 using Implementations.Leagues.DataAccess;
 using Implementations.Teams;
@@ -62,6 +64,10 @@ namespace Dependences
             builder.RegisterType(typeof (EventsMapper)).AsSelf();
             builder.RegisterType(typeof(GamesMapper)).AsSelf();
             builder.RegisterType(typeof(TeamsMapper)).AsSelf();
+            builder.RegisterType(typeof(LeaguesMapper)).AsSelf();
+
+            builder.RegisterType(typeof(UserStatisticCalculation)).AsSelf();
+            builder.RegisterType(typeof(ScoreCalculation)).AsSelf();
         }
     }
 }

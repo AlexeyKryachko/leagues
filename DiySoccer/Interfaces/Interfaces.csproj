@@ -69,12 +69,12 @@
     <Compile Include="Core\DataAccess\IBaseRepository.cs" />
     <Compile Include="Core\IdNameViewModel.cs" />
     <Compile Include="Core\LeagueAccessStatus.cs" />
-    <Compile Include="Core\ScoreCalculation.cs" />
     <Compile Include="Core\Services\Medias\BuisnessLogic\MediaIOViewModel.cs" />
     <Compile Include="Core\Services\Medias\BuisnessLogic\MediaViewModel.cs" />
     <Compile Include="Core\Services\Medias\DataAccess\IMediaRepository.cs" />
     <Compile Include="Core\Services\Medias\BuisnessLogic\IMediaManager.cs" />
     <Compile Include="Core\Services\Medias\DataAccess\MediaDb.cs" />
+    <Compile Include="Core\UserStatistic.cs" />
     <Compile Include="Events\BuisnessLogic\IEventsManager.cs" />
     <Compile Include="Events\BuisnessLogic\Models\EventGameVewModel.cs" />
     <Compile Include="Events\BuisnessLogic\Models\EventVewModel.cs" />
@@ -92,6 +92,9 @@
     <Compile Include="Games\DataAccess\IGamesRepository.cs" />
     <Compile Include="Games\DataAccess\Model\GameDb.cs" />
     <Compile Include="Leagues\BuisnessLogic\ILeaguesManager.cs" />
+    <Compile Include="Leagues\BuisnessLogic\Model\LeagueInfoEventViewModel.cs" />
+    <Compile Include="Leagues\BuisnessLogic\Model\LeagueInfoTeamViewModel.cs" />
+    <Compile Include="Leagues\BuisnessLogic\Model\LeagueInfoViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueMemberStatisticViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueStatisticViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueUnsecureViewModel.cs" />

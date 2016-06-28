@@ -35,6 +35,15 @@ namespace DiySoccer.Api
             return Json(league);
         }
 
+        [Route("api/leagues/{leagueId}/info")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
+        [HttpGet]
+        public IHttpActionResult GetInfo(string leagueId)
+        {
+            var league = _leaguesManager.LeagueInfoViewModel(leagueId);
+            return Json(league);
+        }
+
         [Route("api/leagues")]
         [HttpGet]
         public IHttpActionResult GetAll()

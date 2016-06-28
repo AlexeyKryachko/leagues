@@ -6,17 +6,12 @@ namespace Interfaces.Leagues.BuisnessLogic
     public interface ILeaguesManager
     {
         LeagueStatisticViewModel GetStatisticByLeague(string leagueId);
-
+        LeagueInfoViewModel LeagueInfoViewModel(string leagueId);
         IEnumerable<LeagueViewModel> GetAll();
-
         IEnumerable<LeagueUnsecureViewModel> GetAllUnsecure();
-
         LeagueUnsecureViewModel GetUnsecure(string leagueId);
-
         void Create(LeagueUnsecureViewModel model);
-
         void Update(LeagueUnsecureViewModel model);
-
         void Delete(string leagueId);
     }
 }

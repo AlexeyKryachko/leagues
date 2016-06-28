@@ -21,6 +21,9 @@ namespace Interfaces.Leagues.DataAccess.Model
         [BsonElement("admins")]
         public IEnumerable<string> Admins { get; set; }
 
+        [BsonElement("media")]
+        public string MediaId { get; set; }
+
         public LeagueDb()
         {
             Admins = Enumerable.Empty<string>();

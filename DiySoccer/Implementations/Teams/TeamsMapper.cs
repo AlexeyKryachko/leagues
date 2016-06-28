@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Implementations.Core;
 using Implementations.Games;
 using Interfaces.Core;
 using Interfaces.Events.DataAccess.Model;
@@ -120,19 +121,11 @@ namespace Implementations.Teams
                 MediaId = team.MediaId
             };
 
-            model.GamesCount = games.Count(x => x.GuestTeam.Id == team.EntityId || x.HomeTeam.Id == team.EntityId);
+            model.GamesCount = _scoreCalculation.GameCount(games, team.EntityId);
 
-            model.Wins = games.Count(x =>
-                (x.GuestTeam.Id == team.EntityId && x.GuestTeam.Score > x.HomeTeam.Score) ||
-                (x.HomeTeam.Id == team.EntityId && x.HomeTeam.Score > x.GuestTeam.Score));
-
-            model.Loses = games.Count(x =>
-                (x.GuestTeam.Id == team.EntityId && x.GuestTeam.Score < x.HomeTeam.Score) ||
-                (x.HomeTeam.Id == team.EntityId && x.HomeTeam.Score < x.GuestTeam.Score));
-
-            model.Draws = games.Count(x =>
-                (x.GuestTeam.Id == team.EntityId && x.GuestTeam.Score == x.HomeTeam.Score) ||
-                (x.HomeTeam.Id == team.EntityId && x.HomeTeam.Score == x.GuestTeam.Score));
+            model.Wins = _scoreCalculation.WinsCount(games, team.EntityId);
+            model.Loses = _scoreCalculation.LosesCount(games, team.EntityId);
+            model.Draws = _scoreCalculation.DraftCount(games, team.EntityId);
 
             model.Scores = games
                 .Where(x => x.GuestTeam.Id == team.EntityId)
