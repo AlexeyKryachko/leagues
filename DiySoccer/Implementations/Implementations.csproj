@@ -130,6 +130,8 @@
     <Compile Include="Leagues\LeaguesMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Teams\TeamsMapper.cs" />
+    <Compile Include="Unions\TournamentsMapper.cs" />
+    <Compile Include="Unions\TournamentsManager.cs" />
     <Compile Include="Users\BuisnessLogic\UsersManager.cs" />
     <Compile Include="Users\DataAccess\UsersRepository.cs" />
     <Compile Include="Users\DataAccess\PlayersRepository.cs" />

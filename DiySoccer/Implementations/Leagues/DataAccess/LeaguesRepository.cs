@@ -48,6 +48,8 @@ namespace Implementations.Leagues.DataAccess
                 .Set(x => x.Name, model.Name)
                 .Set(x => x.Description, model.Description)
                 .Set(x => x.VkSecurityGroup, model.VkGroup)
+                .Set(x => x.MediaId, model.MediaId)
+                .Set(x => x.Type, model.Type)
                 .Set(x => x.Admins, admins);
 
             Collection.UpdateOne(filter, update);

@@ -217,9 +217,11 @@
     <Compile Include="Api\AuthenticationApiController.cs" />
     <Compile Include="Api\CalendarApiController.cs" />
     <Compile Include="Api\ImageApiController.cs" />
+    <Compile Include="Api\UnionsApiController.cs" />
     <Compile Include="Api\SettingsApiController.cs" />
     <Compile Include="Api\GamesApiController.cs" />
     <Compile Include="Api\LeaguesApiController.cs" />
+    <Compile Include="Api\TournamentsApiController.cs" />
     <Compile Include="Api\UsersApiController.cs" />
     <Compile Include="Api\TeamsApiController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -249,6 +251,7 @@
     <Content Include="Frontend\app\leagues\list\leaguesList.js" />
     <Content Include="Frontend\app\games\game\gameModule.js" />
     <Content Include="Frontend\app\games\game\gameView.js" />
+    <Content Include="Frontend\app\models\tournaments.js" />
     <Content Include="Frontend\app\models\settings.js" />
     <Content Include="Frontend\app\models\leagues.js" />
     <Content Include="Frontend\app\models\calendars.js" />
@@ -265,6 +268,9 @@
     <Content Include="Frontend\app\teams\team\teamView.js" />
     <Content Include="Frontend\app\teams\list\teamListView.js" />
     <Content Include="Frontend\app\teams\list\teamListModule.js" />
+    <Content Include="Frontend\app\tournaments\info\tournamentsInfoModule.js" />
+    <Content Include="Frontend\app\tournaments\info\tournamentsInfoViews.js" />
+    <Content Include="Frontend\css\spinner.css" />
     <Content Include="Frontend\css\theme.css" />
     <Content Include="Frontend\css\ie10-viewport-bug-workaround.css" />
     <Content Include="Frontend\css\bootstrap-theme.min.css" />
@@ -316,6 +322,8 @@
     <Content Include="Frontend\templates\header.html" />
     <Content Include="Frontend\templates\custom-game.html" />
     <Content Include="Frontend\templates\cancel.html" />
+    <Content Include="Frontend\templates\tournament-info-actions.html" />
+    <Content Include="Frontend\templates\tournament-info.html" />
     <Content Include="Frontend\templates\league-info.html" />
     <Content Include="Frontend\templates\league.html" />
     <Content Include="Frontend\templates\leagues-actions.html" />
@@ -357,7 +365,6 @@
     <Content Include="Frontend\templates\team.html" />
     <Content Include="Frontend\templates\team-list.html" />
     <Content Include="Frontend\templates\leagues-list.html" />
-    <Content Include="Frontend\templates\leagues-item.html" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

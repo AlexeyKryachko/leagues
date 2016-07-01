@@ -40,15 +40,15 @@ namespace DiySoccer.Api
         [HttpGet]
         public IHttpActionResult GetInfo(string leagueId)
         {
-            var league = _leaguesManager.LeagueInfoViewModel(leagueId);
+            var league = _leaguesManager.GetInfo(leagueId);
             return Json(league);
         }
 
         [Route("api/leagues")]
         [HttpGet]
-        public IHttpActionResult GetAll()
+        public IHttpActionResult GetLeagues()
         {
-            var league = _leaguesManager.GetAll();
+            var league = _leaguesManager.GetLeagues();
             return Json(league);
         }
 

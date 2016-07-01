@@ -45,6 +45,15 @@ namespace DiySoccer.Api
             return Json(teams);
         }
 
+        [Route("api/teams/search")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
+        [HttpGet]
+        public IHttpActionResult FindTeams(string query, int page, int pageSize)
+        {
+            var teams = _teamsManager.Find(query, page, pageSize).ToList();
+            return Json(teams);
+        }
+
         #endregion
 
         #region PUT
@@ -60,6 +69,8 @@ namespace DiySoccer.Api
 
         #endregion
 
+        #region POST
+
         [Route("api/leagues/{leagueId}/teams")]
         [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
         [HttpPost]
@@ -68,5 +79,7 @@ namespace DiySoccer.Api
             _teamsManager.Create(leagueId, model);
             return Json(model);
         }
+
+        #endregion
     }
 }

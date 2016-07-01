@@ -13,10 +13,10 @@
         e.preventDefault();
         if (e.stopPropagation)
             e.stopPropagation();
-        document.location.href = document.location.href + '/teams/' + this.model.get('id') + '/edit';
+        document.location.href = '#leagues/' + this.options.leagueId + '/teams/' + this.model.get('id') + '/edit';
     },
     onRedirect: function () {
-        document.location.href = document.location.href + '/teams/' + this.model.get('id');
+        document.location.href = '#leagues/' + this.options.leagueId + '/teams/' + this.model.get('id');
     },
     onShow: function () {
     },

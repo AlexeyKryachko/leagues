@@ -67,6 +67,7 @@
     <Compile Include="Calendar\Models\CalendarViewModel.cs" />
     <Compile Include="Core\DataAccess\IBaseEntity.cs" />
     <Compile Include="Core\DataAccess\IBaseRepository.cs" />
+    <Compile Include="Core\Extensions\QueryableExtensions.cs" />
     <Compile Include="Core\IdNameViewModel.cs" />
     <Compile Include="Core\LeagueAccessStatus.cs" />
     <Compile Include="Core\Services\Medias\BuisnessLogic\MediaIOViewModel.cs" />
@@ -97,8 +98,13 @@
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueInfoViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueMemberStatisticViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueStatisticViewModel.cs" />
+    <Compile Include="Leagues\BuisnessLogic\Model\LeaguesViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueUnsecureViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueViewModel.cs" />
+    <Compile Include="Unions\BuisnessLogic\Models\Tournaments\TournamentInfoGameViewModel.cs" />
+    <Compile Include="Unions\BuisnessLogic\Models\Tournaments\TournamentInfoGroupViewModel.cs" />
+    <Compile Include="Unions\BuisnessLogic\Models\Tournaments\TournamentInfoViewModel.cs" />
+    <Compile Include="Leagues\DataAccess\Model\LeagueType.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamInfoPlayersStatisticViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamStatisticViewModel.cs" />
     <Compile Include="Leagues\DataAccess\ILeaguesRepository.cs" />
@@ -111,6 +117,7 @@
     <Compile Include="Teams\BuisnessLogic\Models\TeamInfoGameViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamInfoViewModel.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamViewModel.cs" />
+    <Compile Include="Unions\BuisnessLogic\ITournamentsManager.cs" />
     <Compile Include="Users\BuisnessLogic\IUsersManager.cs" />
     <Compile Include="Users\DataAccess\IUsersRepository.cs" />
     <Compile Include="Users\DataAccess\IPlayersRepository.cs" />

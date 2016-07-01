@@ -16,7 +16,7 @@
 
         self.model.save(null, {
             success: function(model, response) {
-                document.location.href = '#leagues/' + self.options.leagueId;
+                window.history.back();
             }
         });
     },

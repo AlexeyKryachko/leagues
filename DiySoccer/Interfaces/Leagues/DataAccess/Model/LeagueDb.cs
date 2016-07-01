@@ -4,10 +4,14 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Interfaces.Leagues.DataAccess.Model
 {
+    [BsonIgnoreExtraElements]
     public class LeagueDb
     {
         [BsonId]
         public string EntityId { get; set; }
+
+        [BsonElement("type")]
+        public LeagueType Type { get; set; }
 
         [BsonElement("name")]
         public string Name { get; set; }

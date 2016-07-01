@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Implementations.Core.DataAccess;
+using Interfaces.Core.Extensions;
 using Interfaces.Teams.DataAccess;
 using MongoDB.Driver;
 
@@ -13,6 +14,14 @@ namespace Implementations.Teams.DataAccess
         public IEnumerable<TeamDb> GetByLeague(string id)
         {
             return Collection.AsQueryable().Where(x => x.LeagueId == id);
+        }
+
+        public IEnumerable<TeamDb> Find(string query, int page, int pageSize)
+        {
+            return Collection
+                .AsQueryable()
+                .Where(x => x.Name.Contains(query))
+                .Page(page, pageSize);
         }
 
         public void Update(string leagueId, TeamDb entity)

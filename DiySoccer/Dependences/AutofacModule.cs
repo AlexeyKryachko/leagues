@@ -16,6 +16,7 @@ using Implementations.Leagues.DataAccess;
 using Implementations.Teams;
 using Implementations.Teams.BuisnessLogic;
 using Implementations.Teams.DataAccess;
+using Implementations.Unions;
 using Implementations.Users.BuisnessLogic;
 using Implementations.Users.DataAccess;
 using Interfaces.Authenticate.BuisnessLogic;
@@ -30,6 +31,7 @@ using Interfaces.Leagues.BuisnessLogic;
 using Interfaces.Leagues.DataAccess;
 using Interfaces.Teams.BuisnessLogic;
 using Interfaces.Teams.DataAccess;
+using Interfaces.Unions.BuisnessLogic;
 using Interfaces.Users.BuisnessLogic;
 using Interfaces.Users.DataAccess;
 
@@ -49,6 +51,7 @@ namespace Dependences
             builder.RegisterType(typeof(GamesManager)).As<IGamesManager>();
             builder.RegisterType(typeof(GamesRepository)).As<IGamesRepository>();
 
+            builder.RegisterType(typeof(TournamentsManager)).As<ITournamentsManager>();
             builder.RegisterType(typeof(LeaguesManager)).As<ILeaguesManager>();
             builder.RegisterType(typeof(LeaguesRepository)).As<ILeaguesRepository>();
 
@@ -65,6 +68,7 @@ namespace Dependences
             builder.RegisterType(typeof(GamesMapper)).AsSelf();
             builder.RegisterType(typeof(TeamsMapper)).AsSelf();
             builder.RegisterType(typeof(LeaguesMapper)).AsSelf();
+            builder.RegisterType(typeof(TournamentsMapper)).AsSelf();
 
             builder.RegisterType(typeof(UserStatisticCalculation)).AsSelf();
             builder.RegisterType(typeof(ScoreCalculation)).AsSelf();

@@ -109,19 +109,19 @@ namespace Implementations.Authenticate.BuisnessLogic
                 : LeagueAccessStatus.Member;
         }
 
-        public bool IsMember(string leagueId)
+        public bool IsMember(string unionId)
         {
             if (IsAdmin())
                 return true;
 
-            var league = _leaguesManager.GetUnsecure(leagueId);
-            if (league == null)
+            var union = _leaguesManager.GetUnsecure(unionId);
+            if (union == null)
                 return false;
 
             var context = HttpContext.Current.GetOwinContext();
             var currentUserId = GetCurrentUserId(context);
 
-            var access = GetAccess(league, context, currentUserId);
+            var access = GetAccess(union, context, currentUserId);
             return access == LeagueAccessStatus.Member ||
                 access == LeagueAccessStatus.Editor || 
                 access == LeagueAccessStatus.Admin;

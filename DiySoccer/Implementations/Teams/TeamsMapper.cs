@@ -17,6 +17,36 @@ namespace Implementations.Teams
     {
         private readonly ScoreCalculation _scoreCalculation = new ScoreCalculation();
 
+        public IdNameViewModel MapIdName(TeamDb team)
+        {
+            return new IdNameViewModel
+            {
+                Id = team.EntityId,
+                Name = team.Name
+            };
+        }
+
+        public TeamViewModel Map(TeamDb team, Dictionary<string, string> players)
+        {
+            var members = team.MemberIds
+                .Where(x => players[x] != null)
+                .Select(x => new IdNameViewModel
+                {
+                    Id = x,
+                    Name = players[x]
+                });
+
+            return new TeamViewModel
+            {
+                Id = team.EntityId,
+                Name = team.Name,
+                Hidden = team.Hidden,
+                Members = members,
+                Media = team.MediaId,
+                Description = team.Description
+            };
+        }
+
         private IEnumerable<TeamInfoGameViewModel> MapTeamInfoGames(List<GameDb> games, Dictionary<string, TeamDb> teams, List<EventDb> events)
         {
             var result = new List<Tuple<DateTime?, TeamInfoGameViewModel>>();

@@ -127,7 +127,6 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
     },
     serializeData: function() {
         var model = this.model.toJSON();
-        console.log('[TeamView] ', model);
         return model;
     }
 });

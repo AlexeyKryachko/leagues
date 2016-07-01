@@ -13,6 +13,22 @@
         <input type="text" class="form-control league-vkGroup" placeholder="Группа вконтакте" value="{{vkGroup}}"/>
     </div>
 </div>
+
+<div class="form-group">
+    <select id="league-type" class="form-control">
+        <option selected="selected" disabled="disabled">Тип</option>
+        {{#if types}}
+        {{#each types}}
+        {{#if selected}}
+        <option selected="selected" value="{{value}}">{{name}}</option>
+        {{else}}
+        <option value="{{value}}">{{name}}</option>
+        {{/if}}
+        {{/each}}
+        {{/if}}
+    </select>
+</div>
+
 <div class="form-group row">
     <div class="col-sm-12">
         <input type="text" class="form-control add-league-admin" placeholder="Имя"/>
@@ -23,15 +39,27 @@
     <div class="col-sm-6">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th>
-                        Админы
-                    </th>
-                    <th>
-                    </th>
-                </tr>
+            <tr>
+                <th>
+                    Админы
+                </th>
+                <th>
+                </th>
+            </tr>
             </thead>
             <tbody></tbody>
         </table>
+    </div>
+    <div class="col-sm-6">
+        <form id="logo-upload-form" action="">
+            <input type="file" id="logo-file" name="logo-file" />
+            <input id="btUpload" type="button" value="Upload File" />
+            <p></p>
+        </form>
+        <div class="logo-container">
+            {{#if mediaId}}
+            <img src="/api/image/{{mediaId}}" />
+            {{/if}}
+        </div>
     </div>
 </div>

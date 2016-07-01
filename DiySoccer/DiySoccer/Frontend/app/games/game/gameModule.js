@@ -44,7 +44,7 @@
             url: '/api/leagues/' + self.options.leagueId + '/games',
             data: data,
             success: function () {
-                document.location.href = '#leagues/' + self.options.leagueId;
+                window.history.back();
             }
         });
     },
@@ -57,7 +57,7 @@
             url: '/api/leagues/' + self.options.leagueId + '/games/' + self.options.gameId,
             data: data,
             success: function () {
-                document.location.href = '#leagues/' + self.options.leagueId;
+                window.history.back();
             }
         });
     },

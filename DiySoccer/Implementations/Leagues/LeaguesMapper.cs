@@ -23,6 +23,55 @@ namespace Implementations.Leagues
             _userStatisticCalculation = userStatisticCalculation;
         }
 
+        public LeaguesViewModel MapLeagues(IList<LeagueDb> entities)
+        {
+            var leagues = entities
+                .Where(x => x.Type != LeagueType.Tournament)
+                .Select(Map);
+            var tournaments = entities
+                .Where(x => x.Type == LeagueType.Tournament)
+                .Select(Map);
+
+            return new LeaguesViewModel
+            {
+                Leagues = leagues,
+                Tournaments = tournaments
+            };
+        }
+
+        public LeagueViewModel Map(LeagueDb league)
+        {
+            return new LeagueViewModel
+            {
+                Id = league.EntityId,
+                Name = league.Name,
+                Description = league.Description,
+                Type = league.Type
+            };
+        }
+
+        public LeagueUnsecureViewModel MapUnsecure(LeagueDb league, Dictionary<string, string> users)
+        {
+            return new LeagueUnsecureViewModel
+            {
+                Id = league.EntityId,
+                Name = league.Name,
+                Description = league.Description,
+                VkGroup = league.VkSecurityGroup,
+                MediaId = league.MediaId,
+                Type = league.Type,
+                Admins = league.Admins
+                        .Select(y => users.ContainsKey(y)
+                            ? new IdNameViewModel
+                            {
+                                Id = y,
+                                Name = users[y]
+                            }
+                            : null)
+                        .Where(y => y != null)
+            };
+        }
+
         public LeagueInfoViewModel MapInfo(LeagueDb league, IEnumerable<TeamDb> teams, IEnumerable<GameDb> games, IEnumerable<EventDb> events, Dictionary<string, UserDb> users)
         {
             var teamsStatistic = teams
@@ -30,9 +79,12 @@ namespace Implementations.Leagues
                 .Select(x => new LeagueInfoTeamViewModel
                 {
                     Name = x.Name,
+                    MediaId = x.MediaId,
                     Games = _scoreCalculation.GameCount(games, x.EntityId),
                     Points = _scoreCalculation.Points(games, x.EntityId)
-                });
+                })
+                .OrderByDescending(x => x.Points)
+                .ToList();
 
             var best = _userStatisticCalculation.GetBestStatistic(games)
                 .OrderByDescending(x => x.Value)

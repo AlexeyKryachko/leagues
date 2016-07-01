@@ -18,7 +18,7 @@ var League = Backbone.Model.extend({
     }
 });
 
-var Leagues = Backbone.Collection.extend({
+var LeaguesModel = Backbone.Model.extend({
     url: function() {
         return '/api/leagues';
     }

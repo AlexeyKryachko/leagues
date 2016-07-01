@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Interfaces.Core.DataAccess;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -12,7 +13,10 @@ namespace Interfaces.Teams.DataAccess
         
         [BsonElement("lid")]
         public string LeagueId { get; set; }
-        
+
+        [BsonElement("rid")]
+        public string ReferenceId { get; set; }
+
         [BsonElement("name")]
         public string Name { get; set; }
 
@@ -27,5 +31,10 @@ namespace Interfaces.Teams.DataAccess
 
         [BsonElement("members")]
         public IEnumerable<string> MemberIds { get; set; }
+
+        public TeamDb()
+        {
+            MemberIds = Enumerable.Empty<string>();
+        }
     }
 }

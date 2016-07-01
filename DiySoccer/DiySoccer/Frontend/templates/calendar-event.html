@@ -60,12 +60,16 @@
     {{/if}}
 </td>
 <td>
+    {{#if isEditor}}
     <div class="form-group">
         <div class='input-group date'>
-            <input type='text' class="form-control start-date" />
+            <input type='text' class="form-control start-date"/>
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>
         </div>
     </div>
+    {{else}}
+    {{startDate}}
+    {{/if}}
 </td>

@@ -1,28 +1,25 @@
-﻿var leagueView = Backbone.Marionette.ItemView.extend({
-    template: "#leagues-item",
-    ui: {
-        'edit': '.league-edit'
-    },
-    events: {
-        'click @ui.edit': 'editLeague'
-    },
-    editLeague: function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        document.location.href = '#leagues/' + this.model.id + '/edit';
-    },
-    serializeData: function() {
-        var model = this.model.toJSON();
-        model.showEdit = MyApp.Settings.isAdmin();
-        return model;
-    }
-});
-
-var LeagueList = Backbone.Marionette.CompositeView.extend({
+﻿var LeagueList = Backbone.Marionette.ItemView.extend({
     template: "#leagues-list",
-    childViewContainer: ".leagues-container",
-    childView: leagueView,
-    initialize: function (options) {        
+    initialize: function (options) {
+        this.options = options;
+    },
+    serializeData: function () {
+        var model = this.model.toJSON();
+        model.isAdmin = MyApp.Settings.isAdmin();
+
+        if (!model.isAdmin)
+            return model;
+
+        if (model.leagues) {
+            _.each(model.leagues, function (obj) {
+                obj.href = '#leagues/' + obj.id + '/edit';
+            });
+        }
+        if (model.tournaments) {
+            _.each(model.tournaments, function (obj) {
+                obj.href = '#leagues/' + obj.id + '/edit';
+            });
+        }
+        return model;
     }
 });

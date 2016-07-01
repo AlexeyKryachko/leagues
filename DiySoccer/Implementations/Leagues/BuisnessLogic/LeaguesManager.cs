@@ -39,12 +39,12 @@ namespace Implementations.Leagues.BuisnessLogic
             _eventsRepository = eventsRepository;
         }
 
-        public LeagueInfoViewModel LeagueInfoViewModel(string leagueId)
+        public LeagueInfoViewModel GetInfo(string leagueId)
         {
             var league = _leaguesRepository.Get(leagueId);
-            var teams = _teamsRepository.GetByLeague(leagueId);
-            var games = _gamesRepository.GetByLeague(leagueId);
-            var events = _eventsRepository.GetByLeague(leagueId);
+            var teams = _teamsRepository.GetByLeague(leagueId).ToList();
+            var games = _gamesRepository.GetByLeague(leagueId).ToList();
+            var events = _eventsRepository.GetByLeague(leagueId).ToList();
 
             var userIds = teams.SelectMany(x => x.MemberIds);
             var users = _playersRepository.GetRange(userIds)
@@ -53,15 +53,15 @@ namespace Implementations.Leagues.BuisnessLogic
             return _leaguesMapper.MapInfo(league, teams, games, events, users);
         }
 
-        public IEnumerable<LeagueViewModel> GetAll()
+        public LeaguesViewModel GetLeagues()
         {
-            return _leaguesRepository.GetAll().Select(x => new LeagueViewModel
-            {
-                Id = x.EntityId,
-                Name = x.Name,
-                Description = x.Description
-            });
+            var leagueEntities = _leaguesRepository
+                .GetAll()
+                .ToList();
+
+            return _leaguesMapper.MapLeagues(leagueEntities);
         }
+
 
         public IEnumerable<LeagueUnsecureViewModel> GetAllUnsecure()
         {
@@ -96,22 +96,7 @@ namespace Implementations.Leagues.BuisnessLogic
             var userIds = league.Admins;
             var users = _usersRepository.GetRange(userIds).ToDictionary(x => x.Id, y => y.UserName);
 
-            return new LeagueUnsecureViewModel
-                {
-                    Id = league.EntityId,
-                    Name = league.Name,
-                    Description = league.Description,
-                    VkGroup = league.VkSecurityGroup,
-                    Admins = league.Admins
-                        .Select(y => users.ContainsKey(y)
-                            ? new IdNameViewModel
-                            {
-                                Id = y,
-                                Name = users[y]
-                            }
-                            : null)
-                        .Where(y => y != null)
-            };
+            return _leaguesMapper.MapUnsecure(league, users);
         }
 
         public void Create(LeagueUnsecureViewModel model)

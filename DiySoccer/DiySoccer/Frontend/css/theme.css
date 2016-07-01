@@ -1,5 +1,14 @@
-﻿.main-league-title {
+﻿.navbar .container {
+    padding-left: 30px !important;
+    padding-right: 0px !important;
+}
+
+.main-league-title {
     text-align: center;
+}
+
+.inline-block {
+    display: inline-block;
 }
 
 .cursor-pointer {
@@ -33,12 +42,28 @@ body {
     width: 300px;
 }
 
+.p0 {
+    padding: 0px !important;
+}
+
+.m0 {
+    margin: 0px !important;
+}
+
+.mb0 {
+    margin-bottom: 0px !important;
+}
+
 .mb10 {
     margin-bottom: 10px !important;
 }
 
 .mb15 {
     margin-bottom: 15px;
+}
+
+.mb20 {
+    margin-bottom: 20px;
 }
 
 .mb30 {
@@ -54,7 +79,7 @@ body {
 }
 
 .date {
-    width: 100px;
+    width: 200px;
 }
 
 .name-event {
@@ -82,6 +107,10 @@ body {
     width: 150px;
 }
 
+.width-200 {
+    width: 200px;
+}
+
 .width-720 {
     width: 720px;
 }
@@ -98,4 +127,34 @@ body {
 .img-150-150 {
     height: 150px;
     width: 150px;
+}
+
+.box {
+    border: 1px solid lightgrey;
+}
+
+.box .box-header {
+    padding: 10px;
+    height: 41px;
+}
+
+.box .box-header-border {
+    border-bottom: 1px solid lightgrey;
+}
+
+
+.box .box-header .box-header__link {
+    text-align: right;
+}
+
+.box .box-header .box-header__title {
+    text-align: left;
+}
+
+.box .box-content .tab-pane {
+    margin: 0px;
+}
+
+.box ~ .box {
+    margin-top: 20px;
 }

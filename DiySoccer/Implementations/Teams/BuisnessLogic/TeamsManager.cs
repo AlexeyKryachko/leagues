@@ -31,6 +31,13 @@ namespace Implementations.Teams.BuisnessLogic
             _eventsRepository = eventsRepository;
         }
 
+        public IEnumerable<IdNameViewModel> Find(string query, int page, int pageSize)
+        {
+            return _teamsRepository
+                .Find(query, page, pageSize)
+                .Select(_teamMapper.MapIdName);
+        }
+
         public void Create(string leagueId, TeamViewModel model)
         {
             var exitedIds = model.Members
@@ -57,26 +64,36 @@ namespace Implementations.Teams.BuisnessLogic
             _teamsRepository.Add(leagueId, entity);
         }
 
+        public TeamViewModel Copy(string teamId, string destinationUnionId)
+        {
+            var team = _teamsRepository.Get(teamId);
+            if (team == null)
+                return null;
+
+            var newTeam = _teamsRepository.Create(destinationUnionId);
+            team.ReferenceId = team.EntityId;
+            team.EntityId = newTeam.EntityId;
+
+            _teamsRepository.Update(destinationUnionId, team);
+
+            var members = _playersRepository
+                .GetRange(team.MemberIds)
+                .ToDictionary(x => x.EntityId, x => x.Name);
+
+            return _teamMapper.Map(team, members);
+        }
+
         public TeamViewModel Get(string leagueId, string teamId)
         {
             var team = _teamsRepository.Get(teamId);
             if (team == null)
                 return null;
 
-            var members = _playersRepository.GetRange(team.MemberIds);
-            return new TeamViewModel
-            {
-                Id = team.EntityId,
-                Name = team.Name,
-                Hidden = team.Hidden,
-                Members = members.Select(x => new IdNameViewModel
-                {
-                    Id = x.EntityId,
-                    Name = x.Name
-                }),
-                Media = team.MediaId,
-                Description = team.Description
-            };
+            var members = _playersRepository
+                .GetRange(team.MemberIds)
+                .ToDictionary(x => x.EntityId, x => x.Name);
+
+            return _teamMapper.Map(team, members);
         }
 
         public TeamInfoViewModel GetInfo(string leagueId, string teamId)
@@ -124,7 +141,7 @@ namespace Implementations.Teams.BuisnessLogic
             };
             _teamsRepository.Update(leagueId, entity);
         }
-
+        
         public IEnumerable<TeamViewModel> GetByLeague(string id)
         {
             var teams = _teamsRepository.GetByLeague(id).ToList();

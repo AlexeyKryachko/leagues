@@ -1,12 +1,62 @@
 ﻿<div class="row">
     <div class="col-sm-6">
         <h1 class="main-league-title">Лиги</h1>
-        <div class="leagues-container"></div>
+        <div class="leagues-container">
+            {{#if leagues}}
+            {{#if isAdmin}}
+            {{#each leagues}}
+            <div class="list-group-item mb10 row">
+                <a href="#leagues/{{id}}" class="col-sm-9">
+                    <h4 class="list-group-item-heading">{{ name }}</h4>
+                    <p class="list-group-item-text">{{ description }}</p>
+
+                </a>
+                <div class="col-sm-3">
+                    <a href="{{href}}" class="btn btn-primary pull-right">Редактировать</a>
+                </div>
+            </div>
+            {{/each}}
+            {{else}}
+            {{#each leagues}}
+            <a href="#leagues/{{id}}" class="list-group-item mb10">
+                <h4 class="list-group-item-heading">{{ name }}</h4>
+                <p class="list-group-item-text">{{ description }}</p>
+            </a>
+            {{/each}}
+            {{/if}}
+            {{else}}
+            Нет лиг
+            {{/if}}
+            </div>
     </div>
     <div class="col-sm-6">
         <h1 class="main-league-title">Турниры</h1>
         <div class="cups-container">
+            {{#if tournaments}}
+            {{#if isAdmin}}
+            {{#each tournaments}}
+            <div class="list-group-item mb10 row">
+                <a href="#tournaments/{{id}}" class="col-sm-9">
+                    <h4 class="list-group-item-heading">{{ name }}</h4>
+                    <p class="list-group-item-text">{{ description }}</p>
+
+                </a>
+                <div class="col-sm-3">
+                    <a href="{{href}}" class="btn btn-primary pull-right">Редактировать</a>
+                </div>
+            </div>
+            {{/each}}
+            {{else}}
+            {{#each tournaments}}
+            <a href="#tournaments/{{id}}" class="list-group-item mb10">
+                <h4 class="list-group-item-heading">{{ name }}</h4>
+                <p class="list-group-item-text">{{ description }}</p>
+            </a>
+            {{/each}}
+            {{/if}}
+            {{else}}
             Нет турниров
+            {{/if}}
         </div>
     </div>
 </div>

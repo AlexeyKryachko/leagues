@@ -1,1 +1,193 @@
-﻿INFO {{name}} {{Name}}
+﻿{{#if name}}
+<div class="row mb20">
+    <div class="col-sm-2">
+        {{#if mediaId}}
+        <img class="img-120-120" src="/api/image/{{mediaId}}?width=120&height=120" />
+        {{else}}
+        <img class="img-120-120" src="/Frontend/img/DefaultLogo_120x120.jpg" />
+        {{/if}}
+    </div>
+    <div class="col-sm-8">
+        <div>
+            <h3>{{name}}</h3>
+        </div>
+        <div>
+            {{description}}
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <a href="#" class="btn btn-primary pull-right">На главную</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-7">
+        <div class="box">
+            <div class="box-header box-header-border row m0">
+                <div class="box-header__title col-sm-7 p0">
+                    Таблица
+                </div>
+                <div class="box-header__link col-sm-5 p0">
+                    <a href="#leagues/{{id}}/table">Подробнее ></a>
+                </div>
+            </div>
+            <div class="box-content">
+                <table class="table table-striped mb0">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th class="text-right">Кол-во игр</th>
+                            <th class="text-right">Очки</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#if teams}}
+                        {{#each teams}}
+                        <tr>
+                            <td>
+                                {{#if mediaId}}
+                                <img src="/api/image/{{mediaId}}?width=25&height=25" />
+                                {{/if}}
+                                {{name}}
+                            </td>
+                            <td class="text-right">{{games}}</td>
+                            <td class="text-right">{{points}}</td>
+                        </tr>
+                        {{/each}}
+                        {{else}}
+                        <tr><td colspan="3">Нет данных</td></tr>
+                        {{/if}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-5">
+
+        <div class="box">
+            <div class="box-header box-header-border row m0">
+                <div class="box-header__title col-sm-7 p0">
+                    События
+                </div>
+                <div class="box-header__link col-sm-5 p0">
+                    <a href="#leagues/{{id}}/calendar">Подробнее ></a>
+                </div>
+            </div>
+            <div class="box-content">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#future-events">Будующие</a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#past-events">Прошедшие</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="future-events" class="tab-pane fade tab-inner active in">
+                        <table class="table table-striped mb0">
+                            <tbody>
+                                {{#if fEvents}}
+                                {{#each fEvents}}
+                                <tr>
+                                    <td>
+                                        {{name}}
+                                    </td>
+                                    <td class="text-right">{{date}}</td>
+                                </tr>
+                                {{/each}}
+                                {{else}}
+                                <tr><td colspan="3">Нет данных</td></tr>
+                                {{/if}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="past-events" class="tab-pane fade tab-inner">
+                        <table class="table table-striped mb0">
+                            <tbody>
+                                {{#if pEvents}}
+                                {{#each pEvents}}
+                                <tr>
+                                    <td>
+                                        {{name}}
+                                    </td>
+                                    <td class="text-right">{{date}}</td>
+                                </tr>
+                                {{/each}}
+                                {{else}}
+                                <tr><td colspan="3">Нет данных</td></tr>
+                                {{/if}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header box-header-border row m0">
+                <div class="box-header__title col-sm-7 p0">
+                    Статистика
+                </div>
+                <div class="box-header__link col-sm-5 p0">
+                    <a href="#leagues/{{id}}/table">Подробнее ></a>
+                </div>
+            </div>
+            <div class="box-content">
+                <table class="table table-striped mb0">
+                    <tbody>
+                        <tr>
+                            <td>
+                                {{#if bestPlayer}}
+                                Лучший игрок: {{bestPlayer.name}}
+                                {{else}}
+                                Лучший игрок: -
+                                {{/if}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{#if bestGoalPlayer}}
+                                Лучший форвард: {{bestGoalPlayer.name}}
+                                {{else}}
+                                Лучший форвард: -
+                                {{/if}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{#if bestHelpPlayer}}
+                                Лучший ассисстент: {{bestHelpPlayer.name}}
+                                {{else}}
+                                Лучший ассисстент: -
+                                {{/if}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!--<div class="box">
+            <div class="box-header box-header-border row m0">
+                <div class="box-header__title col-sm-7 p0">
+                    Новости
+                </div>
+                <div class="box-header__link col-sm-5 p0">
+                </div>
+            </div>
+            <div class="box-content">
+                Новостей нет
+            </div>
+        </div>-->
+
+    </div>
+</div>
+{{else}}
+<div class="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+</div>
+{{/if}}

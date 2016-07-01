@@ -4,7 +4,7 @@
     initialize: function (options, app, object) {
         this.app = app;
 
-        this.leagues = new Leagues();
+        this.leagues = new LeaguesModel();
     },
 
     onStart: function (options) {
@@ -21,13 +21,13 @@
         var self = this;
 
         self.layout = new LayoutView();
-        self.leagueListView = new LeagueList({ collection: self.leagues });
+        self.leagueListView = new LeagueList({ model: self.leagues });
         self.leagueActionView = new LeagueActions();
     },
     bindViews: function () {
         var self = this;
 
-        self.listenTo(self.layout, 'show', function () {
+        self.listenTo(self.leagues, 'sync', function () {
             self.layout.up.show(self.leagueActionView);
             self.layout.center.show(self.leagueListView);
         });

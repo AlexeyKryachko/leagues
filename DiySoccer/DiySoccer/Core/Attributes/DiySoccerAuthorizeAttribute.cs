@@ -23,6 +23,11 @@ namespace DiySoccer.Core.Attributes
                 ? actionContext.ControllerContext.RouteData.Values["leagueId"].ToString() 
                 : string.Empty;
 
+            if (string.IsNullOrEmpty(leagueId))
+                leagueId = actionContext.ControllerContext.RouteData.Values.ContainsKey("tournamentId")
+                    ? actionContext.ControllerContext.RouteData.Values["tournamentId"].ToString()
+                    : string.Empty;
+
             switch (_accessStatus)
             {
                 case LeagueAccessStatus.Member:

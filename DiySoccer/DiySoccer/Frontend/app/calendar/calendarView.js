@@ -70,11 +70,6 @@
         var self = this;
         var model = this.model.toJSON();
         
-        model.isEditor = MyApp.Settings.isEditor(this.options.leagueId);
-
-        if (!model.isEditor)
-            return model;
-
         _.each(model.games, function (obj) {
             var guestTeam = _.findWhere(self.options.teams.models, { id: obj.guestTeamId });
             var homeTeam = _.findWhere(self.options.teams.models, { id: obj.homeTeamId });
@@ -83,6 +78,16 @@
             obj.teams = self.options.teams.toJSON();
         });
         
+        model.isEditor = MyApp.Settings.isEditor(this.options.leagueId);
+
+        if (model.isEditor)
+            return model;
+        
+        if (model.startDate) {
+            var date = new Date(model.startDate);
+            model.startDate = date.toLocaleDateString();
+        }
+
         return model;
     },
     modelEvents: {

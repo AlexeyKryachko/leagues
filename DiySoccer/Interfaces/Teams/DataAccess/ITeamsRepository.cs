@@ -7,8 +7,9 @@ namespace Interfaces.Teams.DataAccess
     {
         IEnumerable<TeamDb> GetByLeague(string id);
 
-        void Update(string leagueId, TeamDb entity);
-
         IEnumerable<TeamDb> FindByUsers(string leagueId, IEnumerable<string> userIds);
+        IEnumerable<TeamDb> Find(string query, int page, int pageSize);
+
+        void Update(string leagueId, TeamDb entity);
     }
 }
