@@ -6,12 +6,15 @@ namespace Interfaces.Unions.BuisnessLogic.Models.Tournaments
 {
     public class TournamentInfoViewModel
     {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
         [JsonProperty("events")]
-        public IEnumerable<IEnumerable<TournamentInfoGroupViewModel>> Events { get; set; }
+        public IEnumerable<IEnumerable<ITournamentInfoGroupViewModel>> Events { get; set; }
 
         public TournamentInfoViewModel()
         {
-            Events = Enumerable.Empty<IEnumerable<TournamentInfoGroupViewModel>>();
+            Events = Enumerable.Empty<IEnumerable<ITournamentInfoGroupViewModel>>();
         }
     }
 }

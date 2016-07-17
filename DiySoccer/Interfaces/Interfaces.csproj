@@ -101,7 +101,9 @@
     <Compile Include="Leagues\BuisnessLogic\Model\LeaguesViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueUnsecureViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueViewModel.cs" />
-    <Compile Include="Unions\BuisnessLogic\Models\Tournaments\TournamentInfoGameViewModel.cs" />
+    <Compile Include="Unions\BuisnessLogic\Models\Tournaments\ITournamentInfoGroupViewModel.cs" />
+    <Compile Include="Unions\BuisnessLogic\Models\Tournaments\TournamentInfoPlayOffGameViewModel.cs" />
+    <Compile Include="Unions\BuisnessLogic\Models\Tournaments\TournamentInfoGroupGameViewModel.cs" />
     <Compile Include="Unions\BuisnessLogic\Models\Tournaments\TournamentInfoGroupViewModel.cs" />
     <Compile Include="Unions\BuisnessLogic\Models\Tournaments\TournamentInfoViewModel.cs" />
     <Compile Include="Leagues\DataAccess\Model\LeagueType.cs" />

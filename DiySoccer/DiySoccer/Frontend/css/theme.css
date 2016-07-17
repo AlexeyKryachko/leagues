@@ -142,6 +142,19 @@ body {
     border-bottom: 1px solid lightgrey;
 }
 
+.box .box-content .box-content__half-right {
+    display: inline-block;
+    text-align: left;
+    padding-left: 20px;
+    width: 45%;
+}
+
+.box .box-content .box-content__half-left {
+    display: inline-block;
+    text-align: right;
+    padding-right: 20px;
+    width: 45%;
+}
 
 .box .box-header .box-header__link {
     text-align: right;

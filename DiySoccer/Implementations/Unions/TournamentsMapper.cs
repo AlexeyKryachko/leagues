@@ -4,6 +4,7 @@ using System.Linq;
 using Implementations.Core;
 using Interfaces.Events.DataAccess.Model;
 using Interfaces.Games.DataAccess.Model;
+using Interfaces.Leagues.DataAccess.Model;
 using Interfaces.Teams.DataAccess;
 using Interfaces.Unions.BuisnessLogic.Models.Tournaments;
 
@@ -46,7 +47,7 @@ namespace Implementations.Unions
             _scoreCalculation = scoreCalculation;
         }
 
-        public TournamentInfoViewModel MapTournametInfo(IList<EventDb> events, IList<TeamDb> teams, IList<GameDb> games)
+        public TournamentInfoViewModel MapTournametInfo(LeagueDb league, IList<EventDb> events, IList<TeamDb> teams, IList<GameDb> games)
         {
             var grouppedEvents = events
                 .Where(x => x.StartDate.HasValue)
@@ -60,6 +61,7 @@ namespace Implementations.Unions
 
             return new TournamentInfoViewModel
             {
+                Name = league.Name,
                 Events = groups
             };
         }
@@ -76,57 +78,61 @@ namespace Implementations.Unions
         {
             var teamsDictionary = teams.ToDictionary(x => x.EntityId, x => x);
 
-            return eventEntity.Games.Count() == 1
-                ? MapTournamentGroupGame(eventEntity, teamsDictionary, games)
-                : MapTournamentGroupGames(eventEntity, teams, games);
+            return eventEntity.Games.All(x => !string.IsNullOrEmpty(x.GuestTeamId) && !string.IsNullOrEmpty(x.HomeTeamId))
+                ? MapTournamentGroupGames(eventEntity, teamsDictionary, games)
+                : MapTournamentPlayoffGames(eventEntity, teams, games);
         }
 
-        private TournamentInfoGroupViewModel MapTournamentGroupGame(EventDb eventEntity, IDictionary<string, TeamDb> teams, IList<GameDb> games)
+        private TournamentInfoGroupViewModel MapTournamentGroupGames(EventDb eventEntity, IDictionary<string, TeamDb> teams, IList<GameDb> games)
         {
-            var game = games.FirstOrDefault(x => x.EventId == eventEntity.EntityId);
-            if (game == null)
+            var eventGames = games.Where(x => x.EventId == eventEntity.EntityId).ToList();
+            if (!eventGames.Any())
                 return null;
-
-            if (teams[game.HomeTeam.Id] == null || teams[game.GuestTeam.Id] == null)
-                return null;
-
+            
             return new TournamentInfoGroupViewModel
             {
                 Name = eventEntity.Name,
-                Teams = new List<TournamentInfoGameViewModel>
-                {
-                    new TournamentInfoGameViewModel
-                    {
-                        Name = teams[game.HomeTeam.Id].Name,
-                        Value = game.HomeTeam.Score
-                    },
-                    new TournamentInfoGameViewModel
-                    {
-                        Name = teams[game.GuestTeam.Id].Name,
-                        Value = game.GuestTeam.Score
-                    }
-                }
+                PlayOffGames = eventGames.Select(x => MapPlayoffGame(x, teams))
             };
         }
 
-        public TournamentInfoGroupViewModel MapTournamentGroupGames(EventDb eventEntity, IList<TeamDb> teams, IList<GameDb> games)
+        private TournamentInfoPlayOffGameViewModel MapPlayoffGame(GameDb game, IDictionary<string, TeamDb> teams)
+        {
+            var home = teams[game.HomeTeam.Id];
+            var guest = teams[game.GuestTeam.Id];
+
+            return new TournamentInfoPlayOffGameViewModel()
+            {
+                HomeTeamMediaId = home.MediaId,
+                HomeTeamScore = game.HomeTeam.Score,
+                HomeTeamName = home.Name,
+                GuestTeamMediaId = guest.MediaId,
+                GuestTeamScore = game.GuestTeam.Score,
+                GuestTeamName = guest.Name
+            };
+        }
+
+        public TournamentInfoGroupViewModel MapTournamentPlayoffGames(EventDb eventEntity, IList<TeamDb> teams, IList<GameDb> games)
         {
             var teamIdsInGroup = eventEntity.Games.Select(x => x.HomeTeamId);
             var teamsInGroup = teams.Where(x => teamIdsInGroup.Contains(x.EntityId));
 
             var eventGames = games.Where(x => x.EventId == eventEntity.EntityId).ToList();
             var teamResults = teamsInGroup
-                .Select(team => new TournamentInfoGameViewModel
+                .Select(team => new TournamentInfoGroupGameViewModel
                 {
                     Name = team.Name,
-                    Value = _scoreCalculation.Points(eventGames, team.EntityId)
+                    Points = _scoreCalculation.Points(eventGames, team.EntityId),
+                    Wins = _scoreCalculation.WinsCount(eventGames, team.EntityId),
+                    Drafts = _scoreCalculation.DraftCount(eventGames, team.EntityId),
+                    Loses = _scoreCalculation.LosesCount(eventGames, team.EntityId),
                 })
-                .OrderByDescending(x => x.Value);
+                .OrderByDescending(x => x.Points);
 
             return new TournamentInfoGroupViewModel
             {
                 Name = eventEntity.Name,
-                Teams = teamResults
+                GroupGames = teamResults
             };
         }
     }

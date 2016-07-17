@@ -4,17 +4,21 @@ using Newtonsoft.Json;
 
 namespace Interfaces.Unions.BuisnessLogic.Models.Tournaments
 {
-    public class TournamentInfoGroupViewModel
+    public class TournamentInfoGroupViewModel : ITournamentInfoGroupViewModel
     {
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("teams")]
-        public IEnumerable<TournamentInfoGameViewModel> Teams { get; set; }
+        [JsonProperty("playoffGames")]
+        public IEnumerable<TournamentInfoPlayOffGameViewModel> PlayOffGames { get; set; }
+
+        [JsonProperty("groupGames")]
+        public IEnumerable<TournamentInfoGroupGameViewModel> GroupGames { get; set; }
 
         public TournamentInfoGroupViewModel()
         {
-            Teams = Enumerable.Empty<TournamentInfoGameViewModel>();
+            PlayOffGames = Enumerable.Empty<TournamentInfoPlayOffGameViewModel>();
+            GroupGames = Enumerable.Empty<TournamentInfoGroupGameViewModel>();
         }
     }
 }

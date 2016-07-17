@@ -1,39 +1,88 @@
-﻿{{#if events}}
+﻿<h2 class="mb30">{{name}}</h2>
+
+{{#if events}}
 {{#each events}}
 <div class="row mb30">
     {{#each []}}
-    <div class="col-sm-{{col}}">
-        {{#if name}}
-        <div class="box">
-            <div class="box-header box-header-border row m0">
-                <div class="box-header__title col-sm-7 p0">
-                    {{name}}
-                </div>
-            </div>
-            <div class="box-content">
-                <table class="table table-striped mb0">
-                    <tbody>
-                    {{#if teams}}
-                    {{#each teams}}
-                    <tr>
-                        <td>
-                            {{#if mediaId}}
-                            <img src="/api/image/{{mediaId}}?width=25&height=25"/>
-                            {{/if}}
-                            {{name}}
-                        </td>
-                        <td class="text-right">{{value}}</td>
-                    </tr>
-                    {{/each}}
-                    {{else}}
-                    <tr><td colspan="3">Нет данных</td></tr>
-                    {{/if}}
-                    </tbody>
-                </table>
+
+    <div class="box">
+        <div class="box-header box-header-border">
+            <div class="box-header__title">
+                {{name}}
             </div>
         </div>
+
+        {{#if playoffGames}}
+        {{#each playoffGames}}
+        <div class="box-content">
+            <div class="box-content__half-left">
+                {{#if homeTeamMediaId}}
+                <img class="inline-block" src="/api/image/{{homeTeamMediaId}}?width=50&height=50"/>
+                {{else}}
+                <img class="inline-block" src="/Frontend/img/DefaultLogo_50x50.jpg" />
+                {{/if}}
+                <h5  class="inline-block">{{homeTeamName}}</h5>
+            </div>
+            <div class="inline-block">
+                <h4>
+                    <b>
+                        {{homeTeamScore}} - {{guestTeamScore}}
+                    </b>
+                </h4>
+            </div>
+            <div class="box-content__half-right">
+                <h5  class="inline-block">{{guestTeamName}}</h5>
+                {{#if guestTeamMediaId}}
+                <img class="inline-block" src="/api/image/{{guestTeamMediaId}}?width=50&height=50"/>
+                {{else}}
+                <img class="inline-block" src="/Frontend/img/DefaultLogo_50x50.jpg"/>
+                {{/if}}
+            </div>
+        </div>
+        {{/each}}
+        {{else}}
+            {{#if groupGames}}
+        <table class="table table-hover mb0">
+            <thead>
+                <tr>
+                    <th>Команда</th>
+                    <th class="text-right width-100">В</th>
+                    <th class="text-right width-100">Н</th>
+                    <th class="text-right width-100">П</th>
+                    <th class="text-right width-100">О</th>
+                </tr>
+            </thead>
+            <tbody>
+            {{#each groupGames}}
+            <tr>
+                <td>
+                    {{#if mediaId}}
+                    <img class="inline-block" src="/api/image/{{mediaId}}?width=25&height=25"/>
+                    {{else}}
+                    <img class="inline-block" src="/Frontend/img/DefaultLogo_25x25.jpg"/>
+                    {{/if}}
+                    {{name}}
+                </td>
+                <td class="text-right width-100">
+                    {{wins}}
+                </td>
+                <td class="text-right width-100">
+                    {{drafts}}
+                </td>
+                <td class="text-right width-100">
+                    {{loses}}
+                </td>
+                <td class="text-right width-100">
+                    {{points}}
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+            {{/if}}
         {{/if}}
     </div>
+
     {{/each}}
 </div>
 {{/each}}

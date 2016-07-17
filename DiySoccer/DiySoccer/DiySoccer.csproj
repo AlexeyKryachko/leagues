@@ -275,6 +275,8 @@
     <Content Include="Frontend\css\ie10-viewport-bug-workaround.css" />
     <Content Include="Frontend\css\bootstrap-theme.min.css" />
     <Content Include="Frontend\css\bootstrap.min.css" />
+    <Content Include="Frontend\img\DefaultLogo_50x50.jpg" />
+    <Content Include="Frontend\img\DefaultLogo_25x25.jpg" />
     <Content Include="Frontend\img\DefaultLogo_120x120.jpg" />
     <Content Include="Frontend\img\DefaultLogo_150x150.png" />
     <Content Include="Frontend\js\static\bootstrap3-typeahead.min.js" />
