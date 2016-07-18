@@ -16,6 +16,9 @@ namespace Interfaces.Leagues.DataAccess.Model
         [BsonElement("name")]
         public string Name { get; set; }
 
+        [BsonElement("subName")]
+        public string SubName { get; set; }
+        
         [BsonElement("desc")]
         public string Description { get; set; }
 

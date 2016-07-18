@@ -45,6 +45,7 @@ namespace Implementations.Leagues
             {
                 Id = league.EntityId,
                 Name = league.Name,
+                SubName = league.SubName,
                 Description = league.Description,
                 Type = league.Type
             };
@@ -56,6 +57,7 @@ namespace Implementations.Leagues
             {
                 Id = league.EntityId,
                 Name = league.Name,
+                SubName = league.SubName,
                 Description = league.Description,
                 VkGroup = league.VkSecurityGroup,
                 MediaId = league.MediaId,
@@ -89,33 +91,45 @@ namespace Implementations.Leagues
             var best = _userStatisticCalculation.GetBestStatistic(games)
                 .OrderByDescending(x => x.Value)
                 .FirstOrDefault();
+            var bestPlayerTeam = best != null
+                ? teams.FirstOrDefault(x => x.MemberIds.Contains(best.Id))
+                : null;
             var bestPlayer = best == null || users[best.Id] == null
                 ? null
-                : new IdNameViewModel
+                : new LeagueInfoPlayerViewModel
                 {
                     Id = best.Id,
+                    MediaId = bestPlayerTeam != null ? bestPlayerTeam.MediaId : null,
                     Name = users[best.Id].Name
                 };
 
             var goals = _userStatisticCalculation.GetGoalsStatistic(games)
                 .OrderByDescending(x => x.Value)
                 .FirstOrDefault();
+            var goalsPlayerTeam = goals != null
+                ? teams.FirstOrDefault(x => x.MemberIds.Contains(goals.Id))
+                : null;
             var bestGoalPlayer = goals == null || users[goals.Id] == null
                 ? null
-                : new IdNameViewModel
+                : new LeagueInfoPlayerViewModel
                 {
                     Id = goals.Id,
+                    MediaId = bestPlayerTeam != null ? goalsPlayerTeam.MediaId : null,
                     Name = users[goals.Id].Name
                 };
 
             var helps = _userStatisticCalculation.GetHelpsStatistic(games)
                 .OrderByDescending(x => x.Value)
                 .FirstOrDefault();
+            var helpsPlayerTeam = goals != null
+                ? teams.FirstOrDefault(x => x.MemberIds.Contains(helps.Id))
+                : null;
             var bestHelpPlayer = helps == null || users[goals.Id] == null
                 ? null
-                : new IdNameViewModel
+                : new LeagueInfoPlayerViewModel
                 {
                     Id = helps.Id,
+                    MediaId = bestPlayerTeam != null ? helpsPlayerTeam.MediaId : null,
                     Name = users[helps.Id].Name
                 };
 
@@ -127,12 +141,13 @@ namespace Implementations.Leagues
                 {
                     Name = x.Name,
                     Date = x.StartDate
-                });
-
+                })
+                .ToList();
+            
             var pastEvents = events
                 .Where(x => x.StartDate <= DateTime.UtcNow)
                 .OrderByDescending(x => x.StartDate)
-                .Take(3)
+                .Take(3 - futureEvents.Count)
                 .Select(x => new LeagueInfoEventViewModel
                 {
                     Name = x.Name,
@@ -142,14 +157,14 @@ namespace Implementations.Leagues
             return new LeagueInfoViewModel
             {
                 Name = league.Name,
+                SubName = league.SubName,
                 Description = league.Description,
                 MediaId = league.MediaId,
                 BestPlayer = bestPlayer,
                 BestGoalPlayer = bestGoalPlayer,
                 BestHelpPlayer = bestHelpPlayer,
                 Teams = teamsStatistic,
-                FutureEvents = futureEvents,
-                PastEvents = pastEvents
+                Events = futureEvents.Concat(pastEvents),
             };
         }
     }

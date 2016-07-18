@@ -18,6 +18,9 @@
 body {
   padding-top: 70px;
   padding-bottom: 30px;
+  background: url("/frontend/img/background-pattern.png");
+  color: #3f3f3f;
+  overflow-x: hidden;
 }
 
 .theme-dropdown .dropdown-menu {
@@ -95,38 +98,8 @@ body {
     text-align: left;
 }
 
-.width-100 {
-    width: 100px;
-}
-
-.width-125 {
-    width: 125px;
-}
-
-.width-150 {
-    width: 150px;
-}
-
-.width-200 {
-    width: 200px;
-}
-
-.width-720 {
-    width: 720px;
-}
-
-.width-620 {
-    width: 620px;
-}
-
-.img-120-120 {
-    height: 120px;
-    width: 120px;
-}
-
-.img-150-150 {
-    height: 150px;
-    width: 150px;
+.text-center {
+    text-align: center;
 }
 
 .box {
@@ -170,4 +143,9 @@ body {
 
 .box ~ .box {
     margin-top: 20px;
+}
+
+.number-cell {
+    width: 50px;
+    text-align: center;
 }

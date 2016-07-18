@@ -9,30 +9,30 @@ namespace Interfaces.Leagues.BuisnessLogic.Model
     {
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        [JsonProperty("subName")]
+        public string SubName { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
         [JsonProperty("mediaId")]
         public string MediaId { get; set; }
         [JsonProperty("teams")]
         public IEnumerable<LeagueInfoTeamViewModel> Teams { get; set; }
-        [JsonProperty("fEvents")]
-        public IEnumerable<LeagueInfoEventViewModel> FutureEvents { get; set; }
-        [JsonProperty("pEvents")]
-        public IEnumerable<LeagueInfoEventViewModel> PastEvents { get; set; }
+        [JsonProperty("events")]
+        public IEnumerable<LeagueInfoEventViewModel> Events { get; set; }
         [JsonProperty("bestPlayer")]
-        public IdNameViewModel BestPlayer { get; set; }
+        public LeagueInfoPlayerViewModel BestPlayer { get; set; }
         [JsonProperty("bestGoalPlayer")]
-        public IdNameViewModel BestGoalPlayer { get; set; }
+        public LeagueInfoPlayerViewModel BestGoalPlayer { get; set; }
         [JsonProperty("bestHelpPlayer")]
-        public IdNameViewModel BestHelpPlayer { get; set; }
+        public LeagueInfoPlayerViewModel BestHelpPlayer { get; set; }
         [JsonProperty("News")]
         public IEnumerable<IdNameViewModel> News { get; set; }
 
         public LeagueInfoViewModel()
         {
             Teams = Enumerable.Empty<LeagueInfoTeamViewModel>();
-            FutureEvents = Enumerable.Empty<LeagueInfoEventViewModel>();
-            PastEvents = Enumerable.Empty<LeagueInfoEventViewModel>();
+            Events = Enumerable.Empty<LeagueInfoEventViewModel>();
             News = Enumerable.Empty<IdNameViewModel>();
         }
     }

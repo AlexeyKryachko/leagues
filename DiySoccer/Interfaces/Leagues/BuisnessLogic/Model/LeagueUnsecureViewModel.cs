@@ -20,6 +20,9 @@ namespace Interfaces.Leagues.BuisnessLogic.Model
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("subName")]
+        public string SubName { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
 

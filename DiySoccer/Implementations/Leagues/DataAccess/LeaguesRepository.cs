@@ -46,6 +46,7 @@ namespace Implementations.Leagues.DataAccess
             var filter = Builders<LeagueDb>.Filter.Eq(x => x.EntityId, model.Id);
             var update = Builders<LeagueDb>.Update
                 .Set(x => x.Name, model.Name)
+                .Set(x => x.SubName, model.SubName)
                 .Set(x => x.Description, model.Description)
                 .Set(x => x.VkSecurityGroup, model.VkGroup)
                 .Set(x => x.MediaId, model.MediaId)

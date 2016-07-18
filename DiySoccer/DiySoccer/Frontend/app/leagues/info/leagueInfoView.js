@@ -2,6 +2,11 @@
     template: "#league-info",
     serializeData: function () {
         var model = this.model.toJSON();
+
+        _.each(model.teams, function (obj, index) {
+            obj.number = index + 1 + '.';
+        });
+
         return model;
     },
     modelEvents: {

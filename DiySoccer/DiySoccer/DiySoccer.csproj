@@ -270,11 +270,14 @@
     <Content Include="Frontend\app\teams\list\teamListModule.js" />
     <Content Include="Frontend\app\tournaments\info\tournamentsInfoModule.js" />
     <Content Include="Frontend\app\tournaments\info\tournamentsInfoViews.js" />
+    <Content Include="Frontend\css\variables.css" />
     <Content Include="Frontend\css\spinner.css" />
+    <Content Include="Frontend\css\dashboards.css" />
     <Content Include="Frontend\css\theme.css" />
     <Content Include="Frontend\css\ie10-viewport-bug-workaround.css" />
     <Content Include="Frontend\css\bootstrap-theme.min.css" />
     <Content Include="Frontend\css\bootstrap.min.css" />
+    <Content Include="Frontend\img\background-pattern.png" />
     <Content Include="Frontend\img\DefaultLogo_50x50.jpg" />
     <Content Include="Frontend\img\DefaultLogo_25x25.jpg" />
     <Content Include="Frontend\img\DefaultLogo_120x120.jpg" />

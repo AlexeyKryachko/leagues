@@ -32,10 +32,12 @@ var LeagueView = Backbone.Marionette.CompositeView.extend({
         'upload': '#btUpload',
         'logoContainer': '.logo-container',
         'logoValue': '#logo-file-id',
-        'type': '#league-type'
+        'type': '#league-type',
+        'subName': '.league-sub-name'
     },
     events: {
         'change @ui.name': 'changeName',
+        'change @ui.subName': 'changeSubName',
         'change @ui.description': 'changeDescription',
         'change @ui.group': 'changeGroup',
         'change @ui.type': 'changeType',
@@ -66,6 +68,9 @@ var LeagueView = Backbone.Marionette.CompositeView.extend({
     },
     changeType: function () {
         this.model.set('type', this.ui.type.val());
+    },
+    changeSubName: function () {
+        this.model.set('subName', this.ui.subName.val());
     },
     changeName: function () {
         this.model.set('name', this.ui.name.val());
