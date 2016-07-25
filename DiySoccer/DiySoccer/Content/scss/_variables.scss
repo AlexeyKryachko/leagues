@@ -1,0 +1,82 @@
+﻿// Variables
+// --------------------------------------------------
+
+//== Colors
+$black:                                 rgba(33,33,33,1);
+$brand-primary:                         #759580;
+$brand-primary-hover:                   #647e6d;
+
+$gray-darker:            #383838;
+$gray-dark:              #707073;
+$gray:                   #848488;
+$gray-light:             #a5a5a5;
+$gray-lighter:           #eaeae9;
+//skift gray-body til gray-lighter
+//skift border-gray til gray-light
+$gray-body:         #eaeae9;
+$border-gray:       #a5a5a5;
+$product-green:     $brand-primary;
+$border-sizechart: 1px solid rgba(33, 33, 33, .2);
+
+//== Scaffolding
+//
+//## Settings for some of the most global styles.
+
+//** Background color for `<body>`.
+$body-bg:                           #fff !default;
+
+//** Global text color on `<body>`.
+$text-color:                        $black !default;
+
+//** Global textual link color.
+$link-color:                        $black !default;
+
+//** Link hover color set via `darken()` function.
+$link-hover-color:                  transparentize($link-color, 0.25) !default;
+
+//** Link hover decoration.
+$link-hover-decoration:             underline !default;
+
+//== Typography
+$font-family-sans-serif:            sans-serif !default;
+$font-family-sans-serif-wf:         "sofia-pro",sans-serif !default;
+
+$font-weight-base:                  300 !default;
+
+$headings-font-weight:              900 !default;
+$font-size-base:                    16px !default;
+$font-size-large:                   18px !default;
+$font-size-small:                   14px !default;
+$font-size-h1:                      120px !default;
+$font-size-h2:                      60px !default;
+$font-size-h3:                      28px !default;
+$font-size-h4:                      20px !default;
+$font-size-h5:                      26px !default;
+$font-size-h6:                      32px !default;
+$font-size-h1-mobile:               100px !default;
+$font-size-h2-mobile:               50px !default;
+$font-size-h3-mobile:               24px !default;
+$font-size-h4-mobile:               18px !default;
+
+
+//** Unit-less `line-height` for use in components like buttons.
+$line-height-base:        1.625 !default; // 26/16
+
+
+//== Navbar
+
+//Force mobile menu on iPad in portrait
+$grid-float-breakpoint: 769px !default;
+
+
+// Basics of a navbar
+$navbar-default-color:             $text-color !default;
+$navbar-default-bg:                $body-bg !default;
+
+$navbar-default-link-color:                $link-color !default;
+$navbar-default-link-hover-color:          $link-hover-color !default;
+$navbar-default-link-hover-bg:             transparent !default;
+$navbar-default-link-active-color:         $link-color !default;
+$navbar-default-link-active-bg:            transparent !default;
+$navbar-default-link-disabled-color:       #ccc !default;
+$navbar-default-link-disabled-bg:          transparent !default;

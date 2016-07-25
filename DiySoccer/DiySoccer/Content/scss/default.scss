@@ -1,0 +1,19 @@
+﻿
+/**
+ * Merge all stylesheets into one
+ * 1. Variables and global styles
+ * 2. Boostrap and other 3rd party libraries
+ * 3. Partials
+ */
+
+// 2: Variables and global styles
+@import "variables";
+
+// 2: Boostrap and other 3rd party libraries
+@import "bootstrap";
+@import "mixins";
+
+// 3: Partials
+
+// Core CSS
+@import "partials/";

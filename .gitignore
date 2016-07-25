@@ -15,3 +15,8 @@ node_modules
 /DiySoccer/Core/bin
 /DiySoccer/Core/obj
 /DiySoccer/DiySoccer/Media
+/DiySoccer/DiySoccer/.sass-cache
+/DiySoccer/DiySoccer/Content/dist
+
+
+

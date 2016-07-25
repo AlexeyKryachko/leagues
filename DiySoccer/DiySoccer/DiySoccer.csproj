@@ -237,6 +237,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Startup.cs" />
+    <Content Include="Content\js\app.js" />
     <Content Include="Frontend\app\calendar\calendarModule.js" />
     <Content Include="Frontend\app\calendar\calendarView.js" />
     <Content Include="Frontend\app\games\gameInfo\gameInfoModule.js" />
@@ -378,6 +379,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Frontend\templates\league-admin.html" />
+    <Content Include="gulpfile.js" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />
@@ -453,6 +455,7 @@
     <Content Include="Frontend\js\static\tinymce\skins\lightgray\fonts\tinymce.eot" />
     <Content Include="Frontend\js\static\tinymce\skins\lightgray\fonts\tinymce.ttf" />
     <Content Include="Frontend\js\static\tinymce\skins\lightgray\fonts\tinymce.woff" />
+    <Content Include="package.json" />
     <None Include="Properties\PublishProfiles\diysoccer - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\diysoccer - Web Deploy.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
