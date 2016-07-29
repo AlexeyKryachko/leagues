@@ -23,7 +23,7 @@ var Promise = require('es6-promise').Promise;
 gulp.task('styles', function () {
     return sass('content/scss/default.scss', { style: 'expanded' })
       .pipe(autoprefixer('last 2 version'))
-      .pipe(gulp.dest('dist/styles'))
+      .pipe(gulp.dest('content/dist/styles'))
       .pipe(rename({ suffix: '.min' }))
       .pipe(cssnano())
       .pipe(gulp.dest('content/dist/css'))
@@ -61,7 +61,7 @@ gulp.task('watch', function () {
     livereload.listen();
 
     // Watch any files in dist/, reload on change
-    gulp.watch(['dist/**']).on('change', livereload.changed);
+    gulp.watch(['content/dist/**']).on('change', livereload.changed);
 
 });
 
