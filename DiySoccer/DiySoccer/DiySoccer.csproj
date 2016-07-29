@@ -243,6 +243,7 @@
     <Content Include="Content\dist\css\default.min.css" />
     <Content Include="Content\dist\css\font-awesome.min.css" />
     <Content Include="Content\dist\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\dist\js\app.bundle.js" />
     <Content Include="Content\dist\js\main.js" />
     <Content Include="Content\dist\js\main.min.js" />
     <Content Include="Content\dist\fonts\fontawesome-webfont.eot" />
@@ -254,6 +255,11 @@
     <None Include="Content\scss\partials\ie10-viewport-bug-workaround.scss" />
     <None Include="Content\scss\partials\spinner.scss" />
     <None Include="Content\scss\partials\theme.scss" />
+    <Content Include="Content\dist\js\vendor.bundle.js" />
+    <Content Include="Content\js\app\app.js" />
+    <Content Include="Content\js\app\entry.js" />
+    <Content Include="Content\js\app\router.js" />
+    <Content Include="Content\js\app\template.js" />
     <Content Include="Content\scss\partials\bootstrap-datetimepicker.scss" />
     <None Include="Content\scss\variables.scss" />
     <Content Include="Frontend\app\calendar\calendarModule.js" />
@@ -414,7 +420,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\js\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
