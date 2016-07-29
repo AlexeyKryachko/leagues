@@ -258,6 +258,12 @@
     <Content Include="Content\dist\js\vendor.bundle.js" />
     <Content Include="Content\js\app\app.js" />
     <Content Include="Content\js\app\entry.js" />
+    <Content Include="Content\js\app\models\calendars.js" />
+    <Content Include="Content\js\app\models\games.js" />
+    <Content Include="Content\js\app\models\leagues.js" />
+    <Content Include="Content\js\app\models\settings.js" />
+    <Content Include="Content\js\app\models\teams.js" />
+    <Content Include="Content\js\app\models\tournaments.js" />
     <Content Include="Content\js\app\router.js" />
     <Content Include="Content\js\app\template.js" />
     <Content Include="Content\scss\partials\bootstrap-datetimepicker.scss" />
