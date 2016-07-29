@@ -10,10 +10,13 @@
 @import "variables";
 
 // 2: Boostrap and other 3rd party libraries
-@import "bootstrap";
-@import "mixins";
+@import "font-awesome/font-awesome";
 
 // 3: Partials
 
 // Core CSS
-@import "partials/";
+@import "partials/dashboards";
+@import "partials/bootstrap-datetimepicker";
+@import "partials/ie10-viewport-bug-workaround";
+@import "partials/spinner";
+@import "partials/theme";
