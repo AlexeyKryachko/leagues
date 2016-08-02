@@ -258,6 +258,8 @@
     <Content Include="Content\dist\js\vendor.bundle.js" />
     <Content Include="Content\js\app\app.js" />
     <Content Include="Content\js\app\entry.js" />
+    <Content Include="Content\js\app\header\headerModule.js" />
+    <Content Include="Content\js\app\header\headerView.js" />
     <Content Include="Content\js\app\models\calendars.js" />
     <Content Include="Content\js\app\models\games.js" />
     <Content Include="Content\js\app\models\leagues.js" />
