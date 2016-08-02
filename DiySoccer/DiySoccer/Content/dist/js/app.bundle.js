@@ -47,8 +47,13 @@
 	var MyApp = __webpack_require__(1);
 	var template = __webpack_require__(5);
 
-	var headerModule = __webpack_require__(8);
-	MyApp.module("header", headerModule);
+	__webpack_require__(8);
+
+	__webpack_require__(10);
+
+	__webpack_require__(17);
+	__webpack_require__(20);
+	__webpack_require__(23);
 
 	MyApp.start();
 
@@ -56,10 +61,10 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {var MyRouter = __webpack_require__(3);
-	var Settings = __webpack_require__(4);
+	/* WEBPACK VAR INJECTION */(function($) {var MyApp = new Backbone.Marionette.Application();
 
-	var MyApp = new Backbone.Marionette.Application();
+	var MyRouter = __webpack_require__(3);
+	var Settings = __webpack_require__(4);
 
 	MyApp.addRegions({
 	    mainRegion: "#main-container",
@@ -75,7 +80,7 @@
 
 	    MyApp.listenToOnce(MyApp.Settings, 'sync', function () {
 	        MyApp.submodules.header.start();
-	        var router = new MyRouter();
+	        var router = new MyRouter(MyApp);
 	        
 	        if (Backbone.history) {
 	            Backbone.history.start();
@@ -10173,16 +10178,16 @@
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var MyApp = __webpack_require__(1);
+/***/ function(module, exports) {
 
 	var MyRouter = Backbone.Marionette.AppRouter.extend({
-	    initialize: function () {
+	    initialize: function (app) {
 	        var self = this;
 
-	        MyApp.listenTo(MyApp.Settings, 'sync', function () {
-	            console.log('Settings: ', MyApp.Settings.toJSON());
+	        self.app = app;
+
+	        self.app.listenTo(self.app.Settings, 'sync', function () {
+	            console.log('Settings: ', self.app.Settings.toJSON());
 	            self.changeModule(self.workingModule, self.workingOptions);
 	        });
 	    },
@@ -10203,55 +10208,55 @@
 	        "leagues/:leagueId/calendar": "calendarRoute"
 	    },
 	    defaultRoute: function () {
-	        this.changeModule(MyApp.submodules.leagues);
+	        this.changeModule(this.app.submodules.leagues);
 	    },
 	    calendarRoute: function(leagueId) {
 	        var options = { leagueId: leagueId };
-	        this.changeModule(MyApp.submodules.calendar, options);
+	        this.changeModule(this.app.submodules.calendar, options);
 	    },
 	    newLeagueRoute: function (leagueId) {
 	        var options = { leagueId: leagueId };
-	        this.changeModule(MyApp.submodules.league, options);
+	        this.changeModule(this.app.submodules.league, options);
 	    },
 	    editLeagueRoute: function (leagueId) {
 	        var options = { leagueId: leagueId };
-	        this.changeModule(MyApp.submodules.league, options);
+	        this.changeModule(this.app.submodules.league, options);
 	    },
 	    tournamentInfoRoute: function (tournamentId) {
 	        var options = { tournamentId: tournamentId };
-	        this.changeModule(MyApp.submodules.tournamentsInfo, options);
+	        this.changeModule(this.app.submodules.tournamentsInfo, options);
 	    },
 	    leagueInfoRoute: function (leagueId) {
 	        var options = { leagueId: leagueId };
-	        this.changeModule(MyApp.submodules.leagueInfo, options);
+	        this.changeModule(this.app.submodules.leagueInfo, options);
 	    },
 	    tableRoute: function (leagueId) {
 	        var options = { leagueId: leagueId };
-	        this.changeModule(MyApp.submodules.teamList, options);
+	        this.changeModule(this.app.submodules.teamList, options);
 	    },
 	    newTeamRoute: function (leagueId) {
 	        var options = { leagueId: leagueId };
-	        this.changeModule(MyApp.submodules.team, options);
+	        this.changeModule(this.app.submodules.team, options);
 	    },
 	    editTeamRoute: function (leagueId, teamId) {
 	        var options = { leagueId: leagueId, teamId: teamId };
-	        this.changeModule(MyApp.submodules.team, options);
+	        this.changeModule(this.app.submodules.team, options);
 	    },
 	    infoTeamRoute: function (leagueId, teamId) {
 	        var options = { leagueId: leagueId, teamId: teamId };
-	        this.changeModule(MyApp.submodules.teamInfo, options);
+	        this.changeModule(this.app.submodules.teamInfo, options);
 	    },
 	    newGameRoute: function (leagueId) {
 	        var options = { leagueId: leagueId };
-	        this.changeModule(MyApp.submodules.game, options);
+	        this.changeModule(this.app.submodules.game, options);
 	    },
 	    gameInfoRoute: function (leagueId, gameId) {
 	        var options = { leagueId: leagueId, gameId: gameId };
-	        this.changeModule(MyApp.submodules.gameInfo, options);
+	        this.changeModule(this.app.submodules.gameInfo, options);
 	    },
 	    editGameRoute: function (leagueId, gameId) {
 	        var options = { leagueId: leagueId, gameId: gameId };
-	        this.changeModule(MyApp.submodules.game, options);
+	        this.changeModule(this.app.submodules.game, options);
 	    },
 	    changeModule: function (module, options) {
 	        if (this.workingModule)
@@ -12009,6 +12014,7 @@
 	    }
 	});
 
+	MyApp.module("header", headerModule);
 	module.exports = headerModule;
 
 /***/ },
@@ -12047,6 +12053,1635 @@
 
 	module.exports = headerView;
 
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var MyApp = __webpack_require__(1);
+	var SharedViews = __webpack_require__(11);
+	var Layouts = __webpack_require__(12);
+	var Views = __webpack_require__(13);
+	var Models = __webpack_require__(16);
+
+	var calendarModule = Backbone.Marionette.Module.extend({
+	    startWithParent: false,
+
+	    initialize: function(options, app, object) {
+	        var self = this;
+
+	        self.app = app;
+
+	        self.model = new Models.Calendar();
+	        self.events = new Models.Events();
+	        self.teams = new Backbone.Collection();
+	    },
+	    onSubmit: function() {
+	        var self = this;
+
+	        self.model.save(null, {
+	            success: function(model, response) {
+	                window.history.back();
+	            }
+	        });
+	    },
+	    onCancel: function() {
+	        window.history.back();
+	    },
+	    onStart: function(options) {
+	        var self = this;
+
+	        self.model.clear();
+	        self.events.reset();
+	        self.teams.reset();
+
+	        self.options = options;
+	        self.model.setLeagueId(self.options.leagueId);
+
+	        self.listenToOnce(self.model, 'sync', self._onStart);
+	        self.model.fetch();
+	    },
+	    _onStart: function() {
+	        var self = this;
+
+	        self.events.reset(self.model.get('events'));
+	        self.teams.reset(self.model.get('teams'));
+
+	        self.createViews();
+	        self.bindViews();
+
+	        self.app.mainRegion.show(self.layout);
+	    },
+	    createViews: function() {
+	        var self = this;
+
+	        self.layout = new Layouts.LayoutView();
+
+	        var viewOptions = {
+	            leagueId: self.options.leagueId,
+	            teams: self.teams,
+	            model: self.model,
+	            collection: self.events
+	        };
+	        self.calendarView = new Views.CalendarView(viewOptions);
+	        self.bottomView = new SharedViews.CancelView();
+	    },
+	    bindViews: function() {
+	        var self = this;
+
+	        self.listenTo(self.layout, 'show', function() {
+	            self.layout.center.show(self.calendarView);
+	            self.layout.down.show(self.bottomView);
+	        });
+
+	        self.listenTo(self.calendarView, 'submit', this.onSubmit);
+	        self.listenTo(self.bottomView, 'cancel', this.onCancel);
+	        self.listenTo(self.calendarView, 'event:add', this.addEvent);
+
+	    },
+	    addEvent: function () {
+	        var self = this;
+	        var event = new Event();
+	        event.setLeagueId(self.options.leagueId);
+
+	        event.save({}, {
+	            success: function () {
+	                self.events.add(event);
+	            }
+	        });
+	    },
+	    onStop: function (options) {
+	        var self = this;
+
+	        self.bottomView.destroy();
+	        self.calendarView.destroy();
+	        self.layout.destroy();
+	    }
+	});
+
+	MyApp.module("calendar", calendarModule);
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	var CancelView = Backbone.Marionette.ItemView.extend({
+	    template: "#cancel",
+	    ui: {
+	        'cancel': '.cancel'
+	    },
+	    triggers: {
+	        'click @ui.cancel': 'cancel'
+	    }
+	});
+
+
+	var EmptyListView = Backbone.Marionette.ItemView.extend({
+	    tagName: 'tr',
+	    template: "#empty-list-view"
+	});
+
+	var SaveView = Backbone.Marionette.ItemView.extend({
+	    template: "#save",
+	    ui: {
+	        'save': '.save',
+	        'cancel': '.cancel'
+
+	    },
+	    triggers: {
+	        'click @ui.save': 'save',
+	        'click @ui.cancel': 'cancel'
+	    }
+	 });
+
+	 module.exports = {
+	     SaveView: SaveView,
+	     EmptyListView: EmptyListView,
+	     CancelView: CancelView
+	 }
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	var LayoutView = Backbone.Marionette.LayoutView.extend({
+	    template: "#layout",
+	    regions: {
+	        up: "#up-region",
+	        center: "#center-region",
+	        down: "#down-region"
+	    }
+	});
+
+	var SplittedLayout = Backbone.Marionette.LayoutView.extend({
+	    template: "#splitted-layout",
+	    regions: {
+	        up: "#up-region",
+	        left: "#left-region",
+	        right: "#right-region",
+	        down: "#down-region"
+	    }
+	});
+
+	module.exports = {
+	    LayoutView: LayoutView,
+	    SplittedLayout: SplittedLayout
+	}
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($, _) {var MyApp = __webpack_require__(1);
+	var Views = __webpack_require__(11);
+	__webpack_require__(14);
+
+	var CalendarListItemView = Backbone.Marionette.ItemView.extend({
+	    tagName: 'tr',
+	    template: "#calendar-event",
+	    ui: {
+	        'deleteEvent': '.delete-event',
+	        'addEventGame': '.add-event-game',
+	        'deleteEventGame': '.delete-event-game',
+	        'homeTeamChange': '.home-team-change',
+	        'guestTeamChange': '.guest-team-change',
+	        'nameTeam': '.name-event',
+	        'startDate': '.date',
+	        'startDateInput': '.start-date'
+	    },
+	    events: {
+	        'click @ui.deleteEvent': 'deleteEvent',
+	        'click @ui.addEventGame': 'addEventGame',
+	        'click @ui.deleteEventGame': 'deleteEventGame',
+	        'change @ui.homeTeamChange': 'homeTeamChange',
+	        'change @ui.guestTeamChange': 'guestTeamChange',
+	        'change @ui.startDateInput': 'timeChange',
+	        'change @ui.nameTeam': 'nameChange'
+	    },
+	    homeTeamChange: function (e) {
+	        var val = $(e.currentTarget).val();
+	        var eventGameId = $(e.currentTarget).data('id');
+
+	        this.model.changeHomeTeam(eventGameId, val);
+	    },
+	    guestTeamChange: function (e) {
+	        var val = $(e.currentTarget).val();
+	        var eventGameId = $(e.currentTarget).data('id');
+
+	        this.model.changeGuestTeam(eventGameId, val);
+	    },
+	    deleteEventGame: function (e) {
+	        var eventGameId = $(e.currentTarget).data('id');
+
+	        this.model.deleteGame(eventGameId);
+	    },
+	    addEventGame: function() {
+	        this.model.createGame();
+	    },
+	    deleteEvent: function () {
+	        this.model.destroy();
+	    },
+	    nameChange: function(e) {
+	        var val = this.ui.nameTeam.val();
+
+	        this.model.set('name', val);
+	        this.model.save();
+	    },
+	    onRender: function () {
+	        var self = this;
+
+	        var startDate = self.model.get('startDate');
+	        var startJsDate = new Date(startDate);
+
+	        $(this.ui.startDate).datetimepicker({
+	            startDate: startDate,
+	            onChangeDateTime: function(dp, $input) {
+	                self.model.set('startDate', $input.val());
+	                $('input', self.ui.startDate).val($input.val().toLocaleDateString());
+	            }
+	        });
+
+	        $('input', self.ui.startDate).val(startJsDate.toLocaleDateString());
+	    },
+	    setOptions: function(options) {
+	        this.options.teams = options.teams;
+	        this.options.leagueId = options.leagueId;
+	        this.model.setLeagueId(options.leagueId);
+	    },
+	    serializeData: function () {
+	        var self = this;
+	        var model = this.model.toJSON();
+	        
+	        _.each(model.games, function (obj) {
+	            var guestTeam = _.findWhere(self.options.teams.models, { id: obj.guestTeamId });
+	            var homeTeam = _.findWhere(self.options.teams.models, { id: obj.homeTeamId });
+	            obj.guestTeamName = guestTeam ? guestTeam.get('name') : '';
+	            obj.homeTeamName = homeTeam ? homeTeam.get('name') : '';
+	            obj.teams = self.options.teams.toJSON();
+	        });
+	        
+	        model.isEditor = MyApp.Settings.isEditor(this.options.leagueId);
+
+	        if (model.isEditor)
+	            return model;
+	        
+	        if (model.startDate) {
+	            var date = new Date(model.startDate);
+	            model.startDate = date.toLocaleDateString();
+	        }
+
+	        return model;
+	    },
+	    modelEvents: {
+	        'change:games': 'render'
+	    }
+	});
+
+	var CalendarView = Backbone.Marionette.CompositeView.extend({
+	    template: "#calendar",    
+	    childViewContainer: "tbody",
+	    childView: CalendarListItemView,
+	    emptyView: Views.EmptyListView,
+	    ui: {
+	        'addEvent': '.add-event'
+	    },
+	    events: {
+	        'click @ui.addEvent': 'addEvent',
+	        
+	    },
+	    triggers: {
+	        'click @ui.submit': 'submit',
+	        'click @ui.back': 'back'
+	    },
+	    onBeforeAddChild: function (childView) {
+	        childView.setOptions(this.options);
+	    },
+	    addEvent: function() {
+	        this.trigger('event:add');
+	    },
+	    
+	    onShow: function () {
+	    },
+	    onRender: function () {
+	    },
+	    initialize: function (options) {
+	        this.options = options;
+	    },
+	    serializeData: function() {
+	        var model = this.model.toJSON();
+	        console.log('[CalendarView] ', model);
+	        model.showAddEvent = MyApp.Settings.isEditor(this.options.leagueId);
+
+	        return model;
+	    }
+	});
+
+	module.exports = { CalendarView: CalendarView }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(6)))
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var DateFormatter;!function(){"use strict";var e,t,a,r,n,o;n=864e5,o=3600,e=function(e,t){return"string"==typeof e&&"string"==typeof t&&e.toLowerCase()===t.toLowerCase()},t=function(e,a,r){var n=r||"0",o=e.toString();return o.length<a?t(n+o,a):o},a=function(e){var t,r;for(e=e||{},t=1;t<arguments.length;t++)if(r=arguments[t])for(var n in r)r.hasOwnProperty(n)&&("object"==typeof r[n]?a(e[n],r[n]):e[n]=r[n]);return e},r={dateSettings:{days:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],daysShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],months:["January","February","March","April","May","June","July","August","September","October","November","December"],monthsShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],meridiem:["AM","PM"],ordinal:function(e){var t=e%10,a={1:"st",2:"nd",3:"rd"};return 1!==Math.floor(e%100/10)&&a[t]?a[t]:"th"}},separators:/[ \-+\/\.T:@]/g,validParts:/[dDjlNSwzWFmMntLoYyaABgGhHisueTIOPZcrU]/g,intParts:/[djwNzmnyYhHgGis]/g,tzParts:/\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,tzClip:/[^-+\dA-Z]/g},DateFormatter=function(e){var t=this,n=a(r,e);t.dateSettings=n.dateSettings,t.separators=n.separators,t.validParts=n.validParts,t.intParts=n.intParts,t.tzParts=n.tzParts,t.tzClip=n.tzClip},DateFormatter.prototype={constructor:DateFormatter,parseDate:function(t,a){var r,n,o,i,s,d,u,l,f,c,m=this,h=!1,g=!1,p=m.dateSettings,y={date:null,year:null,month:null,day:null,hour:0,min:0,sec:0};if(!t)return void 0;if(t instanceof Date)return t;if("number"==typeof t)return new Date(t);if("U"===a)return o=parseInt(t),o?new Date(1e3*o):t;if("string"!=typeof t)return"";if(r=a.match(m.validParts),!r||0===r.length)throw new Error("Invalid date format definition.");for(n=t.replace(m.separators,"\x00").split("\x00"),o=0;o<n.length;o++)switch(i=n[o],s=parseInt(i),r[o]){case"y":case"Y":f=i.length,2===f?y.year=parseInt((70>s?"20":"19")+i):4===f&&(y.year=s),h=!0;break;case"m":case"n":case"M":case"F":isNaN(i)?(d=p.monthsShort.indexOf(i),d>-1&&(y.month=d+1),d=p.months.indexOf(i),d>-1&&(y.month=d+1)):s>=1&&12>=s&&(y.month=s),h=!0;break;case"d":case"j":s>=1&&31>=s&&(y.day=s),h=!0;break;case"g":case"h":u=r.indexOf("a")>-1?r.indexOf("a"):r.indexOf("A")>-1?r.indexOf("A"):-1,c=n[u],u>-1?(l=e(c,p.meridiem[0])?0:e(c,p.meridiem[1])?12:-1,s>=1&&12>=s&&l>-1?y.hour=s+l-1:s>=0&&23>=s&&(y.hour=s)):s>=0&&23>=s&&(y.hour=s),g=!0;break;case"G":case"H":s>=0&&23>=s&&(y.hour=s),g=!0;break;case"i":s>=0&&59>=s&&(y.min=s),g=!0;break;case"s":s>=0&&59>=s&&(y.sec=s),g=!0}if(h===!0&&y.year&&y.month&&y.day)y.date=new Date(y.year,y.month-1,y.day,y.hour,y.min,y.sec,0);else{if(g!==!0)return!1;y.date=new Date(0,0,0,y.hour,y.min,y.sec,0)}return y.date},guessDate:function(e,t){if("string"!=typeof e)return e;var a,r,n,o,i=this,s=e.replace(i.separators,"\x00").split("\x00"),d=/^[djmn]/g,u=t.match(i.validParts),l=new Date,f=0;if(!d.test(u[0]))return e;for(r=0;r<s.length;r++){switch(f=2,n=s[r],o=parseInt(n.substr(0,2)),r){case 0:"m"===u[0]||"n"===u[0]?l.setMonth(o-1):l.setDate(o);break;case 1:"m"===u[0]||"n"===u[0]?l.setDate(o):l.setMonth(o-1);break;case 2:a=l.getFullYear(),n.length<4?(l.setFullYear(parseInt(a.toString().substr(0,4-n.length)+n)),f=n.length):(l.setFullYear=parseInt(n.substr(0,4)),f=4);break;case 3:l.setHours(o);break;case 4:l.setMinutes(o);break;case 5:l.setSeconds(o)}n.substr(f).length>0&&s.splice(r+1,0,n.substr(f))}return l},parseFormat:function(e,a){var r,i=this,s=i.dateSettings,d=/\\?(.?)/gi,u=function(e,t){return r[e]?r[e]():t};return r={d:function(){return t(r.j(),2)},D:function(){return s.daysShort[r.w()]},j:function(){return a.getDate()},l:function(){return s.days[r.w()]},N:function(){return r.w()||7},w:function(){return a.getDay()},z:function(){var e=new Date(r.Y(),r.n()-1,r.j()),t=new Date(r.Y(),0,1);return Math.round((e-t)/n)},W:function(){var e=new Date(r.Y(),r.n()-1,r.j()-r.N()+3),a=new Date(e.getFullYear(),0,4);return t(1+Math.round((e-a)/n/7),2)},F:function(){return s.months[a.getMonth()]},m:function(){return t(r.n(),2)},M:function(){return s.monthsShort[a.getMonth()]},n:function(){return a.getMonth()+1},t:function(){return new Date(r.Y(),r.n(),0).getDate()},L:function(){var e=r.Y();return e%4===0&&e%100!==0||e%400===0?1:0},o:function(){var e=r.n(),t=r.W(),a=r.Y();return a+(12===e&&9>t?1:1===e&&t>9?-1:0)},Y:function(){return a.getFullYear()},y:function(){return r.Y().toString().slice(-2)},a:function(){return r.A().toLowerCase()},A:function(){var e=r.G()<12?0:1;return s.meridiem[e]},B:function(){var e=a.getUTCHours()*o,r=60*a.getUTCMinutes(),n=a.getUTCSeconds();return t(Math.floor((e+r+n+o)/86.4)%1e3,3)},g:function(){return r.G()%12||12},G:function(){return a.getHours()},h:function(){return t(r.g(),2)},H:function(){return t(r.G(),2)},i:function(){return t(a.getMinutes(),2)},s:function(){return t(a.getSeconds(),2)},u:function(){return t(1e3*a.getMilliseconds(),6)},e:function(){var e=/\((.*)\)/.exec(String(a))[1];return e||"Coordinated Universal Time"},T:function(){var e=(String(a).match(i.tzParts)||[""]).pop().replace(i.tzClip,"");return e||"UTC"},I:function(){var e=new Date(r.Y(),0),t=Date.UTC(r.Y(),0),a=new Date(r.Y(),6),n=Date.UTC(r.Y(),6);return e-t!==a-n?1:0},O:function(){var e=a.getTimezoneOffset(),r=Math.abs(e);return(e>0?"-":"+")+t(100*Math.floor(r/60)+r%60,4)},P:function(){var e=r.O();return e.substr(0,3)+":"+e.substr(3,2)},Z:function(){return 60*-a.getTimezoneOffset()},c:function(){return"Y-m-d\\TH:i:sP".replace(d,u)},r:function(){return"D, d M Y H:i:s O".replace(d,u)},U:function(){return a.getTime()/1e3||0}},u(e,e)},formatDate:function(e,t){var a,r,n,o,i,s=this,d="";if("string"==typeof e&&(e=s.parseDate(e,t),e===!1))return!1;if(e instanceof Date){for(n=t.length,a=0;n>a;a++)i=t.charAt(a),"S"!==i&&(o=s.parseFormat(i,e),a!==n-1&&s.intParts.test(i)&&"S"===t.charAt(a+1)&&(r=parseInt(o),o+=s.dateSettings.ordinal(r)),d+=o);return d}return""}}}(),function(e){ true?!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2),__webpack_require__(15)], __WEBPACK_AMD_DEFINE_FACTORY__ = (e), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)):"object"==typeof exports?module.exports=e:e(jQuery)}(function(e){"use strict";function t(e,t,a){this.date=e,this.desc=t,this.style=a}var a={i18n:{ar:{months:["كانون الثاني","شباط","آذار","نيسان","مايو","حزيران","تموز","آب","أيلول","تشرين الأول","تشرين الثاني","كانون الأول"],dayOfWeekShort:["ن","ث","ع","خ","ج","س","ح"],dayOfWeek:["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت","الأحد"]},ro:{months:["Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie","Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"],dayOfWeekShort:["Du","Lu","Ma","Mi","Jo","Vi","Sâ"],dayOfWeek:["Duminică","Luni","Marţi","Miercuri","Joi","Vineri","Sâmbătă"]},id:{months:["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"],dayOfWeekShort:["Min","Sen","Sel","Rab","Kam","Jum","Sab"],dayOfWeek:["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"]},is:{months:["Janúar","Febrúar","Mars","Apríl","Maí","Júní","Júlí","Ágúst","September","Október","Nóvember","Desember"],dayOfWeekShort:["Sun","Mán","Þrið","Mið","Fim","Fös","Lau"],dayOfWeek:["Sunnudagur","Mánudagur","Þriðjudagur","Miðvikudagur","Fimmtudagur","Föstudagur","Laugardagur"]},bg:{months:["Януари","Февруари","Март","Април","Май","Юни","Юли","Август","Септември","Октомври","Ноември","Декември"],dayOfWeekShort:["Нд","Пн","Вт","Ср","Чт","Пт","Сб"],dayOfWeek:["Неделя","Понеделник","Вторник","Сряда","Четвъртък","Петък","Събота"]},fa:{months:["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"],dayOfWeekShort:["یکشنبه","دوشنبه","سه شنبه","چهارشنبه","پنجشنبه","جمعه","شنبه"],dayOfWeek:["یک‌شنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنج‌شنبه","جمعه","شنبه","یک‌شنبه"]},ru:{months:["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],dayOfWeekShort:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],dayOfWeek:["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]},uk:{months:["Січень","Лютий","Березень","Квітень","Травень","Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"],dayOfWeekShort:["Ндл","Пнд","Втр","Срд","Чтв","Птн","Сбт"],dayOfWeek:["Неділя","Понеділок","Вівторок","Середа","Четвер","П'ятниця","Субота"]},en:{months:["January","February","March","April","May","June","July","August","September","October","November","December"],dayOfWeekShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],dayOfWeek:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]},el:{months:["Ιανουάριος","Φεβρουάριος","Μάρτιος","Απρίλιος","Μάιος","Ιούνιος","Ιούλιος","Αύγουστος","Σεπτέμβριος","Οκτώβριος","Νοέμβριος","Δεκέμβριος"],dayOfWeekShort:["Κυρ","Δευ","Τρι","Τετ","Πεμ","Παρ","Σαβ"],dayOfWeek:["Κυριακή","Δευτέρα","Τρίτη","Τετάρτη","Πέμπτη","Παρασκευή","Σάββατο"]},de:{months:["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],dayOfWeekShort:["So","Mo","Di","Mi","Do","Fr","Sa"],dayOfWeek:["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"]},nl:{months:["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],dayOfWeekShort:["zo","ma","di","wo","do","vr","za"],dayOfWeek:["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"]},tr:{months:["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"],dayOfWeekShort:["Paz","Pts","Sal","Çar","Per","Cum","Cts"],dayOfWeek:["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"]},fr:{months:["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],dayOfWeekShort:["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"],dayOfWeek:["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"]},es:{months:["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],dayOfWeekShort:["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"],dayOfWeek:["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"]},th:{months:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],dayOfWeekShort:["อา.","จ.","อ.","พ.","พฤ.","ศ.","ส."],dayOfWeek:["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัส","ศุกร์","เสาร์","อาทิตย์"]},pl:{months:["styczeń","luty","marzec","kwiecień","maj","czerwiec","lipiec","sierpień","wrzesień","październik","listopad","grudzień"],dayOfWeekShort:["nd","pn","wt","śr","cz","pt","sb"],dayOfWeek:["niedziela","poniedziałek","wtorek","środa","czwartek","piątek","sobota"]},pt:{months:["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"],dayOfWeekShort:["Dom","Seg","Ter","Qua","Qui","Sex","Sab"],dayOfWeek:["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"]},ch:{months:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],dayOfWeekShort:["日","一","二","三","四","五","六"]},se:{months:["Januari","Februari","Mars","April","Maj","Juni","Juli","Augusti","September","Oktober","November","December"],dayOfWeekShort:["Sön","Mån","Tis","Ons","Tor","Fre","Lör"]},kr:{months:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],dayOfWeekShort:["일","월","화","수","목","금","토"],dayOfWeek:["일요일","월요일","화요일","수요일","목요일","금요일","토요일"]},it:{months:["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"],dayOfWeekShort:["Dom","Lun","Mar","Mer","Gio","Ven","Sab"],dayOfWeek:["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"]},da:{months:["January","Februar","Marts","April","Maj","Juni","July","August","September","Oktober","November","December"],dayOfWeekShort:["Søn","Man","Tir","Ons","Tor","Fre","Lør"],dayOfWeek:["søndag","mandag","tirsdag","onsdag","torsdag","fredag","lørdag"]},no:{months:["Januar","Februar","Mars","April","Mai","Juni","Juli","August","September","Oktober","November","Desember"],dayOfWeekShort:["Søn","Man","Tir","Ons","Tor","Fre","Lør"],dayOfWeek:["Søndag","Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag"]},ja:{months:["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],dayOfWeekShort:["日","月","火","水","木","金","土"],dayOfWeek:["日曜","月曜","火曜","水曜","木曜","金曜","土曜"]},vi:{months:["Tháng 1","Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"],dayOfWeekShort:["CN","T2","T3","T4","T5","T6","T7"],dayOfWeek:["Chủ nhật","Thứ hai","Thứ ba","Thứ tư","Thứ năm","Thứ sáu","Thứ bảy"]},sl:{months:["Januar","Februar","Marec","April","Maj","Junij","Julij","Avgust","September","Oktober","November","December"],dayOfWeekShort:["Ned","Pon","Tor","Sre","Čet","Pet","Sob"],dayOfWeek:["Nedelja","Ponedeljek","Torek","Sreda","Četrtek","Petek","Sobota"]},cs:{months:["Leden","Únor","Březen","Duben","Květen","Červen","Červenec","Srpen","Září","Říjen","Listopad","Prosinec"],dayOfWeekShort:["Ne","Po","Út","St","Čt","Pá","So"]},hu:{months:["Január","Február","Március","Április","Május","Június","Július","Augusztus","Szeptember","Október","November","December"],dayOfWeekShort:["Va","Hé","Ke","Sze","Cs","Pé","Szo"],dayOfWeek:["vasárnap","hétfő","kedd","szerda","csütörtök","péntek","szombat"]},az:{months:["Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avqust","Sentyabr","Oktyabr","Noyabr","Dekabr"],dayOfWeekShort:["B","Be","Ça","Ç","Ca","C","Ş"],dayOfWeek:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"]},bs:{months:["Januar","Februar","Mart","April","Maj","Jun","Jul","Avgust","Septembar","Oktobar","Novembar","Decembar"],dayOfWeekShort:["Ned","Pon","Uto","Sri","Čet","Pet","Sub"],dayOfWeek:["Nedjelja","Ponedjeljak","Utorak","Srijeda","Četvrtak","Petak","Subota"]},ca:{months:["Gener","Febrer","Març","Abril","Maig","Juny","Juliol","Agost","Setembre","Octubre","Novembre","Desembre"],dayOfWeekShort:["Dg","Dl","Dt","Dc","Dj","Dv","Ds"],dayOfWeek:["Diumenge","Dilluns","Dimarts","Dimecres","Dijous","Divendres","Dissabte"]},"en-GB":{months:["January","February","March","April","May","June","July","August","September","October","November","December"],dayOfWeekShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],dayOfWeek:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]},et:{months:["Jaanuar","Veebruar","Märts","Aprill","Mai","Juuni","Juuli","August","September","Oktoober","November","Detsember"],dayOfWeekShort:["P","E","T","K","N","R","L"],dayOfWeek:["Pühapäev","Esmaspäev","Teisipäev","Kolmapäev","Neljapäev","Reede","Laupäev"]},eu:{months:["Urtarrila","Otsaila","Martxoa","Apirila","Maiatza","Ekaina","Uztaila","Abuztua","Iraila","Urria","Azaroa","Abendua"],dayOfWeekShort:["Ig.","Al.","Ar.","Az.","Og.","Or.","La."],dayOfWeek:["Igandea","Astelehena","Asteartea","Asteazkena","Osteguna","Ostirala","Larunbata"]},fi:{months:["Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"],dayOfWeekShort:["Su","Ma","Ti","Ke","To","Pe","La"],dayOfWeek:["sunnuntai","maanantai","tiistai","keskiviikko","torstai","perjantai","lauantai"]},gl:{months:["Xan","Feb","Maz","Abr","Mai","Xun","Xul","Ago","Set","Out","Nov","Dec"],dayOfWeekShort:["Dom","Lun","Mar","Mer","Xov","Ven","Sab"],dayOfWeek:["Domingo","Luns","Martes","Mércores","Xoves","Venres","Sábado"]},hr:{months:["Siječanj","Veljača","Ožujak","Travanj","Svibanj","Lipanj","Srpanj","Kolovoz","Rujan","Listopad","Studeni","Prosinac"],dayOfWeekShort:["Ned","Pon","Uto","Sri","Čet","Pet","Sub"],dayOfWeek:["Nedjelja","Ponedjeljak","Utorak","Srijeda","Četvrtak","Petak","Subota"]},ko:{months:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],dayOfWeekShort:["일","월","화","수","목","금","토"],dayOfWeek:["일요일","월요일","화요일","수요일","목요일","금요일","토요일"]},lt:{months:["Sausio","Vasario","Kovo","Balandžio","Gegužės","Birželio","Liepos","Rugpjūčio","Rugsėjo","Spalio","Lapkričio","Gruodžio"],dayOfWeekShort:["Sek","Pir","Ant","Tre","Ket","Pen","Šeš"],dayOfWeek:["Sekmadienis","Pirmadienis","Antradienis","Trečiadienis","Ketvirtadienis","Penktadienis","Šeštadienis"]},lv:{months:["Janvāris","Februāris","Marts","Aprīlis ","Maijs","Jūnijs","Jūlijs","Augusts","Septembris","Oktobris","Novembris","Decembris"],dayOfWeekShort:["Sv","Pr","Ot","Tr","Ct","Pk","St"],dayOfWeek:["Svētdiena","Pirmdiena","Otrdiena","Trešdiena","Ceturtdiena","Piektdiena","Sestdiena"]},mk:{months:["јануари","февруари","март","април","мај","јуни","јули","август","септември","октомври","ноември","декември"],dayOfWeekShort:["нед","пон","вто","сре","чет","пет","саб"],dayOfWeek:["Недела","Понеделник","Вторник","Среда","Четврток","Петок","Сабота"]},mn:{months:["1-р сар","2-р сар","3-р сар","4-р сар","5-р сар","6-р сар","7-р сар","8-р сар","9-р сар","10-р сар","11-р сар","12-р сар"],dayOfWeekShort:["Дав","Мяг","Лха","Пүр","Бсн","Бям","Ням"],dayOfWeek:["Даваа","Мягмар","Лхагва","Пүрэв","Баасан","Бямба","Ням"]},"pt-BR":{months:["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"],dayOfWeekShort:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],dayOfWeek:["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"]},sk:{months:["Január","Február","Marec","Apríl","Máj","Jún","Júl","August","September","Október","November","December"],dayOfWeekShort:["Ne","Po","Ut","St","Št","Pi","So"],dayOfWeek:["Nedeľa","Pondelok","Utorok","Streda","Štvrtok","Piatok","Sobota"]},sq:{months:["Janar","Shkurt","Mars","Prill","Maj","Qershor","Korrik","Gusht","Shtator","Tetor","Nëntor","Dhjetor"],dayOfWeekShort:["Die","Hën","Mar","Mër","Enj","Pre","Shtu"],dayOfWeek:["E Diel","E Hënë","E Martē","E Mërkurë","E Enjte","E Premte","E Shtunë"]},"sr-YU":{months:["Januar","Februar","Mart","April","Maj","Jun","Jul","Avgust","Septembar","Oktobar","Novembar","Decembar"],dayOfWeekShort:["Ned","Pon","Uto","Sre","čet","Pet","Sub"],dayOfWeek:["Nedelja","Ponedeljak","Utorak","Sreda","Četvrtak","Petak","Subota"]},sr:{months:["јануар","фебруар","март","април","мај","јун","јул","август","септембар","октобар","новембар","децембар"],dayOfWeekShort:["нед","пон","уто","сре","чет","пет","суб"],dayOfWeek:["Недеља","Понедељак","Уторак","Среда","Четвртак","Петак","Субота"]},sv:{months:["Januari","Februari","Mars","April","Maj","Juni","Juli","Augusti","September","Oktober","November","December"],dayOfWeekShort:["Sön","Mån","Tis","Ons","Tor","Fre","Lör"],dayOfWeek:["Söndag","Måndag","Tisdag","Onsdag","Torsdag","Fredag","Lördag"]},"zh-TW":{months:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],dayOfWeekShort:["日","一","二","三","四","五","六"],dayOfWeek:["星期日","星期一","星期二","星期三","星期四","星期五","星期六"]},zh:{months:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],dayOfWeekShort:["日","一","二","三","四","五","六"],dayOfWeek:["星期日","星期一","星期二","星期三","星期四","星期五","星期六"]},he:{months:["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"],dayOfWeekShort:["א'","ב'","ג'","ד'","ה'","ו'","שבת"],dayOfWeek:["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת","ראשון"]},hy:{months:["Հունվար","Փետրվար","Մարտ","Ապրիլ","Մայիս","Հունիս","Հուլիս","Օգոստոս","Սեպտեմբեր","Հոկտեմբեր","Նոյեմբեր","Դեկտեմբեր"],dayOfWeekShort:["Կի","Երկ","Երք","Չոր","Հնգ","Ուրբ","Շբթ"],dayOfWeek:["Կիրակի","Երկուշաբթի","Երեքշաբթի","Չորեքշաբթի","Հինգշաբթի","Ուրբաթ","Շաբաթ"]},kg:{months:["Үчтүн айы","Бирдин айы","Жалган Куран","Чын Куран","Бугу","Кулжа","Теке","Баш Оона","Аяк Оона","Тогуздун айы","Жетинин айы","Бештин айы"],dayOfWeekShort:["Жек","Дүй","Шей","Шар","Бей","Жум","Ише"],dayOfWeek:["Жекшемб","Дүйшөмб","Шейшемб","Шаршемб","Бейшемби","Жума","Ишенб"]},rm:{months:["Schaner","Favrer","Mars","Avrigl","Matg","Zercladur","Fanadur","Avust","Settember","October","November","December"],dayOfWeekShort:["Du","Gli","Ma","Me","Gie","Ve","So"],dayOfWeek:["Dumengia","Glindesdi","Mardi","Mesemna","Gievgia","Venderdi","Sonda"]},ka:{months:["იანვარი","თებერვალი","მარტი","აპრილი","მაისი","ივნისი","ივლისი","აგვისტო","სექტემბერი","ოქტომბერი","ნოემბერი","დეკემბერი"],dayOfWeekShort:["კვ","ორშ","სამშ","ოთხ","ხუთ","პარ","შაბ"],dayOfWeek:["კვირა","ორშაბათი","სამშაბათი","ოთხშაბათი","ხუთშაბათი","პარასკევი","შაბათი"]}},value:"",rtl:!1,format:"Y/m/d H:i",formatTime:"H:i",formatDate:"Y/m/d",startDate:!1,step:60,monthChangeSpinner:!0,closeOnDateSelect:!1,closeOnTimeSelect:!0,closeOnWithoutClick:!0,closeOnInputClick:!0,timepicker:!0,datepicker:!0,weeks:!1,defaultTime:!1,defaultDate:!1,minDate:!1,maxDate:!1,minTime:!1,maxTime:!1,disabledMinTime:!1,disabledMaxTime:!1,allowTimes:[],opened:!1,initTime:!0,inline:!1,theme:"",onSelectDate:function(){},onSelectTime:function(){},onChangeMonth:function(){},onGetWeekOfYear:function(){},onChangeYear:function(){},onChangeDateTime:function(){},onShow:function(){},onClose:function(){},onGenerate:function(){},withoutCopyright:!0,inverseButton:!1,hours12:!1,next:"xdsoft_next",prev:"xdsoft_prev",dayOfWeekStart:0,parentID:"body",timeHeightInTimePicker:25,timepickerScrollbar:!0,todayButton:!0,prevButton:!0,nextButton:!0,defaultSelect:!0,scrollMonth:!0,scrollTime:!0,scrollInput:!0,lazyInit:!1,mask:!1,validateOnBlur:!0,allowBlank:!0,yearStart:1950,yearEnd:2050,monthStart:0,monthEnd:11,style:"",id:"",fixed:!1,roundTime:"round",className:"",weekends:[],highlightedDates:[],highlightedPeriods:[],allowDates:[],allowDateRe:null,disabledDates:[],disabledWeekDays:[],yearOffset:0,beforeShowDay:null,enterLikeTab:!0,showApplyButton:!1},r=null,n="en",o="en",i={meridiem:["AM","PM"]},s=function(){var t=a.i18n[o],n={days:t.dayOfWeek,daysShort:t.dayOfWeekShort,months:t.months,monthsShort:e.map(t.months,function(e){return e.substring(0,3)})};r=new DateFormatter({dateSettings:e.extend({},i,n)})};e.datetimepicker={setLocale:function(e){var t=a.i18n[e]?e:n;o!=t&&(o=t,s())},setDateFormatter:function(e){r=e},RFC_2822:"D, d M Y H:i:s O",ATOM:"Y-m-dTH:i:sP",ISO_8601:"Y-m-dTH:i:sO",RFC_822:"D, d M y H:i:s O",RFC_850:"l, d-M-y H:i:s T",RFC_1036:"D, d M y H:i:s O",RFC_1123:"D, d M Y H:i:s O",RSS:"D, d M Y H:i:s O",W3C:"Y-m-dTH:i:sP"},s(),window.getComputedStyle||(window.getComputedStyle=function(e){return this.el=e,this.getPropertyValue=function(t){var a=/(\-([a-z]){1})/g;return"float"===t&&(t="styleFloat"),a.test(t)&&(t=t.replace(a,function(e,t,a){return a.toUpperCase()})),e.currentStyle[t]||null},this}),Array.prototype.indexOf||(Array.prototype.indexOf=function(e,t){var a,r;for(a=t||0,r=this.length;r>a;a+=1)if(this[a]===e)return a;return-1}),Date.prototype.countDaysInMonth=function(){return new Date(this.getFullYear(),this.getMonth()+1,0).getDate()},e.fn.xdsoftScroller=function(t){return this.each(function(){var a,r,n,o,i,s=e(this),d=function(e){var t,a={x:0,y:0};return"touchstart"===e.type||"touchmove"===e.type||"touchend"===e.type||"touchcancel"===e.type?(t=e.originalEvent.touches[0]||e.originalEvent.changedTouches[0],a.x=t.clientX,a.y=t.clientY):("mousedown"===e.type||"mouseup"===e.type||"mousemove"===e.type||"mouseover"===e.type||"mouseout"===e.type||"mouseenter"===e.type||"mouseleave"===e.type)&&(a.x=e.clientX,a.y=e.clientY),a},u=100,l=!1,f=0,c=0,m=0,h=!1,g=0,p=function(){};return"hide"===t?void s.find(".xdsoft_scrollbar").hide():(e(this).hasClass("xdsoft_scroller_box")||(a=s.children().eq(0),r=s[0].clientHeight,n=a[0].offsetHeight,o=e('<div class="xdsoft_scrollbar"></div>'),i=e('<div class="xdsoft_scroller"></div>'),o.append(i),s.addClass("xdsoft_scroller_box").append(o),p=function(e){var t=d(e).y-f+g;0>t&&(t=0),t+i[0].offsetHeight>m&&(t=m-i[0].offsetHeight),s.trigger("scroll_element.xdsoft_scroller",[u?t/u:0])},i.on("touchstart.xdsoft_scroller mousedown.xdsoft_scroller",function(a){r||s.trigger("resize_scroll.xdsoft_scroller",[t]),f=d(a).y,g=parseInt(i.css("margin-top"),10),m=o[0].offsetHeight,"mousedown"===a.type||"touchstart"===a.type?(document&&e(document.body).addClass("xdsoft_noselect"),e([document.body,window]).on("touchend mouseup.xdsoft_scroller",function n(){e([document.body,window]).off("touchend mouseup.xdsoft_scroller",n).off("mousemove.xdsoft_scroller",p).removeClass("xdsoft_noselect")}),e(document.body).on("mousemove.xdsoft_scroller",p)):(h=!0,a.stopPropagation(),a.preventDefault())}).on("touchmove",function(e){h&&(e.preventDefault(),p(e))}).on("touchend touchcancel",function(){h=!1,g=0}),s.on("scroll_element.xdsoft_scroller",function(e,t){r||s.trigger("resize_scroll.xdsoft_scroller",[t,!0]),t=t>1?1:0>t||isNaN(t)?0:t,i.css("margin-top",u*t),setTimeout(function(){a.css("marginTop",-parseInt((a[0].offsetHeight-r)*t,10))},10)}).on("resize_scroll.xdsoft_scroller",function(e,t,d){var l,f;r=s[0].clientHeight,n=a[0].offsetHeight,l=r/n,f=l*o[0].offsetHeight,l>1?i.hide():(i.show(),i.css("height",parseInt(f>10?f:10,10)),u=o[0].offsetHeight-i[0].offsetHeight,d!==!0&&s.trigger("scroll_element.xdsoft_scroller",[t||Math.abs(parseInt(a.css("marginTop"),10))/(n-r)]))}),s.on("mousewheel",function(e){var t=Math.abs(parseInt(a.css("marginTop"),10));return t-=20*e.deltaY,0>t&&(t=0),s.trigger("scroll_element.xdsoft_scroller",[t/(n-r)]),e.stopPropagation(),!1}),s.on("touchstart",function(e){l=d(e),c=Math.abs(parseInt(a.css("marginTop"),10))}),s.on("touchmove",function(e){if(l){e.preventDefault();var t=d(e);s.trigger("scroll_element.xdsoft_scroller",[(c-(t.y-l.y))/(n-r)])}}),s.on("touchend touchcancel",function(){l=!1,c=0})),void s.trigger("resize_scroll.xdsoft_scroller",[t]))})},e.fn.datetimepicker=function(n,i){var s,d,u=this,l=48,f=57,c=96,m=105,h=17,g=46,p=13,y=27,v=8,b=37,D=38,k=39,x=40,T=9,S=116,w=65,O=67,M=86,_=90,W=89,F=!1,C=e.isPlainObject(n)||!n?e.extend(!0,{},a,n):e.extend(!0,{},a),P=0,A=function(e){e.on("open.xdsoft focusin.xdsoft mousedown.xdsoft touchstart",function t(){e.is(":disabled")||e.data("xdsoft_datetimepicker")||(clearTimeout(P),P=setTimeout(function(){e.data("xdsoft_datetimepicker")||s(e),e.off("open.xdsoft focusin.xdsoft mousedown.xdsoft touchstart",t).trigger("open.xdsoft")},100))})};return s=function(a){function i(){var e,t=!1;return C.startDate?t=j.strToDate(C.startDate):(t=C.value||(a&&a.val&&a.val()?a.val():""),t?t=j.strToDateTime(t):C.defaultDate&&(t=j.strToDateTime(C.defaultDate),C.defaultTime&&(e=j.strtotime(C.defaultTime),t.setHours(e.getHours()),t.setMinutes(e.getMinutes())))),t&&j.isValidDate(t)?J.data("changed",!0):t="",t||0}function s(t){var r=function(e,t){var a=e.replace(/([\[\]\/\{\}\(\)\-\.\+]{1})/g,"\\$1").replace(/_/g,"{digit+}").replace(/([0-9]{1})/g,"{digit$1}").replace(/\{digit([0-9]{1})\}/g,"[0-$1_]{1}").replace(/\{digit[\+]\}/g,"[0-9_]{1}");return new RegExp(a).test(t)},n=function(e){try{if(document.selection&&document.selection.createRange){var t=document.selection.createRange();return t.getBookmark().charCodeAt(2)-2}if(e.setSelectionRange)return e.selectionStart}catch(a){return 0}},o=function(e,t){if(e="string"==typeof e||e instanceof String?document.getElementById(e):e,!e)return!1;if(e.createTextRange){var a=e.createTextRange();return a.collapse(!0),a.moveEnd("character",t),a.moveStart("character",t),a.select(),!0}return e.setSelectionRange?(e.setSelectionRange(t,t),!0):!1};t.mask&&a.off("keydown.xdsoft"),t.mask===!0&&(t.mask="undefined"!=typeof moment?t.format.replace(/Y{4}/g,"9999").replace(/Y{2}/g,"99").replace(/M{2}/g,"19").replace(/D{2}/g,"39").replace(/H{2}/g,"29").replace(/m{2}/g,"59").replace(/s{2}/g,"59"):t.format.replace(/Y/g,"9999").replace(/F/g,"9999").replace(/m/g,"19").replace(/d/g,"39").replace(/H/g,"29").replace(/i/g,"59").replace(/s/g,"59")),"string"===e.type(t.mask)&&(r(t.mask,a.val())||(a.val(t.mask.replace(/[0-9]/g,"_")),o(a[0],0)),a.on("keydown.xdsoft",function(i){var s,d,u=this.value,C=i.which;if(C>=l&&f>=C||C>=c&&m>=C||C===v||C===g){for(s=n(this),d=C!==v&&C!==g?String.fromCharCode(C>=c&&m>=C?C-l:C):"_",C!==v&&C!==g||!s||(s-=1,d="_");/[^0-9_]/.test(t.mask.substr(s,1))&&s<t.mask.length&&s>0;)s+=C===v||C===g?-1:1;if(u=u.substr(0,s)+d+u.substr(s+1),""===e.trim(u))u=t.mask.replace(/[0-9]/g,"_");else if(s===t.mask.length)return i.preventDefault(),!1;for(s+=C===v||C===g?0:1;/[^0-9_]/.test(t.mask.substr(s,1))&&s<t.mask.length&&s>0;)s+=C===v||C===g?-1:1;r(t.mask,u)?(this.value=u,o(this,s)):""===e.trim(u)?this.value=t.mask.replace(/[0-9]/g,"_"):a.trigger("error_input.xdsoft")}else if(-1!==[w,O,M,_,W].indexOf(C)&&F||-1!==[y,D,x,b,k,S,h,T,p].indexOf(C))return!0;return i.preventDefault(),!1}))}var d,u,P,A,Y,j,H,J=e('<div class="xdsoft_datetimepicker xdsoft_noselect"></div>'),z=e('<div class="xdsoft_copyright"><a target="_blank" href="http://xdsoft.net/jqplugins/datetimepicker/">xdsoft.net</a></div>'),I=e('<div class="xdsoft_datepicker active"></div>'),N=e('<div class="xdsoft_mounthpicker"><button type="button" class="xdsoft_prev"></button><button type="button" class="xdsoft_today_button"></button><div class="xdsoft_label xdsoft_month"><span></span><i></i></div><div class="xdsoft_label xdsoft_year"><span></span><i></i></div><button type="button" class="xdsoft_next"></button></div>'),L=e('<div class="xdsoft_calendar"></div>'),E=e('<div class="xdsoft_timepicker active"><button type="button" class="xdsoft_prev"></button><div class="xdsoft_time_box"></div><button type="button" class="xdsoft_next"></button></div>'),R=E.find(".xdsoft_time_box").eq(0),B=e('<div class="xdsoft_time_variant"></div>'),V=e('<button type="button" class="xdsoft_save_selected blue-gradient-button">Save Selected</button>'),G=e('<div class="xdsoft_select xdsoft_monthselect"><div></div></div>'),U=e('<div class="xdsoft_select xdsoft_yearselect"><div></div></div>'),q=!1,X=0;C.id&&J.attr("id",C.id),C.style&&J.attr("style",C.style),C.weeks&&J.addClass("xdsoft_showweeks"),C.rtl&&J.addClass("xdsoft_rtl"),J.addClass("xdsoft_"+C.theme),J.addClass(C.className),N.find(".xdsoft_month span").after(G),N.find(".xdsoft_year span").after(U),N.find(".xdsoft_month,.xdsoft_year").on("touchstart mousedown.xdsoft",function(t){var a,r,n=e(this).find(".xdsoft_select").eq(0),o=0,i=0,s=n.is(":visible");for(N.find(".xdsoft_select").hide(),j.currentTime&&(o=j.currentTime[e(this).hasClass("xdsoft_month")?"getMonth":"getFullYear"]()),n[s?"hide":"show"](),a=n.find("div.xdsoft_option"),r=0;r<a.length&&a.eq(r).data("value")!==o;r+=1)i+=a[0].offsetHeight;return n.xdsoftScroller(i/(n.children()[0].offsetHeight-n[0].clientHeight)),t.stopPropagation(),!1}),N.find(".xdsoft_select").xdsoftScroller().on("touchstart mousedown.xdsoft",function(e){e.stopPropagation(),e.preventDefault()}).on("touchstart mousedown.xdsoft",".xdsoft_option",function(){(void 0===j.currentTime||null===j.currentTime)&&(j.currentTime=j.now());var t=j.currentTime.getFullYear();j&&j.currentTime&&j.currentTime[e(this).parent().parent().hasClass("xdsoft_monthselect")?"setMonth":"setFullYear"](e(this).data("value")),e(this).parent().parent().hide(),J.trigger("xchange.xdsoft"),C.onChangeMonth&&e.isFunction(C.onChangeMonth)&&C.onChangeMonth.call(J,j.currentTime,J.data("input")),t!==j.currentTime.getFullYear()&&e.isFunction(C.onChangeYear)&&C.onChangeYear.call(J,j.currentTime,J.data("input"))}),J.getValue=function(){return j.getCurrentTime()},J.setOptions=function(n){var o={};C=e.extend(!0,{},C,n),n.allowTimes&&e.isArray(n.allowTimes)&&n.allowTimes.length&&(C.allowTimes=e.extend(!0,[],n.allowTimes)),n.weekends&&e.isArray(n.weekends)&&n.weekends.length&&(C.weekends=e.extend(!0,[],n.weekends)),n.allowDates&&e.isArray(n.allowDates)&&n.allowDates.length&&(C.allowDates=e.extend(!0,[],n.allowDates)),n.allowDateRe&&"[object String]"===Object.prototype.toString.call(n.allowDateRe)&&(C.allowDateRe=new RegExp(n.allowDateRe)),n.highlightedDates&&e.isArray(n.highlightedDates)&&n.highlightedDates.length&&(e.each(n.highlightedDates,function(a,n){var i,s=e.map(n.split(","),e.trim),d=new t(r.parseDate(s[0],C.formatDate),s[1],s[2]),u=r.formatDate(d.date,C.formatDate);void 0!==o[u]?(i=o[u].desc,i&&i.length&&d.desc&&d.desc.length&&(o[u].desc=i+"\n"+d.desc)):o[u]=d}),C.highlightedDates=e.extend(!0,[],o)),n.highlightedPeriods&&e.isArray(n.highlightedPeriods)&&n.highlightedPeriods.length&&(o=e.extend(!0,[],C.highlightedDates),
+	e.each(n.highlightedPeriods,function(a,n){var i,s,d,u,l,f,c;if(e.isArray(n))i=n[0],s=n[1],d=n[2],c=n[3];else{var m=e.map(n.split(","),e.trim);i=r.parseDate(m[0],C.formatDate),s=r.parseDate(m[1],C.formatDate),d=m[2],c=m[3]}for(;s>=i;)u=new t(i,d,c),l=r.formatDate(i,C.formatDate),i.setDate(i.getDate()+1),void 0!==o[l]?(f=o[l].desc,f&&f.length&&u.desc&&u.desc.length&&(o[l].desc=f+"\n"+u.desc)):o[l]=u}),C.highlightedDates=e.extend(!0,[],o)),n.disabledDates&&e.isArray(n.disabledDates)&&n.disabledDates.length&&(C.disabledDates=e.extend(!0,[],n.disabledDates)),n.disabledWeekDays&&e.isArray(n.disabledWeekDays)&&n.disabledWeekDays.length&&(C.disabledWeekDays=e.extend(!0,[],n.disabledWeekDays)),!C.open&&!C.opened||C.inline||a.trigger("open.xdsoft"),C.inline&&(q=!0,J.addClass("xdsoft_inline"),a.after(J).hide()),C.inverseButton&&(C.next="xdsoft_prev",C.prev="xdsoft_next"),C.datepicker?I.addClass("active"):I.removeClass("active"),C.timepicker?E.addClass("active"):E.removeClass("active"),C.value&&(j.setCurrentTime(C.value),a&&a.val&&a.val(j.str)),C.dayOfWeekStart=isNaN(C.dayOfWeekStart)?0:parseInt(C.dayOfWeekStart,10)%7,C.timepickerScrollbar||R.xdsoftScroller("hide"),C.minDate&&/^[\+\-](.*)$/.test(C.minDate)&&(C.minDate=r.formatDate(j.strToDateTime(C.minDate),C.formatDate)),C.maxDate&&/^[\+\-](.*)$/.test(C.maxDate)&&(C.maxDate=r.formatDate(j.strToDateTime(C.maxDate),C.formatDate)),V.toggle(C.showApplyButton),N.find(".xdsoft_today_button").css("visibility",C.todayButton?"visible":"hidden"),N.find("."+C.prev).css("visibility",C.prevButton?"visible":"hidden"),N.find("."+C.next).css("visibility",C.nextButton?"visible":"hidden"),s(C),C.validateOnBlur&&a.off("blur.xdsoft").on("blur.xdsoft",function(){if(C.allowBlank&&(!e.trim(e(this).val()).length||"string"==typeof C.mask&&e.trim(e(this).val())===C.mask.replace(/[0-9]/g,"_")))e(this).val(null),J.data("xdsoft_datetime").empty();else{var t=r.parseDate(e(this).val(),C.format);if(t)e(this).val(r.formatDate(t,C.format));else{var a=+[e(this).val()[0],e(this).val()[1]].join(""),n=+[e(this).val()[2],e(this).val()[3]].join("");e(this).val(!C.datepicker&&C.timepicker&&a>=0&&24>a&&n>=0&&60>n?[a,n].map(function(e){return e>9?e:"0"+e}).join(":"):r.formatDate(j.now(),C.format))}J.data("xdsoft_datetime").setCurrentTime(e(this).val())}J.trigger("changedatetime.xdsoft"),J.trigger("close.xdsoft")}),C.dayOfWeekStartPrev=0===C.dayOfWeekStart?6:C.dayOfWeekStart-1,J.trigger("xchange.xdsoft").trigger("afterOpen.xdsoft")},J.data("options",C).on("touchstart mousedown.xdsoft",function(e){return e.stopPropagation(),e.preventDefault(),U.hide(),G.hide(),!1}),R.append(B),R.xdsoftScroller(),J.on("afterOpen.xdsoft",function(){R.xdsoftScroller()}),J.append(I).append(E),C.withoutCopyright!==!0&&J.append(z),I.append(N).append(L).append(V),e(C.parentID).append(J),d=function(){var t=this;t.now=function(e){var a,r,n=new Date;return!e&&C.defaultDate&&(a=t.strToDateTime(C.defaultDate),n.setFullYear(a.getFullYear()),n.setMonth(a.getMonth()),n.setDate(a.getDate())),C.yearOffset&&n.setFullYear(n.getFullYear()+C.yearOffset),!e&&C.defaultTime&&(r=t.strtotime(C.defaultTime),n.setHours(r.getHours()),n.setMinutes(r.getMinutes())),n},t.isValidDate=function(e){return"[object Date]"!==Object.prototype.toString.call(e)?!1:!isNaN(e.getTime())},t.setCurrentTime=function(e,a){t.currentTime="string"==typeof e?t.strToDateTime(e):t.isValidDate(e)?e:e||a||!C.allowBlank?t.now():null,J.trigger("xchange.xdsoft")},t.empty=function(){t.currentTime=null},t.getCurrentTime=function(){return t.currentTime},t.nextMonth=function(){(void 0===t.currentTime||null===t.currentTime)&&(t.currentTime=t.now());var a,r=t.currentTime.getMonth()+1;return 12===r&&(t.currentTime.setFullYear(t.currentTime.getFullYear()+1),r=0),a=t.currentTime.getFullYear(),t.currentTime.setDate(Math.min(new Date(t.currentTime.getFullYear(),r+1,0).getDate(),t.currentTime.getDate())),t.currentTime.setMonth(r),C.onChangeMonth&&e.isFunction(C.onChangeMonth)&&C.onChangeMonth.call(J,j.currentTime,J.data("input")),a!==t.currentTime.getFullYear()&&e.isFunction(C.onChangeYear)&&C.onChangeYear.call(J,j.currentTime,J.data("input")),J.trigger("xchange.xdsoft"),r},t.prevMonth=function(){(void 0===t.currentTime||null===t.currentTime)&&(t.currentTime=t.now());var a=t.currentTime.getMonth()-1;return-1===a&&(t.currentTime.setFullYear(t.currentTime.getFullYear()-1),a=11),t.currentTime.setDate(Math.min(new Date(t.currentTime.getFullYear(),a+1,0).getDate(),t.currentTime.getDate())),t.currentTime.setMonth(a),C.onChangeMonth&&e.isFunction(C.onChangeMonth)&&C.onChangeMonth.call(J,j.currentTime,J.data("input")),J.trigger("xchange.xdsoft"),a},t.getWeekOfYear=function(t){if(C.onGetWeekOfYear&&e.isFunction(C.onGetWeekOfYear)){var a=C.onGetWeekOfYear.call(J,t);if("undefined"!=typeof a)return a}var r=new Date(t.getFullYear(),0,1);return 4!=r.getDay()&&r.setMonth(0,1+(4-r.getDay()+7)%7),Math.ceil(((t-r)/864e5+r.getDay()+1)/7)},t.strToDateTime=function(e){var a,n,o=[];return e&&e instanceof Date&&t.isValidDate(e)?e:(o=/^(\+|\-)(.*)$/.exec(e),o&&(o[2]=r.parseDate(o[2],C.formatDate)),o&&o[2]?(a=o[2].getTime()-6e4*o[2].getTimezoneOffset(),n=new Date(t.now(!0).getTime()+parseInt(o[1]+"1",10)*a)):n=e?r.parseDate(e,C.format):t.now(),t.isValidDate(n)||(n=t.now()),n)},t.strToDate=function(e){if(e&&e instanceof Date&&t.isValidDate(e))return e;var a=e?r.parseDate(e,C.formatDate):t.now(!0);return t.isValidDate(a)||(a=t.now(!0)),a},t.strtotime=function(e){if(e&&e instanceof Date&&t.isValidDate(e))return e;var a=e?r.parseDate(e,C.formatTime):t.now(!0);return t.isValidDate(a)||(a=t.now(!0)),a},t.str=function(){return r.formatDate(t.currentTime,C.format)},t.currentTime=this.now()},j=new d,V.on("touchend click",function(e){e.preventDefault(),J.data("changed",!0),j.setCurrentTime(i()),a.val(j.str()),J.trigger("close.xdsoft")}),N.find(".xdsoft_today_button").on("touchend mousedown.xdsoft",function(){J.data("changed",!0),j.setCurrentTime(0,!0),J.trigger("afterOpen.xdsoft")}).on("dblclick.xdsoft",function(){var e,t,r=j.getCurrentTime();r=new Date(r.getFullYear(),r.getMonth(),r.getDate()),e=j.strToDate(C.minDate),e=new Date(e.getFullYear(),e.getMonth(),e.getDate()),e>r||(t=j.strToDate(C.maxDate),t=new Date(t.getFullYear(),t.getMonth(),t.getDate()),r>t||(a.val(j.str()),a.trigger("change"),J.trigger("close.xdsoft")))}),N.find(".xdsoft_prev,.xdsoft_next").on("touchend mousedown.xdsoft",function(){var t=e(this),a=0,r=!1;!function n(e){t.hasClass(C.next)?j.nextMonth():t.hasClass(C.prev)&&j.prevMonth(),C.monthChangeSpinner&&(r||(a=setTimeout(n,e||100)))}(500),e([document.body,window]).on("touchend mouseup.xdsoft",function o(){clearTimeout(a),r=!0,e([document.body,window]).off("touchend mouseup.xdsoft",o)})}),E.find(".xdsoft_prev,.xdsoft_next").on("touchend mousedown.xdsoft",function(){var t=e(this),a=0,r=!1,n=110;!function o(e){var i=R[0].clientHeight,s=B[0].offsetHeight,d=Math.abs(parseInt(B.css("marginTop"),10));t.hasClass(C.next)&&s-i-C.timeHeightInTimePicker>=d?B.css("marginTop","-"+(d+C.timeHeightInTimePicker)+"px"):t.hasClass(C.prev)&&d-C.timeHeightInTimePicker>=0&&B.css("marginTop","-"+(d-C.timeHeightInTimePicker)+"px"),R.trigger("scroll_element.xdsoft_scroller",[Math.abs(parseInt(B[0].style.marginTop,10)/(s-i))]),n=n>10?10:n-10,r||(a=setTimeout(o,e||n))}(500),e([document.body,window]).on("touchend mouseup.xdsoft",function i(){clearTimeout(a),r=!0,e([document.body,window]).off("touchend mouseup.xdsoft",i)})}),u=0,J.on("xchange.xdsoft",function(t){clearTimeout(u),u=setTimeout(function(){if(void 0===j.currentTime||null===j.currentTime){if(C.allowBlank)return;j.currentTime=j.now()}for(var t,i,s,d,u,l,f,c,m,h,g="",p=new Date(j.currentTime.getFullYear(),j.currentTime.getMonth(),1,12,0,0),y=0,v=j.now(),b=!1,D=!1,k=[],x=!0,T="",S="";p.getDay()!==C.dayOfWeekStart;)p.setDate(p.getDate()-1);for(g+="<table><thead><tr>",C.weeks&&(g+="<th></th>"),t=0;7>t;t+=1)g+="<th>"+C.i18n[o].dayOfWeekShort[(t+C.dayOfWeekStart)%7]+"</th>";for(g+="</tr></thead>",g+="<tbody>",C.maxDate!==!1&&(b=j.strToDate(C.maxDate),b=new Date(b.getFullYear(),b.getMonth(),b.getDate(),23,59,59,999)),C.minDate!==!1&&(D=j.strToDate(C.minDate),D=new Date(D.getFullYear(),D.getMonth(),D.getDate()));y<j.currentTime.countDaysInMonth()||p.getDay()!==C.dayOfWeekStart||j.currentTime.getMonth()===p.getMonth();)k=[],y+=1,s=p.getDay(),d=p.getDate(),u=p.getFullYear(),l=p.getMonth(),f=j.getWeekOfYear(p),h="",k.push("xdsoft_date"),c=C.beforeShowDay&&e.isFunction(C.beforeShowDay.call)?C.beforeShowDay.call(J,p):null,C.allowDateRe&&"[object RegExp]"===Object.prototype.toString.call(C.allowDateRe)?C.allowDateRe.test(r.formatDate(p,C.formatDate))||k.push("xdsoft_disabled"):C.allowDates&&C.allowDates.length>0?-1===C.allowDates.indexOf(r.formatDate(p,C.formatDate))&&k.push("xdsoft_disabled"):b!==!1&&p>b||D!==!1&&D>p||c&&c[0]===!1?k.push("xdsoft_disabled"):-1!==C.disabledDates.indexOf(r.formatDate(p,C.formatDate))?k.push("xdsoft_disabled"):-1!==C.disabledWeekDays.indexOf(s)?k.push("xdsoft_disabled"):a.is("[readonly]")&&k.push("xdsoft_disabled"),c&&""!==c[1]&&k.push(c[1]),j.currentTime.getMonth()!==l&&k.push("xdsoft_other_month"),(C.defaultSelect||J.data("changed"))&&r.formatDate(j.currentTime,C.formatDate)===r.formatDate(p,C.formatDate)&&k.push("xdsoft_current"),r.formatDate(v,C.formatDate)===r.formatDate(p,C.formatDate)&&k.push("xdsoft_today"),(0===p.getDay()||6===p.getDay()||-1!==C.weekends.indexOf(r.formatDate(p,C.formatDate)))&&k.push("xdsoft_weekend"),void 0!==C.highlightedDates[r.formatDate(p,C.formatDate)]&&(i=C.highlightedDates[r.formatDate(p,C.formatDate)],k.push(void 0===i.style?"xdsoft_highlighted_default":i.style),h=void 0===i.desc?"":i.desc),C.beforeShowDay&&e.isFunction(C.beforeShowDay)&&k.push(C.beforeShowDay(p)),x&&(g+="<tr>",x=!1,C.weeks&&(g+="<th>"+f+"</th>")),g+='<td data-date="'+d+'" data-month="'+l+'" data-year="'+u+'" class="xdsoft_date xdsoft_day_of_week'+p.getDay()+" "+k.join(" ")+'" title="'+h+'"><div>'+d+"</div></td>",p.getDay()===C.dayOfWeekStartPrev&&(g+="</tr>",x=!0),p.setDate(d+1);if(g+="</tbody></table>",L.html(g),N.find(".xdsoft_label span").eq(0).text(C.i18n[o].months[j.currentTime.getMonth()]),N.find(".xdsoft_label span").eq(1).text(j.currentTime.getFullYear()),T="",S="",l="",m=function(t,n){var o,i,s=j.now(),d=C.allowTimes&&e.isArray(C.allowTimes)&&C.allowTimes.length;s.setHours(t),t=parseInt(s.getHours(),10),s.setMinutes(n),n=parseInt(s.getMinutes(),10),o=new Date(j.currentTime),o.setHours(t),o.setMinutes(n),k=[],C.minDateTime!==!1&&C.minDateTime>o||C.maxTime!==!1&&j.strtotime(C.maxTime).getTime()<s.getTime()||C.minTime!==!1&&j.strtotime(C.minTime).getTime()>s.getTime()?k.push("xdsoft_disabled"):C.minDateTime!==!1&&C.minDateTime>o||C.disabledMinTime!==!1&&s.getTime()>j.strtotime(C.disabledMinTime).getTime()&&C.disabledMaxTime!==!1&&s.getTime()<j.strtotime(C.disabledMaxTime).getTime()?k.push("xdsoft_disabled"):a.is("[readonly]")&&k.push("xdsoft_disabled"),i=new Date(j.currentTime),i.setHours(parseInt(j.currentTime.getHours(),10)),d||i.setMinutes(Math[C.roundTime](j.currentTime.getMinutes()/C.step)*C.step),(C.initTime||C.defaultSelect||J.data("changed"))&&i.getHours()===parseInt(t,10)&&(!d&&C.step>59||i.getMinutes()===parseInt(n,10))&&(C.defaultSelect||J.data("changed")?k.push("xdsoft_current"):C.initTime&&k.push("xdsoft_init_time")),parseInt(v.getHours(),10)===parseInt(t,10)&&parseInt(v.getMinutes(),10)===parseInt(n,10)&&k.push("xdsoft_today"),T+='<div class="xdsoft_time '+k.join(" ")+'" data-hour="'+t+'" data-minute="'+n+'">'+r.formatDate(s,C.formatTime)+"</div>"},C.allowTimes&&e.isArray(C.allowTimes)&&C.allowTimes.length)for(y=0;y<C.allowTimes.length;y+=1)S=j.strtotime(C.allowTimes[y]).getHours(),l=j.strtotime(C.allowTimes[y]).getMinutes(),m(S,l);else for(y=0,t=0;y<(C.hours12?12:24);y+=1)for(t=0;60>t;t+=C.step)S=(10>y?"0":"")+y,l=(10>t?"0":"")+t,m(S,l);for(B.html(T),n="",y=0,y=parseInt(C.yearStart,10)+C.yearOffset;y<=parseInt(C.yearEnd,10)+C.yearOffset;y+=1)n+='<div class="xdsoft_option '+(j.currentTime.getFullYear()===y?"xdsoft_current":"")+'" data-value="'+y+'">'+y+"</div>";for(U.children().eq(0).html(n),y=parseInt(C.monthStart,10),n="";y<=parseInt(C.monthEnd,10);y+=1)n+='<div class="xdsoft_option '+(j.currentTime.getMonth()===y?"xdsoft_current":"")+'" data-value="'+y+'">'+C.i18n[o].months[y]+"</div>";G.children().eq(0).html(n),e(J).trigger("generate.xdsoft")},10),t.stopPropagation()}).on("afterOpen.xdsoft",function(){if(C.timepicker){var e,t,a,r;B.find(".xdsoft_current").length?e=".xdsoft_current":B.find(".xdsoft_init_time").length&&(e=".xdsoft_init_time"),e?(t=R[0].clientHeight,a=B[0].offsetHeight,r=B.find(e).index()*C.timeHeightInTimePicker+1,r>a-t&&(r=a-t),R.trigger("scroll_element.xdsoft_scroller",[parseInt(r,10)/(a-t)])):R.trigger("scroll_element.xdsoft_scroller",[0])}}),P=0,L.on("touchend click.xdsoft","td",function(t){t.stopPropagation(),P+=1;var r=e(this),n=j.currentTime;return(void 0===n||null===n)&&(j.currentTime=j.now(),n=j.currentTime),r.hasClass("xdsoft_disabled")?!1:(n.setDate(1),n.setFullYear(r.data("year")),n.setMonth(r.data("month")),n.setDate(r.data("date")),J.trigger("select.xdsoft",[n]),a.val(j.str()),C.onSelectDate&&e.isFunction(C.onSelectDate)&&C.onSelectDate.call(J,j.currentTime,J.data("input"),t),J.data("changed",!0),J.trigger("xchange.xdsoft"),J.trigger("changedatetime.xdsoft"),(P>1||C.closeOnDateSelect===!0||C.closeOnDateSelect===!1&&!C.timepicker)&&!C.inline&&J.trigger("close.xdsoft"),void setTimeout(function(){P=0},200))}),B.on("touchend click.xdsoft","div",function(t){t.stopPropagation();var a=e(this),r=j.currentTime;return(void 0===r||null===r)&&(j.currentTime=j.now(),r=j.currentTime),a.hasClass("xdsoft_disabled")?!1:(r.setHours(a.data("hour")),r.setMinutes(a.data("minute")),J.trigger("select.xdsoft",[r]),J.data("input").val(j.str()),C.onSelectTime&&e.isFunction(C.onSelectTime)&&C.onSelectTime.call(J,j.currentTime,J.data("input"),t),J.data("changed",!0),J.trigger("xchange.xdsoft"),J.trigger("changedatetime.xdsoft"),void(C.inline!==!0&&C.closeOnTimeSelect===!0&&J.trigger("close.xdsoft")))}),I.on("mousewheel.xdsoft",function(e){return C.scrollMonth?(e.deltaY<0?j.nextMonth():j.prevMonth(),!1):!0}),a.on("mousewheel.xdsoft",function(e){return C.scrollInput?!C.datepicker&&C.timepicker?(A=B.find(".xdsoft_current").length?B.find(".xdsoft_current").eq(0).index():0,A+e.deltaY>=0&&A+e.deltaY<B.children().length&&(A+=e.deltaY),B.children().eq(A).length&&B.children().eq(A).trigger("mousedown"),!1):C.datepicker&&!C.timepicker?(I.trigger(e,[e.deltaY,e.deltaX,e.deltaY]),a.val&&a.val(j.str()),J.trigger("changedatetime.xdsoft"),!1):void 0:!0}),J.on("changedatetime.xdsoft",function(t){if(C.onChangeDateTime&&e.isFunction(C.onChangeDateTime)){var a=J.data("input");C.onChangeDateTime.call(J,j.currentTime,a,t),delete C.value,a.trigger("change")}}).on("generate.xdsoft",function(){C.onGenerate&&e.isFunction(C.onGenerate)&&C.onGenerate.call(J,j.currentTime,J.data("input")),q&&(J.trigger("afterOpen.xdsoft"),q=!1)}).on("click.xdsoft",function(e){e.stopPropagation()}),A=0,H=function(e,t){do if(e=e.parentNode,t(e)===!1)break;while("HTML"!==e.nodeName)},Y=function(){var t,a,r,n,o,i,s,d,u,l,f,c,m;if(d=J.data("input"),t=d.offset(),a=d[0],l="top",r=t.top+a.offsetHeight-1,n=t.left,o="absolute",u=e(window).width(),c=e(window).height(),m=e(window).scrollTop(),document.documentElement.clientWidth-t.left<I.parent().outerWidth(!0)){var h=I.parent().outerWidth(!0)-a.offsetWidth;n-=h}"rtl"===d.parent().css("direction")&&(n-=J.outerWidth()-d.outerWidth()),C.fixed?(r-=m,n-=e(window).scrollLeft(),o="fixed"):(s=!1,H(a,function(e){return"fixed"===window.getComputedStyle(e).getPropertyValue("position")?(s=!0,!1):void 0}),s?(o="fixed",r+J.outerHeight()>c+m?(l="bottom",r=c+m-t.top):r-=m):r+a.offsetHeight>c+m&&(r=t.top-a.offsetHeight+1),0>r&&(r=0),n+a.offsetWidth>u&&(n=u-a.offsetWidth)),i=J[0],H(i,function(e){var t;return t=window.getComputedStyle(e).getPropertyValue("position"),"relative"===t&&u>=e.offsetWidth?(n-=(u-e.offsetWidth)/2,!1):void 0}),f={position:o,left:n,top:"",bottom:""},f[l]=r,J.css(f)},J.on("open.xdsoft",function(t){var a=!0;C.onShow&&e.isFunction(C.onShow)&&(a=C.onShow.call(J,j.currentTime,J.data("input"),t)),a!==!1&&(J.show(),Y(),e(window).off("resize.xdsoft",Y).on("resize.xdsoft",Y),C.closeOnWithoutClick&&e([document.body,window]).on("touchstart mousedown.xdsoft",function r(){J.trigger("close.xdsoft"),e([document.body,window]).off("touchstart mousedown.xdsoft",r)}))}).on("close.xdsoft",function(t){var a=!0;N.find(".xdsoft_month,.xdsoft_year").find(".xdsoft_select").hide(),C.onClose&&e.isFunction(C.onClose)&&(a=C.onClose.call(J,j.currentTime,J.data("input"),t)),a===!1||C.opened||C.inline||J.hide(),t.stopPropagation()}).on("toggle.xdsoft",function(){J.trigger(J.is(":visible")?"close.xdsoft":"open.xdsoft")}).data("input",a),X=0,J.data("xdsoft_datetime",j),J.setOptions(C),j.setCurrentTime(i()),a.data("xdsoft_datetimepicker",J).on("open.xdsoft focusin.xdsoft mousedown.xdsoft touchstart",function(){a.is(":disabled")||a.data("xdsoft_datetimepicker").is(":visible")&&C.closeOnInputClick||(clearTimeout(X),X=setTimeout(function(){a.is(":disabled")||(q=!0,j.setCurrentTime(i(),!0),C.mask&&s(C),J.trigger("open.xdsoft"))},100))}).on("keydown.xdsoft",function(t){var a,r=t.which;return-1!==[p].indexOf(r)&&C.enterLikeTab?(a=e("input:visible,textarea:visible,button:visible,a:visible"),J.trigger("close.xdsoft"),a.eq(a.index(this)+1).focus(),!1):-1!==[T].indexOf(r)?(J.trigger("close.xdsoft"),!0):void 0}).on("blur.xdsoft",function(){J.trigger("close.xdsoft")})},d=function(t){var a=t.data("xdsoft_datetimepicker");a&&(a.data("xdsoft_datetime",null),a.remove(),t.data("xdsoft_datetimepicker",null).off(".xdsoft"),e(window).off("resize.xdsoft"),e([window,document.body]).off("mousedown.xdsoft touchstart"),t.unmousewheel&&t.unmousewheel())},e(document).off("keydown.xdsoftctrl keyup.xdsoftctrl").on("keydown.xdsoftctrl",function(e){e.keyCode===h&&(F=!0)}).on("keyup.xdsoftctrl",function(e){e.keyCode===h&&(F=!1)}),this.each(function(){var t,a=e(this).data("xdsoft_datetimepicker");if(a){if("string"===e.type(n))switch(n){case"show":e(this).select().focus(),a.trigger("open.xdsoft");break;case"hide":a.trigger("close.xdsoft");break;case"toggle":a.trigger("toggle.xdsoft");break;case"destroy":d(e(this));break;case"reset":this.value=this.defaultValue,this.value&&a.data("xdsoft_datetime").isValidDate(r.parseDate(this.value,C.format))||a.data("changed",!1),a.data("xdsoft_datetime").setCurrentTime(this.value);break;case"validate":t=a.data("input"),t.trigger("blur.xdsoft");break;default:a[n]&&e.isFunction(a[n])&&(u=a[n](i))}else a.setOptions(n);return 0}"string"!==e.type(n)&&(!C.lazyInit||C.open||C.inline?s(e(this)):A(e(this)))}),u},e.fn.datetimepicker.defaults=a}),function(e){ true?!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2)], __WEBPACK_AMD_DEFINE_FACTORY__ = (e), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)):"object"==typeof exports?module.exports=e:e(jQuery)}(function(e){function t(t){var i=t||window.event,s=d.call(arguments,1),u=0,f=0,c=0,m=0,h=0,g=0;if(t=e.event.fix(i),t.type="mousewheel","detail"in i&&(c=-1*i.detail),"wheelDelta"in i&&(c=i.wheelDelta),"wheelDeltaY"in i&&(c=i.wheelDeltaY),"wheelDeltaX"in i&&(f=-1*i.wheelDeltaX),"axis"in i&&i.axis===i.HORIZONTAL_AXIS&&(f=-1*c,c=0),u=0===c?f:c,"deltaY"in i&&(c=-1*i.deltaY,u=c),"deltaX"in i&&(f=i.deltaX,0===c&&(u=-1*f)),0!==c||0!==f){if(1===i.deltaMode){var p=e.data(this,"mousewheel-line-height");u*=p,c*=p,f*=p}else if(2===i.deltaMode){var y=e.data(this,"mousewheel-page-height");u*=y,c*=y,f*=y}if(m=Math.max(Math.abs(c),Math.abs(f)),(!o||o>m)&&(o=m,r(i,m)&&(o/=40)),r(i,m)&&(u/=40,f/=40,c/=40),u=Math[u>=1?"floor":"ceil"](u/o),f=Math[f>=1?"floor":"ceil"](f/o),c=Math[c>=1?"floor":"ceil"](c/o),l.settings.normalizeOffset&&this.getBoundingClientRect){var v=this.getBoundingClientRect();h=t.clientX-v.left,g=t.clientY-v.top}return t.deltaX=f,t.deltaY=c,t.deltaFactor=o,t.offsetX=h,t.offsetY=g,t.deltaMode=0,s.unshift(t,u,f,c),n&&clearTimeout(n),n=setTimeout(a,200),(e.event.dispatch||e.event.handle).apply(this,s)}}function a(){o=null}function r(e,t){return l.settings.adjustOldDeltas&&"mousewheel"===e.type&&t%120===0}var n,o,i=["wheel","mousewheel","DOMMouseScroll","MozMousePixelScroll"],s="onwheel"in document||document.documentMode>=9?["wheel"]:["mousewheel","DomMouseScroll","MozMousePixelScroll"],d=Array.prototype.slice;if(e.event.fixHooks)for(var u=i.length;u;)e.event.fixHooks[i[--u]]=e.event.mouseHooks;var l=e.event.special.mousewheel={version:"3.1.12",setup:function(){if(this.addEventListener)for(var a=s.length;a;)this.addEventListener(s[--a],t,!1);else this.onmousewheel=t;e.data(this,"mousewheel-line-height",l.getLineHeight(this)),e.data(this,"mousewheel-page-height",l.getPageHeight(this))},teardown:function(){if(this.removeEventListener)for(var a=s.length;a;)this.removeEventListener(s[--a],t,!1);else this.onmousewheel=null;e.removeData(this,"mousewheel-line-height"),e.removeData(this,"mousewheel-page-height")},getLineHeight:function(t){var a=e(t),r=a["offsetParent"in e.fn?"offsetParent":"parent"]();return r.length||(r=e("body")),parseInt(r.css("fontSize"),10)||parseInt(a.css("fontSize"),10)||16},getPageHeight:function(t){return e(t).height()},settings:{adjustOldDeltas:!0,normalizeOffset:!0}};e.fn.extend({mousewheel:function(e){return e?this.bind("mousewheel",e):this.trigger("mousewheel")},unmousewheel:function(e){return this.unbind("mousewheel",e)}})});
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * jQuery Mousewheel 3.1.13
+	 *
+	 * Copyright jQuery Foundation and other contributors
+	 * Released under the MIT license
+	 * http://jquery.org/license
+	 */
+
+	(function (factory) {
+	    if ( true ) {
+	        // AMD. Register as an anonymous module.
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else if (typeof exports === 'object') {
+	        // Node/CommonJS style for Browserify
+	        module.exports = factory;
+	    } else {
+	        // Browser globals
+	        factory(jQuery);
+	    }
+	}(function ($) {
+
+	    var toFix  = ['wheel', 'mousewheel', 'DOMMouseScroll', 'MozMousePixelScroll'],
+	        toBind = ( 'onwheel' in document || document.documentMode >= 9 ) ?
+	                    ['wheel'] : ['mousewheel', 'DomMouseScroll', 'MozMousePixelScroll'],
+	        slice  = Array.prototype.slice,
+	        nullLowestDeltaTimeout, lowestDelta;
+
+	    if ( $.event.fixHooks ) {
+	        for ( var i = toFix.length; i; ) {
+	            $.event.fixHooks[ toFix[--i] ] = $.event.mouseHooks;
+	        }
+	    }
+
+	    var special = $.event.special.mousewheel = {
+	        version: '3.1.12',
+
+	        setup: function() {
+	            if ( this.addEventListener ) {
+	                for ( var i = toBind.length; i; ) {
+	                    this.addEventListener( toBind[--i], handler, false );
+	                }
+	            } else {
+	                this.onmousewheel = handler;
+	            }
+	            // Store the line height and page height for this particular element
+	            $.data(this, 'mousewheel-line-height', special.getLineHeight(this));
+	            $.data(this, 'mousewheel-page-height', special.getPageHeight(this));
+	        },
+
+	        teardown: function() {
+	            if ( this.removeEventListener ) {
+	                for ( var i = toBind.length; i; ) {
+	                    this.removeEventListener( toBind[--i], handler, false );
+	                }
+	            } else {
+	                this.onmousewheel = null;
+	            }
+	            // Clean up the data we added to the element
+	            $.removeData(this, 'mousewheel-line-height');
+	            $.removeData(this, 'mousewheel-page-height');
+	        },
+
+	        getLineHeight: function(elem) {
+	            var $elem = $(elem),
+	                $parent = $elem['offsetParent' in $.fn ? 'offsetParent' : 'parent']();
+	            if (!$parent.length) {
+	                $parent = $('body');
+	            }
+	            return parseInt($parent.css('fontSize'), 10) || parseInt($elem.css('fontSize'), 10) || 16;
+	        },
+
+	        getPageHeight: function(elem) {
+	            return $(elem).height();
+	        },
+
+	        settings: {
+	            adjustOldDeltas: true, // see shouldAdjustOldDeltas() below
+	            normalizeOffset: true  // calls getBoundingClientRect for each event
+	        }
+	    };
+
+	    $.fn.extend({
+	        mousewheel: function(fn) {
+	            return fn ? this.bind('mousewheel', fn) : this.trigger('mousewheel');
+	        },
+
+	        unmousewheel: function(fn) {
+	            return this.unbind('mousewheel', fn);
+	        }
+	    });
+
+
+	    function handler(event) {
+	        var orgEvent   = event || window.event,
+	            args       = slice.call(arguments, 1),
+	            delta      = 0,
+	            deltaX     = 0,
+	            deltaY     = 0,
+	            absDelta   = 0,
+	            offsetX    = 0,
+	            offsetY    = 0;
+	        event = $.event.fix(orgEvent);
+	        event.type = 'mousewheel';
+
+	        // Old school scrollwheel delta
+	        if ( 'detail'      in orgEvent ) { deltaY = orgEvent.detail * -1;      }
+	        if ( 'wheelDelta'  in orgEvent ) { deltaY = orgEvent.wheelDelta;       }
+	        if ( 'wheelDeltaY' in orgEvent ) { deltaY = orgEvent.wheelDeltaY;      }
+	        if ( 'wheelDeltaX' in orgEvent ) { deltaX = orgEvent.wheelDeltaX * -1; }
+
+	        // Firefox < 17 horizontal scrolling related to DOMMouseScroll event
+	        if ( 'axis' in orgEvent && orgEvent.axis === orgEvent.HORIZONTAL_AXIS ) {
+	            deltaX = deltaY * -1;
+	            deltaY = 0;
+	        }
+
+	        // Set delta to be deltaY or deltaX if deltaY is 0 for backwards compatabilitiy
+	        delta = deltaY === 0 ? deltaX : deltaY;
+
+	        // New school wheel delta (wheel event)
+	        if ( 'deltaY' in orgEvent ) {
+	            deltaY = orgEvent.deltaY * -1;
+	            delta  = deltaY;
+	        }
+	        if ( 'deltaX' in orgEvent ) {
+	            deltaX = orgEvent.deltaX;
+	            if ( deltaY === 0 ) { delta  = deltaX * -1; }
+	        }
+
+	        // No change actually happened, no reason to go any further
+	        if ( deltaY === 0 && deltaX === 0 ) { return; }
+
+	        // Need to convert lines and pages to pixels if we aren't already in pixels
+	        // There are three delta modes:
+	        //   * deltaMode 0 is by pixels, nothing to do
+	        //   * deltaMode 1 is by lines
+	        //   * deltaMode 2 is by pages
+	        if ( orgEvent.deltaMode === 1 ) {
+	            var lineHeight = $.data(this, 'mousewheel-line-height');
+	            delta  *= lineHeight;
+	            deltaY *= lineHeight;
+	            deltaX *= lineHeight;
+	        } else if ( orgEvent.deltaMode === 2 ) {
+	            var pageHeight = $.data(this, 'mousewheel-page-height');
+	            delta  *= pageHeight;
+	            deltaY *= pageHeight;
+	            deltaX *= pageHeight;
+	        }
+
+	        // Store lowest absolute delta to normalize the delta values
+	        absDelta = Math.max( Math.abs(deltaY), Math.abs(deltaX) );
+
+	        if ( !lowestDelta || absDelta < lowestDelta ) {
+	            lowestDelta = absDelta;
+
+	            // Adjust older deltas if necessary
+	            if ( shouldAdjustOldDeltas(orgEvent, absDelta) ) {
+	                lowestDelta /= 40;
+	            }
+	        }
+
+	        // Adjust older deltas if necessary
+	        if ( shouldAdjustOldDeltas(orgEvent, absDelta) ) {
+	            // Divide all the things by 40!
+	            delta  /= 40;
+	            deltaX /= 40;
+	            deltaY /= 40;
+	        }
+
+	        // Get a whole, normalized value for the deltas
+	        delta  = Math[ delta  >= 1 ? 'floor' : 'ceil' ](delta  / lowestDelta);
+	        deltaX = Math[ deltaX >= 1 ? 'floor' : 'ceil' ](deltaX / lowestDelta);
+	        deltaY = Math[ deltaY >= 1 ? 'floor' : 'ceil' ](deltaY / lowestDelta);
+
+	        // Normalise offsetX and offsetY properties
+	        if ( special.settings.normalizeOffset && this.getBoundingClientRect ) {
+	            var boundingRect = this.getBoundingClientRect();
+	            offsetX = event.clientX - boundingRect.left;
+	            offsetY = event.clientY - boundingRect.top;
+	        }
+
+	        // Add information to the event object
+	        event.deltaX = deltaX;
+	        event.deltaY = deltaY;
+	        event.deltaFactor = lowestDelta;
+	        event.offsetX = offsetX;
+	        event.offsetY = offsetY;
+	        // Go ahead and set deltaMode to 0 since we converted to pixels
+	        // Although this is a little odd since we overwrite the deltaX/Y
+	        // properties with normalized deltas.
+	        event.deltaMode = 0;
+
+	        // Add event and delta to the front of the arguments
+	        args.unshift(event, delta, deltaX, deltaY);
+
+	        // Clearout lowestDelta after sometime to better
+	        // handle multiple device types that give different
+	        // a different lowestDelta
+	        // Ex: trackpad = 3 and mouse wheel = 120
+	        if (nullLowestDeltaTimeout) { clearTimeout(nullLowestDeltaTimeout); }
+	        nullLowestDeltaTimeout = setTimeout(nullLowestDelta, 200);
+
+	        return ($.event.dispatch || $.event.handle).apply(this, args);
+	    }
+
+	    function nullLowestDelta() {
+	        lowestDelta = null;
+	    }
+
+	    function shouldAdjustOldDeltas(orgEvent, absDelta) {
+	        // If this is an older event and the delta is divisable by 120,
+	        // then we are assuming that the browser is treating this as an
+	        // older mouse wheel event and that we should divide the deltas
+	        // by 40 to try and get a more usable deltaFactor.
+	        // Side note, this actually impacts the reported scroll distance
+	        // in older browsers and can cause scrolling to be slower than native.
+	        // Turn this off by setting $.event.special.mousewheel.settings.adjustOldDeltas to false.
+	        return special.settings.adjustOldDeltas && orgEvent.type === 'mousewheel' && absDelta % 120 === 0;
+	    }
+
+	}));
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(_, $) {var Calendar = Backbone.Model.extend({
+	    initialize: function () {
+	        this.leagueId = 0;
+	    },
+	    url: function () {
+	        return '/api/leagues/' + this.leagueId + '/calendar';
+	    },
+	    setLeagueId: function (leagueId) {
+	        this.leagueId = leagueId;
+	    }
+	});
+
+	var Event = Backbone.Model.extend({
+	    initialize: function () {
+	        this.leagueId = 0;
+	    },
+	    url: function () {
+	        return this.id
+	            ? '/api/leagues/' + this.leagueId + '/events/' + this.id
+	            : '/api/leagues/' + this.leagueId + '/events/';
+	    },
+	    changeGuestTeam: function (eventGameId, val) {
+	        var games = this.get('games');
+
+	        _.each(games, function (obj) {
+	            if (obj.id == eventGameId) {
+	                obj.guestTeamId = val;
+	            }
+	        });
+
+	        this.set('games', games);
+	        this.save();
+	    },
+	    changeHomeTeam: function (eventGameId, val) {
+	        var games = this.get('games');
+
+	        _.each(games, function (obj) {
+	            if (obj.id == eventGameId) {
+	                obj.homeTeamId = val;
+	            }
+	        });
+
+	        this.set('games', games);
+	        this.save();
+	    },
+	    createGame: function() {
+	        var self = this;
+
+	        $.ajax({
+	            type: "POST",
+	            url: '/api/leagues/' + self.leagueId + '/events/' + this.id,
+	            success: function (eventGame) {
+	                var games = self.get('games');
+	                games.push(eventGame);
+	                self.set('games', games);
+	                self.trigger('change:games');
+	            }
+	        });
+	    },
+	    deleteGame: function (eventGameId) {
+	        var self = this;
+
+	        $.ajax({
+	            type: "DELETE",
+	            url: '/api/leagues/' + self.leagueId + '/events/' + this.id + '/' + eventGameId,
+	            success: function () {
+	                var newGames = [];
+	                var games = self.get('games');
+
+	                _.each(games, function (obj) {
+	                    if (eventGameId != obj.id)
+	                        newGames.push(obj);
+	                });
+
+	                self.set('games', newGames);
+	                self.trigger('change:games');
+	            }
+	        });
+	    },
+	    setLeagueId: function (leagueId) {
+	        this.leagueId = leagueId;
+	    }
+	});
+
+	var Events = Backbone.Collection.extend({
+	    url: function () {
+	        return '/api/leagues/' + this.leagueId + '/events';
+	    },
+	    model: Event,
+	    setLeagueId: function (leagueId) {
+	        this.leagueId = leagueId;
+	    }
+	});
+
+	module.exports = {
+	    Calendar: Calendar,
+	    Event: Event,
+	    Events: Events
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(2)))
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var MyApp = __webpack_require__(1);
+	var Layouts = __webpack_require__(12);
+	var Views = __webpack_require__(18);
+	var Models = __webpack_require__(19);
+
+	var leaguesModule = Backbone.Marionette.Module.extend({
+	    startWithParent: false,
+
+	    initialize: function (options, app, object) {
+	        this.app = app;
+
+	        this.leagues = new Models.LeaguesModel();
+	    },
+
+	    onStart: function (options) {
+	        var self = this;
+
+	        self.createViews();
+	        self.bindViews();
+
+	        self.app.mainRegion.show(self.layout);
+
+	        self.leagues.fetch();
+	    },
+	    createViews: function () {
+	        var self = this;
+
+	        self.layout = new Layouts.LayoutView();
+	        self.leagueListView = new Views.LeagueList({ model: self.leagues });
+	        self.leagueActionView = new Views.LeagueActions();
+	    },
+	    bindViews: function () {
+	        var self = this;
+
+	        self.listenTo(self.leagues, 'sync', function () {
+	            self.layout.up.show(self.leagueActionView);
+	            self.layout.center.show(self.leagueListView);
+	        });
+	    },
+	    onStop: function (options) {
+	        var self = this;
+
+	        self.leagueListView.destroy();
+	        self.leagueActionView.destroy();
+	        self.layout.destroy();
+	    }
+	});
+
+	MyApp.module("leagues", leaguesModule);
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(_) {var MyApp = __webpack_require__(1);
+
+	var LeagueActions = Backbone.Marionette.ItemView.extend({
+	    template: "#leagues-actions",
+	    ui: {
+	        'addLeague': '.add-league'
+	    },
+	    events: {
+	        'click @ui.addLeague': 'addLeague'
+	    },
+	    addLeague: function () {
+	        document.location.href = '#leagues/new';
+	    },
+	    serializeData: function () {
+	        var model = {};
+
+	        model.showAdd = MyApp.Settings.isAdmin();
+
+	        return model;
+	    }
+	});
+
+	var LeagueList = Backbone.Marionette.ItemView.extend({
+	    template: "#leagues-list",
+	    initialize: function (options) {
+	        this.options = options;
+	    },
+	    serializeData: function () {
+	        var model = this.model.toJSON();
+	        model.isAdmin = MyApp.Settings.isAdmin();
+
+	        if (!model.isAdmin)
+	            return model;
+
+	        if (model.leagues) {
+	            _.each(model.leagues, function (obj) {
+	                obj.href = '#leagues/' + obj.id + '/edit';
+	            });
+	        }
+	        if (model.tournaments) {
+	            _.each(model.tournaments, function (obj) {
+	                obj.href = '#leagues/' + obj.id + '/edit';
+	            });
+	        }
+	        return model;
+	    }
+	});
+
+	module.exports = {
+	    LeagueActions: LeagueActions,
+	    LeagueList: LeagueList
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	var LeagueInfo = Backbone.Model.extend({
+	    url: function () {
+	        return '/api/leagues/' + this.id + '/info/';
+	    }
+	});
+
+	var League = Backbone.Model.extend({
+	    url: function() {
+	        return this.id 
+	            ? '/api/leagues/' + this.id
+	            : '/api/leagues';
+	    },
+	    create: function() {
+	        
+	    },
+	    update: function() {
+	        
+	    }
+	});
+
+	var LeaguesModel = Backbone.Model.extend({
+	    url: function() {
+	        return '/api/leagues';
+	    }
+	});
+
+	module.exports = {
+	    LeagueInfo: LeagueInfo,
+	    League: League,
+	    LeaguesModel: LeaguesModel
+	}
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var MyApp = __webpack_require__(1);
+	var Layouts = __webpack_require__(12);
+	var SharedViews = __webpack_require__(11);
+	var Views = __webpack_require__(21);
+	var Models = __webpack_require__(19);
+
+	var leagueModule = Backbone.Marionette.Module.extend({
+	    startWithParent: false,
+
+	    initialize: function (options, app, object) {
+	        var self = this;
+
+	        self.app = app;
+
+	        self.league = new Models.League();
+	        self.admins = new Backbone.Collection();
+	    },
+	    onStart: function (options) {
+	        var self = this;
+
+	        self.options = options;
+	        self.league.clear();
+	        self.admins.reset();
+
+	        self.createViews();
+	        self.bindViews();
+
+	        if (options.leagueId) {
+	            self.league.set('id', self.options.leagueId);
+	            self.league.fetch();
+	        }
+
+	        self.app.mainRegion.show(self.layout);
+	    },
+	    createViews: function () {
+	        var self = this;
+
+	        self.layout = new Layouts.LayoutView();
+	        self.leagueView = new Views.LeagueView({ model: self.league, collection: self.admins });
+	        self.saveView = new SharedViews.SaveView();
+	    },
+	    bindViews: function () {
+	        var self = this;
+	        
+	        self.listenTo(self.layout, 'show', function () {
+	            self.layout.center.show(self.leagueView);
+	            self.layout.down.show(self.saveView);
+	        });
+
+	        self.listenToOnce(self.league, 'sync', function () {
+	            self.admins.reset(self.league.get('admins'));
+	        });
+
+	        self.listenTo(self.saveView, 'save', function () {
+	            self.listenToOnce(self.league, 'sync', function() {
+	                document.location.href = '#leagues/';
+	            });
+
+	            self.league.set('admins', self.admins.toJSON());
+	            self.league.save();
+	        });
+
+	        self.listenTo(self.saveView, 'cancel', function () {
+	            window.history.back();
+	        });
+	    },
+	    onStop: function (options) {
+	        var self = this;
+
+	        self.leagueView.destroy();
+	        self.saveView.destroy();
+	        self.layout.destroy();
+	    }
+	});
+
+	MyApp.module("league", leagueModule);
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($) {var Views = __webpack_require__(11);
+	__webpack_require__(22);
+
+	var LeagueAdminListItemView = Backbone.Marionette.ItemView.extend({
+	    tagName: 'tr',
+	    template: "#league-admin",
+	    ui: {
+	        'removeAdmin': '.remove-league-admin'
+	    },
+	    events: {
+	        'click @ui.removeAdmin': 'removeAdmin'
+	    },
+	    removeAdmin: function () {
+	        this.model.set('id', null);
+	        this.model.destroy();
+	    },
+	    onShow: function () {
+
+	    },
+	    serializeData: function () {
+	        return this.model.toJSON();
+	    }
+	});
+
+	var LeagueView = Backbone.Marionette.CompositeView.extend({
+	    template: "#league",
+	    childViewContainer: "tbody",
+	    childView: LeagueAdminListItemView,
+	    emptyView: Views.EmptyListView,
+	    ui: {
+	        'addAdmin': '.add-league-admin',
+	        'name': '.league-name',
+	        'description': '.league-description',
+	        'group': '.league-vkGroup',
+	        'upload': '#btUpload',
+	        'logoContainer': '.logo-container',
+	        'logoValue': '#logo-file-id',
+	        'type': '#league-type',
+	        'subName': '.league-sub-name'
+	    },
+	    events: {
+	        'change @ui.name': 'changeName',
+	        'change @ui.subName': 'changeSubName',
+	        'change @ui.description': 'changeDescription',
+	        'change @ui.group': 'changeGroup',
+	        'change @ui.type': 'changeType',
+	        'click @ui.upload': 'uploadImage'
+	    },
+	    uploadImage: function () {
+	        var self = this;
+
+	        var data = new FormData($('#logo-upload-form')[0]);
+	        $.ajax({
+	            type: "POST",
+	            url: '/api/upload/logo/',    // CALL WEB API TO SAVE THE FILES.
+	            enctype: 'multipart/form-data',
+	            contentType: false,
+	            processData: false,         // PREVENT AUTOMATIC DATA PROCESSING.
+	            cache: false,
+	            data: data, 		        // DATA OR FILES IN THIS CONTEXT.
+	            success: function (data, textStatus, xhr) {
+	                self.ui.logoContainer.html('<img src="/api/image/' + data.id + '" />');
+	                self.model.set('mediaId', data.id);
+	                document.getElementById("logo-upload-form").reset();
+	            },
+	            error: function (XMLHttpRequest, textStatus, errorThrown) {
+	                self.logoContainer.html('');
+	                document.getElementById("logo-upload-form").reset();
+	            }
+	        });
+	    },
+	    changeType: function () {
+	        this.model.set('type', this.ui.type.val());
+	    },
+	    changeSubName: function () {
+	        this.model.set('subName', this.ui.subName.val());
+	    },
+	    changeName: function () {
+	        this.model.set('name', this.ui.name.val());
+	    },
+	    changeDescription: function () {
+	        this.model.set('description', this.ui.description.val());
+	    },
+	    changeGroup: function () {
+	        this.model.set('vkGroup', this.ui.group.val());
+	    },
+	    onRender: function () {
+	        var self = this;
+
+	        $(this.ui.addAdmin).typeahead({
+	            source: function (query, process) {
+	                var url = '/api/users?page=0&pageSize=10';
+	                return $.get(url, { query: query }, function (response) {
+	                    return process(response);
+	                });
+	            },
+	            displayText: function (item) {
+	                return item.name;
+	            },
+	            updater: function (item) {
+	                self.collection.add(item);
+	                return '';
+	            }
+	        });
+	    },
+	    serializeData: function() {
+	        var model = this.model.toJSON();
+	        model.types = [
+	            { value: 1, name: 'Лига', selected: model.type == '1' },
+	            { value: 2, name: 'Турнир', selected: model.type == '2' }
+	        ];
+	        return model;
+	    },
+	    modelEvents: {
+	        'sync': 'render'
+	    }
+	});
+
+	module.exports = { LeagueView: LeagueView }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* =============================================================
+	 * bootstrap3-typeahead.js v3.1.0
+	 * https://github.com/bassjobsen/Bootstrap-3-Typeahead
+	 * =============================================================
+	 * Original written by @mdo and @fat
+	 * =============================================================
+	 * Copyright 2014 Bass Jobsen @bassjobsen
+	 *
+	 * Licensed under the Apache License, Version 2.0 (the 'License');
+	 * you may not use this file except in compliance with the License.
+	 * You may obtain a copy of the License at
+	 *
+	 * http://www.apache.org/licenses/LICENSE-2.0
+	 *
+	 * Unless required by applicable law or agreed to in writing, software
+	 * distributed under the License is distributed on an 'AS IS' BASIS,
+	 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	 * See the License for the specific language governing permissions and
+	 * limitations under the License.
+	 * ============================================================ */
+
+
+	(function (root, factory) {
+
+	  'use strict';
+
+	  // CommonJS module is defined
+	  if (typeof module !== 'undefined' && module.exports) {
+	    module.exports = factory(__webpack_require__(2));
+	  }
+	  // AMD module is defined
+	  else if (true) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2)], __WEBPACK_AMD_DEFINE_RESULT__ = function ($) {
+	      return factory ($);
+	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else {
+	    factory(root.jQuery);
+	  }
+
+	}(this, function ($) {
+
+	  'use strict';
+	  // jshint laxcomma: true
+
+
+	 /* TYPEAHEAD PUBLIC CLASS DEFINITION
+	  * ================================= */
+
+	  var Typeahead = function (element, options) {
+	    this.$element = $(element);
+	    this.options = $.extend({}, $.fn.typeahead.defaults, options);
+	    this.matcher = this.options.matcher || this.matcher;
+	    this.sorter = this.options.sorter || this.sorter;
+	    this.select = this.options.select || this.select;
+	    this.autoSelect = typeof this.options.autoSelect == 'boolean' ? this.options.autoSelect : true;
+	    this.highlighter = this.options.highlighter || this.highlighter;
+	    this.render = this.options.render || this.render;
+	    this.updater = this.options.updater || this.updater;
+	    this.displayText = this.options.displayText || this.displayText;
+	    this.source = this.options.source;
+	    this.delay = this.options.delay;
+	    this.$menu = $(this.options.menu);
+	    this.$appendTo = this.options.appendTo ? $(this.options.appendTo) : null;
+	    this.shown = false;
+	    this.listen();
+	    this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false;
+	    this.afterSelect = this.options.afterSelect;
+	    this.addItem = false;
+	  };
+
+	  Typeahead.prototype = {
+
+	    constructor: Typeahead,
+
+	    select: function () {
+	      var val = this.$menu.find('.active').data('value');
+	      this.$element.data('active', val);
+	      if(this.autoSelect || val) {
+	        var newVal = this.updater(val);
+	        // Updater can be set to any random functions via "options" parameter in constructor above.
+	        // Add null check for cases when updater returns void or undefined.
+	        if (!newVal) {
+	          newVal = "";
+	        }
+	        this.$element
+	          .val(this.displayText(newVal) || newVal)
+	          .change();
+	        this.afterSelect(newVal);
+	      }
+	      return this.hide();
+	    },
+
+	    updater: function (item) {
+	      return item;
+	    },
+
+	    setSource: function (source) {
+	      this.source = source;
+	    },
+
+	    show: function () {
+	      var pos = $.extend({}, this.$element.position(), {
+	        height: this.$element[0].offsetHeight
+	      }), scrollHeight;
+
+	      scrollHeight = typeof this.options.scrollHeight == 'function' ?
+	          this.options.scrollHeight.call() :
+	          this.options.scrollHeight;
+
+	      var element;
+	      if (this.shown) {
+	        element = this.$menu;
+	      } else if (this.$appendTo) {
+	        element = this.$menu.appendTo(this.$appendTo);
+	      } else {
+	        element = this.$menu.insertAfter(this.$element);
+	      }
+	      element.css({
+	          top: pos.top + pos.height + scrollHeight
+	        , left: pos.left
+	        })
+	        .show();
+
+	      this.shown = true;
+	      return this;
+	    },
+
+	    hide: function () {
+	      this.$menu.hide();
+	      this.shown = false;
+	      return this;
+	    },
+
+	    lookup: function (query) {
+	      var items;
+	      if (typeof(query) != 'undefined' && query !== null) {
+	        this.query = query;
+	      } else {
+	        this.query = this.$element.val() ||  '';
+	      }
+
+	      if (this.query.length < this.options.minLength && !this.options.showHintOnFocus) {
+	        return this.shown ? this.hide() : this;
+	      }
+
+	      var worker = $.proxy(function() {
+
+	        if($.isFunction(this.source)) this.source(this.query, $.proxy(this.process, this));
+	        else if (this.source) {
+	          this.process(this.source);
+	        }
+	      }, this);
+
+	      clearTimeout(this.lookupWorker);
+	      this.lookupWorker = setTimeout(worker, this.delay);
+	    },
+
+	    process: function (items) {
+	      var that = this;
+
+	      items = $.grep(items, function (item) {
+	        return that.matcher(item);
+	      });
+
+	      items = this.sorter(items);
+
+	      if (!items.length && !this.options.addItem) {
+	        return this.shown ? this.hide() : this;
+	      }
+
+	      if (items.length > 0) {
+	        this.$element.data('active', items[0]);
+	      } else {
+	        this.$element.data('active', null);
+	      }
+
+	      // Add item
+	      if (this.options.addItem){
+	        items.push(this.options.addItem);
+	      }
+
+	      if (this.options.items == 'all') {
+	        return this.render(items).show();
+	      } else {
+	        return this.render(items.slice(0, this.options.items)).show();
+	      }
+	    },
+
+	    matcher: function (item) {
+	    var it = this.displayText(item);
+	      return ~it.toLowerCase().indexOf(this.query.toLowerCase());
+	    },
+
+	    sorter: function (items) {
+	      var beginswith = []
+	        , caseSensitive = []
+	        , caseInsensitive = []
+	        , item;
+
+	      while ((item = items.shift())) {
+	        var it = this.displayText(item);
+	        if (!it.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
+	        else if (~it.indexOf(this.query)) caseSensitive.push(item);
+	        else caseInsensitive.push(item);
+	      }
+
+	      return beginswith.concat(caseSensitive, caseInsensitive);
+	    },
+
+	    highlighter: function (item) {
+	          var html = $('<div></div>');
+	          var query = this.query;
+	          var i = item.toLowerCase().indexOf(query.toLowerCase());
+	          var len, leftPart, middlePart, rightPart, strong;
+	          len = query.length;
+	          if(len === 0){
+	              return html.text(item).html();
+	          }
+	          while (i > -1) {
+	              leftPart = item.substr(0, i);
+	              middlePart = item.substr(i, len);
+	              rightPart = item.substr(i + len);
+	              strong = $('<strong></strong>').text(middlePart);
+	              html
+	                  .append(document.createTextNode(leftPart))
+	                  .append(strong);
+	              item = rightPart;
+	              i = item.toLowerCase().indexOf(query.toLowerCase());
+	          }
+	          return html.append(document.createTextNode(item)).html();
+	    },
+
+	    render: function (items) {
+	      var that = this;
+	      var self = this;
+	      var activeFound = false;
+	      var data = [];
+	      var _category = that.options.separator;
+
+	      $.each(items, function (key,value) {
+	        // inject separator
+	        if (key > 0 && value[_category] !== items[key - 1][_category]){
+	          data.push({
+	              __type: 'divider'
+	          });
+	        }
+
+	        // inject category header
+	        if (value[_category] && (key === 0 || value[_category] !== items[key - 1][_category])){
+	          data.push({
+	              __type: 'category',
+	              name: value[_category]
+	          });
+	        }
+	        data.push(value);
+	      });
+
+	      items = $(data).map(function (i, item) {
+
+	        if ((item.__type || false) == 'category'){
+	            return $(that.options.headerHtml).text(item.name)[0];
+	        }
+
+	        if ((item.__type || false) == 'divider'){
+	            return $(that.options.headerDivider)[0];
+	        }
+
+	        var text = self.displayText(item);
+	        i = $(that.options.item).data('value', item);
+	        i.find('a').html(that.highlighter(text, item));
+	        if (text == self.$element.val()) {
+	            i.addClass('active');
+	            self.$element.data('active', item);
+	            activeFound = true;
+	        }
+	        return i[0];
+	      });
+
+	      if (this.autoSelect && !activeFound) {
+	        items.filter(':not(.dropdown-header)').first().addClass('active');
+	        this.$element.data('active', items.first().data('value'));
+	      }
+	      this.$menu.html(items);
+	      return this;
+	    },
+
+	    displayText: function(item) {
+	      return typeof item !== 'undefined' && typeof item.name != 'undefined' && item.name || item;
+	    },
+
+	    next: function (event) {
+	      var active = this.$menu.find('.active').removeClass('active')
+	        , next = active.next();
+
+	      if (!next.length) {
+	        next = $(this.$menu.find('li')[0]);
+	      }
+
+	      next.addClass('active');
+	    },
+
+	    prev: function (event) {
+	      var active = this.$menu.find('.active').removeClass('active')
+	        , prev = active.prev();
+
+	      if (!prev.length) {
+	        prev = this.$menu.find('li').last();
+	      }
+
+	      prev.addClass('active');
+	    },
+
+	    listen: function () {
+	      this.$element
+	        .on('focus',    $.proxy(this.focus, this))
+	        .on('blur',     $.proxy(this.blur, this))
+	        .on('keypress', $.proxy(this.keypress, this))
+	        .on('input',    $.proxy(this.input, this))
+	        .on('keyup',    $.proxy(this.keyup, this));
+
+	      if (this.eventSupported('keydown')) {
+	        this.$element.on('keydown', $.proxy(this.keydown, this));
+	      }
+
+	      this.$menu
+	        .on('click', $.proxy(this.click, this))
+	        .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
+	        .on('mouseleave', 'li', $.proxy(this.mouseleave, this));
+	    },
+
+	    destroy : function () {
+	      this.$element.data('typeahead',null);
+	      this.$element.data('active',null);
+	      this.$element
+	        .off('focus')
+	        .off('blur')
+	        .off('keypress')
+	        .off('input')
+	        .off('keyup');
+
+	      if (this.eventSupported('keydown')) {
+	        this.$element.off('keydown');
+	      }
+
+	      this.$menu.remove();
+	    },
+
+	    eventSupported: function(eventName) {
+	      var isSupported = eventName in this.$element;
+	      if (!isSupported) {
+	        this.$element.setAttribute(eventName, 'return;');
+	        isSupported = typeof this.$element[eventName] === 'function';
+	      }
+	      return isSupported;
+	    },
+
+	    move: function (e) {
+	      if (!this.shown) return;
+
+	      switch(e.keyCode) {
+	        case 9: // tab
+	        case 13: // enter
+	        case 27: // escape
+	          e.preventDefault();
+	          break;
+
+	        case 38: // up arrow
+	          // with the shiftKey (this is actually the left parenthesis)
+	          if (e.shiftKey) return;
+	          e.preventDefault();
+	          this.prev();
+	          break;
+
+	        case 40: // down arrow
+	          // with the shiftKey (this is actually the right parenthesis)
+	          if (e.shiftKey) return;
+	          e.preventDefault();
+	          this.next();
+	          break;
+	      }
+	    },
+
+	    keydown: function (e) {
+	      this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27]);
+	      if (!this.shown && e.keyCode == 40) {
+	        this.lookup();
+	      } else {
+	        this.move(e);
+	      }
+	    },
+
+	    keypress: function (e) {
+	      if (this.suppressKeyPressRepeat) return;
+	      this.move(e);
+	    },
+	    
+	    input: function (e) {
+	      this.lookup();
+	      e.preventDefault();
+	    },
+
+	    keyup: function (e) {
+	      switch(e.keyCode) {
+	        case 40: // down arrow
+	        case 38: // up arrow
+	        case 16: // shift
+	        case 17: // ctrl
+	        case 18: // alt
+	          break;
+
+	        case 9: // tab
+	        case 13: // enter
+	          if (!this.shown) return;
+	          this.select();
+	          break;
+
+	        case 27: // escape
+	          if (!this.shown) return;
+	          this.hide();
+	          break;
+	      }
+
+	      e.preventDefault();
+	   },
+
+	   focus: function (e) {
+	      if (!this.focused) {
+	        this.focused = true;
+	        if (this.options.showHintOnFocus) {
+	          this.lookup('');
+	        }
+	      }
+	    },
+
+	    blur: function (e) {
+	      this.focused = false;
+	      if (!this.mousedover && this.shown) this.hide();
+	    },
+
+	    click: function (e) {
+	      e.preventDefault();
+	      this.select();
+	      this.$element.focus();
+	      this.hide();
+	    },
+
+	    mouseenter: function (e) {
+	      this.mousedover = true;
+	      this.$menu.find('.active').removeClass('active');
+	      $(e.currentTarget).addClass('active');
+	    },
+
+	    mouseleave: function (e) {
+	      this.mousedover = false;
+	      if (!this.focused && this.shown) this.hide();
+	    }
+
+	  };
+
+
+	  /* TYPEAHEAD PLUGIN DEFINITION
+	   * =========================== */
+
+	  var old = $.fn.typeahead;
+
+	  $.fn.typeahead = function (option) {
+	    var arg = arguments;
+	     if (typeof option == 'string' && option == 'getActive') {
+	        return this.data('active');
+	     }
+	    return this.each(function () {
+	      var $this = $(this)
+	        , data = $this.data('typeahead')
+	        , options = typeof option == 'object' && option;
+	      if (!data) $this.data('typeahead', (data = new Typeahead(this, options)));
+	      if (typeof option == 'string' && data[option]) {
+	        if (arg.length > 1) {
+	          data[option].apply(data, Array.prototype.slice.call(arg ,1));
+	        } else {
+	          data[option]();
+	        }
+	      } 
+	    });
+	  };
+
+	  $.fn.typeahead.defaults = {
+	        source: [],
+	        items: 8,
+	        menu: '<ul class="typeahead dropdown-menu" role="listbox"></ul>',
+	        item: '<li><a class="dropdown-item" href="#" role="option"></a></li>',
+	        minLength: 1,
+	        scrollHeight: 0,
+	        autoSelect: true,
+	        afterSelect: $.noop,
+	        addItem: false,
+	        delay: 0,
+	        separator: 'category',
+	        headerHtml: '<li class="dropdown-header"></li>',
+	        headerDivider: '<li class="divider" role="separator"></li>'
+	  };
+
+	  $.fn.typeahead.Constructor = Typeahead;
+
+
+	 /* TYPEAHEAD NO CONFLICT
+	  * =================== */
+
+	  $.fn.typeahead.noConflict = function () {
+	    $.fn.typeahead = old;
+	    return this;
+	  };
+
+
+	 /* TYPEAHEAD DATA-API
+	  * ================== */
+
+	  $(document).on('focus.typeahead.data-api', '[data-provide="typeahead"]', function (e) {
+	    var $this = $(this);
+	    if ($this.data('typeahead')) return;
+	    $this.typeahead($this.data());
+	  });
+
+	}));
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var MyApp = __webpack_require__(1);
+	var Models = __webpack_require__(19);
+	var Layouts = __webpack_require__(12);
+	var Views = __webpack_require__(24);
+
+	var leagueInfoModule = Backbone.Marionette.Module.extend({
+	    startWithParent: false,
+
+	    initialize: function (options, app, object) {
+	        var self = this;
+
+	        self.app = app;
+
+	        self.leagueInfo = new Models.LeagueInfo();
+	    },
+	    onStart: function (options) {
+	        var self = this;
+
+	        self.options = options;
+	        self.leagueInfo.clear();
+
+	        self.createViews();
+	        self.bindViews();
+
+	        if (options.leagueId) {
+	            self.leagueInfo.set('id', self.options.leagueId);
+	            self.leagueInfo.fetch();
+	        }
+
+	        self.app.mainRegion.show(self.layout);
+	    },
+	    createViews: function () {
+	        var self = this;
+
+	        self.layout = new Layouts.LayoutView();
+	        self.leagueInfoView = new Views.LeagueInfoView({ model: self.leagueInfo });
+	    },
+	    bindViews: function () {
+	        var self = this;
+	        
+	        self.listenTo(self.layout, 'show', function () {
+	            self.layout.center.show(self.leagueInfoView);
+	        });
+	    },
+	    onStop: function () {
+	        var self = this;
+
+	        self.leagueInfoView.destroy();
+	        self.layout.destroy();
+	    }
+	});
+
+	MyApp.module("leagueInfo", leagueInfoModule);
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(_) {var LeagueInfoView = Backbone.Marionette.ItemView.extend({
+	    template: "#league-info",
+	    serializeData: function () {
+	        var model = this.model.toJSON();
+
+	        _.each(model.teams, function (obj, index) {
+	            obj.number = index + 1 + '.';
+	        });
+
+	        return model;
+	    },
+	    modelEvents: {
+	        'sync': 'render'
+	    }
+	});
+
+	module.exports = { LeagueInfoView: LeagueInfoView }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }
 /******/ ]);

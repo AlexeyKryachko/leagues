@@ -6,6 +6,8 @@
   "dependencies": {},
   "devDependencies": {
     "backbone.marionette": "^2.4.7",
+    "bootstrap-3-typeahead": "^4.0.1",
+    "eonasdan-bootstrap-datetimepicker": "^4.15.35",
     "handlebars": "^4.0.5",
     "install": "^0.8.1",
     "jquery": "^3.1.0",

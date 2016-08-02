@@ -43,4 +43,5 @@ headerModule = Backbone.Marionette.Module.extend({
     }
 });
 
+MyApp.module("header", headerModule);
 module.exports = headerModule;

@@ -9,6 +9,8 @@ module.exports = {
 			'backbone.marionette',
 			'handlebars',
 			'underscore',
+			'bootstrap-3-typeahead',
+			'jquery-datetimepicker'
 		]		
 	},
     output: {
@@ -19,12 +21,15 @@ module.exports = {
 		new webpack.ProvidePlugin({
 			$: "jquery",
 			jQuery: "jquery",
-			"window.jQuery": "jquery"
+			"window.jQuery": "jquery",
+			_: "underscore",
 		})
 	],
 	resolve: {
+		modulesDirectories: ['node_modules'],
 		alias: {
-		   handlebars: 'handlebars/dist/handlebars.min.js'
+			handlebars: 'handlebars/dist/handlebars.min.js',
+			$: 'jquery/dist/jquery.min.js'
 		}
 	}
 };

@@ -23,3 +23,9 @@ var LeaguesModel = Backbone.Model.extend({
         return '/api/leagues';
     }
 });
+
+module.exports = {
+    LeagueInfo: LeagueInfo,
+    League: League,
+    LeaguesModel: LeaguesModel
+}

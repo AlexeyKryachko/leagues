@@ -1,4 +1,8 @@
-﻿var CalendarListItemView = Backbone.Marionette.ItemView.extend({
+﻿var MyApp = require("../app.js");
+var Views = require("../shared/views.js");
+require('jquery-datetimepicker');
+
+var CalendarListItemView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
     template: "#calendar-event",
     ui: {
@@ -52,14 +56,17 @@
     onRender: function () {
         var self = this;
 
-        this.ui.startDate.datetimepicker({
-                defaultDate: self.model.get('startDate')
-            })
-            .on('dp.change', function (e) {
-                var date = new Date(e.date);
-                console.log(date);
-                self.model.set('startDate', date);
-            });
+        var startDate = new Date(self.model.get('startDate'));
+
+        $(this.ui.startDate).datetimepicker({
+            startDate: startDate,
+            onChangeDateTime: function(dp, $input) {
+                self.model.set('startDate', $input.val());
+                $('input', self.ui.startDate).val($input.val().toLocaleDateString());
+            }
+        });
+
+        $('input', self.ui.startDate).val(startDate.toLocaleDateString());
     },
     setOptions: function(options) {
         this.options.teams = options.teams;
@@ -99,7 +106,7 @@ var CalendarView = Backbone.Marionette.CompositeView.extend({
     template: "#calendar",    
     childViewContainer: "tbody",
     childView: CalendarListItemView,
-    emptyView: EmptyListView,
+    emptyView: Views.EmptyListView,
     ui: {
         'addEvent': '.add-event'
     },
@@ -133,3 +140,5 @@ var CalendarView = Backbone.Marionette.CompositeView.extend({
         return model;
     }
 });
+
+module.exports = { CalendarView: CalendarView }

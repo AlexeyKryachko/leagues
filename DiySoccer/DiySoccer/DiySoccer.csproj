@@ -244,8 +244,6 @@
     <Content Include="Content\dist\css\font-awesome.min.css" />
     <Content Include="Content\dist\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\dist\js\app.bundle.js" />
-    <Content Include="Content\dist\js\main.js" />
-    <Content Include="Content\dist\js\main.min.js" />
     <Content Include="Content\dist\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\dist\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\dist\fonts\fontawesome-webfont.woff" />
@@ -260,6 +258,12 @@
     <Content Include="Content\js\app\entry.js" />
     <Content Include="Content\js\app\header\headerModule.js" />
     <Content Include="Content\js\app\header\headerView.js" />
+    <Content Include="Content\js\app\leagues\info\leagueInfoModule.js" />
+    <Content Include="Content\js\app\leagues\info\leagueInfoView.js" />
+    <Content Include="Content\js\app\leagues\league\leagueModule.js" />
+    <Content Include="Content\js\app\leagues\league\leagueView.js" />
+    <Content Include="Content\js\app\leagues\list\leaguesList.js" />
+    <Content Include="Content\js\app\leagues\list\leaguesModule.js" />
     <Content Include="Content\js\app\models\calendars.js" />
     <Content Include="Content\js\app\models\games.js" />
     <Content Include="Content\js\app\models\leagues.js" />
@@ -270,8 +274,8 @@
     <Content Include="Content\js\app\template.js" />
     <Content Include="Content\scss\partials\bootstrap-datetimepicker.scss" />
     <None Include="Content\scss\variables.scss" />
-    <Content Include="Frontend\app\calendar\calendarModule.js" />
-    <Content Include="Frontend\app\calendar\calendarView.js" />
+    <Content Include="Content\js\app\calendar\calendarModule.js" />
+    <Content Include="Content\js\app\calendar\calendarView.js" />
     <Content Include="Frontend\app\games\gameInfo\gameInfoModule.js" />
     <Content Include="Frontend\app\games\gameInfo\gameInfoView.js" />
     <Content Include="Frontend\app\games\game\gameActions.js" />
@@ -290,11 +294,8 @@
     <Content Include="Frontend\app\models\calendars.js" />
     <Content Include="Frontend\app\models\games.js" />
     <Content Include="Frontend\app\models\teams.js" />
-    <Content Include="Frontend\app\shared\bottom\cancelView.js" />
-    <Content Include="Frontend\app\shared\emptyListView.js" />
-    <Content Include="Frontend\app\shared\bottom\saveView.js" />
+    <Content Include="Content\js\app\shared\views.js" />
     <Content Include="Frontend\app\header\headerView.js" />
-    <Content Include="Frontend\app\shared\splittedLayout.js" />
     <Content Include="Frontend\app\teams\info\teamInfoModule.js" />
     <Content Include="Frontend\app\teams\info\teamInfoView.js" />
     <Content Include="Frontend\app\teams\team\teamModule.js" />
@@ -382,7 +383,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Frontend\templates\league-admin.html" />
-    <Content Include="gulpfile.js" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />
@@ -391,18 +391,12 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Frontend\app\shared\layout.js" />
+    <Content Include="Content\js\app\shared\layouts.js" />
     <Content Include="Frontend\app\leagues\list\leaguesModule.js" />
     <Content Include="Frontend\app\template.js" />
     <Content Include="Frontend\app\router.js" />
     <Content Include="Frontend\app\app.js" />
     <Content Include="Content\dist\js\static\jquery.jeditable.mini.js" />
-    <Content Include="Content\dist\js\static\handlebars-v4.0.5.js" />
-    <Content Include="Content\dist\js\static\underscore.min.js" />
-    <Content Include="Content\dist\js\static\backbone.min.js" />
-    <Content Include="Content\dist\js\static\backbone.marionette.min.js" />
-    <Content Include="Content\dist\js\static\bootstrap.min.js" />
-    <Content Include="Content\dist\js\static\jquery-1.12.1.min.js" />
     <Content Include="Frontend\templates\save.html" />
     <Content Include="Frontend\templates\empty-list-view.html" />
     <Content Include="Frontend\templates\splitted-layout.html" />

@@ -1,11 +1,11 @@
-﻿var MyApp = require("./app.js");
-
-var MyRouter = Backbone.Marionette.AppRouter.extend({
-    initialize: function () {
+﻿var MyRouter = Backbone.Marionette.AppRouter.extend({
+    initialize: function (app) {
         var self = this;
 
-        MyApp.listenTo(MyApp.Settings, 'sync', function () {
-            console.log('Settings: ', MyApp.Settings.toJSON());
+        self.app = app;
+
+        self.app.listenTo(self.app.Settings, 'sync', function () {
+            console.log('Settings: ', self.app.Settings.toJSON());
             self.changeModule(self.workingModule, self.workingOptions);
         });
     },
@@ -26,55 +26,55 @@ var MyRouter = Backbone.Marionette.AppRouter.extend({
         "leagues/:leagueId/calendar": "calendarRoute"
     },
     defaultRoute: function () {
-        this.changeModule(MyApp.submodules.leagues);
+        this.changeModule(this.app.submodules.leagues);
     },
     calendarRoute: function(leagueId) {
         var options = { leagueId: leagueId };
-        this.changeModule(MyApp.submodules.calendar, options);
+        this.changeModule(this.app.submodules.calendar, options);
     },
     newLeagueRoute: function (leagueId) {
         var options = { leagueId: leagueId };
-        this.changeModule(MyApp.submodules.league, options);
+        this.changeModule(this.app.submodules.league, options);
     },
     editLeagueRoute: function (leagueId) {
         var options = { leagueId: leagueId };
-        this.changeModule(MyApp.submodules.league, options);
+        this.changeModule(this.app.submodules.league, options);
     },
     tournamentInfoRoute: function (tournamentId) {
         var options = { tournamentId: tournamentId };
-        this.changeModule(MyApp.submodules.tournamentsInfo, options);
+        this.changeModule(this.app.submodules.tournamentsInfo, options);
     },
     leagueInfoRoute: function (leagueId) {
         var options = { leagueId: leagueId };
-        this.changeModule(MyApp.submodules.leagueInfo, options);
+        this.changeModule(this.app.submodules.leagueInfo, options);
     },
     tableRoute: function (leagueId) {
         var options = { leagueId: leagueId };
-        this.changeModule(MyApp.submodules.teamList, options);
+        this.changeModule(this.app.submodules.teamList, options);
     },
     newTeamRoute: function (leagueId) {
         var options = { leagueId: leagueId };
-        this.changeModule(MyApp.submodules.team, options);
+        this.changeModule(this.app.submodules.team, options);
     },
     editTeamRoute: function (leagueId, teamId) {
         var options = { leagueId: leagueId, teamId: teamId };
-        this.changeModule(MyApp.submodules.team, options);
+        this.changeModule(this.app.submodules.team, options);
     },
     infoTeamRoute: function (leagueId, teamId) {
         var options = { leagueId: leagueId, teamId: teamId };
-        this.changeModule(MyApp.submodules.teamInfo, options);
+        this.changeModule(this.app.submodules.teamInfo, options);
     },
     newGameRoute: function (leagueId) {
         var options = { leagueId: leagueId };
-        this.changeModule(MyApp.submodules.game, options);
+        this.changeModule(this.app.submodules.game, options);
     },
     gameInfoRoute: function (leagueId, gameId) {
         var options = { leagueId: leagueId, gameId: gameId };
-        this.changeModule(MyApp.submodules.gameInfo, options);
+        this.changeModule(this.app.submodules.gameInfo, options);
     },
     editGameRoute: function (leagueId, gameId) {
         var options = { leagueId: leagueId, gameId: gameId };
-        this.changeModule(MyApp.submodules.game, options);
+        this.changeModule(this.app.submodules.game, options);
     },
     changeModule: function (module, options) {
         if (this.workingModule)

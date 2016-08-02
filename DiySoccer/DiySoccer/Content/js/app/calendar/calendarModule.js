@@ -1,4 +1,10 @@
-﻿var calendarModule = Marionette.Module.extend({
+﻿var MyApp = require("../app.js");
+var SharedViews = require("../shared/views.js");
+var Layouts = require("../shared/layouts.js");
+var Views = require("./calendarView.js");
+var Models = require("../models/calendars.js");
+
+var calendarModule = Backbone.Marionette.Module.extend({
     startWithParent: false,
 
     initialize: function(options, app, object) {
@@ -6,8 +12,8 @@
 
         self.app = app;
 
-        self.model = new Calendar();
-        self.events = new Events();
+        self.model = new Models.Calendar();
+        self.events = new Models.Events();
         self.teams = new Backbone.Collection();
     },
     onSubmit: function() {
@@ -49,7 +55,7 @@
     createViews: function() {
         var self = this;
 
-        self.layout = new LayoutView();
+        self.layout = new Layouts.LayoutView();
 
         var viewOptions = {
             leagueId: self.options.leagueId,
@@ -57,8 +63,8 @@
             model: self.model,
             collection: self.events
         };
-        self.calendarView = new CalendarView(viewOptions);
-        self.bottomView = new CancelView();
+        self.calendarView = new Views.CalendarView(viewOptions);
+        self.bottomView = new SharedViews.CancelView();
     },
     bindViews: function() {
         var self = this;

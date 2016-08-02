@@ -91,3 +91,9 @@ var Events = Backbone.Collection.extend({
         this.leagueId = leagueId;
     }
 });
+
+module.exports = {
+    Calendar: Calendar,
+    Event: Event,
+    Events: Events
+}

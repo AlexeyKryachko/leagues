@@ -1,7 +1,7 @@
-﻿var MyRouter = require("./router.js");
-var Settings = require("./models/settings.js");
+﻿var MyApp = new Backbone.Marionette.Application();
 
-var MyApp = new Backbone.Marionette.Application();
+var MyRouter = require("./router.js");
+var Settings = require("./models/settings.js");
 
 MyApp.addRegions({
     mainRegion: "#main-container",
@@ -17,7 +17,7 @@ MyApp.on('start', function () {
 
     MyApp.listenToOnce(MyApp.Settings, 'sync', function () {
         MyApp.submodules.header.start();
-        var router = new MyRouter();
+        var router = new MyRouter(MyApp);
         
         if (Backbone.history) {
             Backbone.history.start();
