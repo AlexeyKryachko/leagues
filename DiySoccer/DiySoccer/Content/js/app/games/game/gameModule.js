@@ -1,4 +1,11 @@
-﻿var gameModule = Marionette.Module.extend({
+﻿var MyApp = require("../../app.js");
+var Layouts = require("../../shared/layouts.js");
+var SharedViews = require("../../shared/views.js");
+var Views = require("./gameView.js");
+var TeamModels = require("../../models/teams.js");
+var EventModels = require("../../models/calendars.js");
+
+var gameModule = Backbone.Marionette.Module.extend({
     startWithParent: false,
 
     initialize: function (options, app, object) {
@@ -6,8 +13,8 @@
 
         self.app = app;
 
-        self.teams = new Teams();
-        self.events = new Events();
+        self.teams = new TeamModels.Teams();
+        self.events = new EventModels.Events();
 
         self.optionsModel = new Backbone.Model();
         self.leftModel = new Backbone.Model();
@@ -126,11 +133,11 @@
     createViews: function () {
         var self = this;
 
-        self.layout = new SplittedLayout();
-        self.leftGameView = new GameView({ model: self.leftModel, collection: self.leftScores, teams: self.teams, leagueId: self.options.leagueId });
-        self.rightGameView = new GameView({ model: self.rightModel, collection: self.rightScores, teams: self.teams, leagueId: self.options.leagueId });
-        self.optionsView = new GameOptionsView({ model: self.optionsModel });
-        self.saveView = new SaveView();
+        self.layout = new Layouts.SplittedLayout();
+        self.leftGameView = new Views.GameView({ model: self.leftModel, collection: self.leftScores, teams: self.teams, leagueId: self.options.leagueId });
+        self.rightGameView = new Views.GameView({ model: self.rightModel, collection: self.rightScores, teams: self.teams, leagueId: self.options.leagueId });
+        self.optionsView = new Views.GameOptionsView({ model: self.optionsModel });
+        self.saveView = new SharedViews.SaveView();
     },
     bindViews: function () {
         var self = this;

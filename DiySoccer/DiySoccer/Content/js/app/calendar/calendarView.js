@@ -55,14 +55,14 @@ var CalendarListItemView = Backbone.Marionette.ItemView.extend({
     },
     onRender: function () {
         var self = this;
-
-        var startDate = new Date(self.model.get('startDate'));
-
+        
         $(this.ui.startDate).datetimepicker({
+            timepicker: false,
             startDate: startDate,
-            onChangeDateTime: function(dp, $input) {
+            onChangeDateTime: function (dp, $input) {
+                var newDate = new Date($input.val());
                 self.model.set('startDate', $input.val());
-                $('input', self.ui.startDate).val($input.val().toLocaleDateString());
+                $('input', self.ui.startDate).val(newDate.toLocaleDateString());
             }
         });
 

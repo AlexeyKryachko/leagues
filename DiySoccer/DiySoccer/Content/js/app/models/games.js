@@ -12,3 +12,7 @@
         this.id = id;
     }
 });
+
+module.exports = {
+    GameInfo: GameInfo
+}

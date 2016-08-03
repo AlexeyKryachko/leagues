@@ -1,4 +1,6 @@
-﻿var TournamentsInfoActions = Backbone.Marionette.ItemView.extend({
+﻿require("bootstrap-3-typeahead");
+
+var TournamentsInfoActions = Backbone.Marionette.ItemView.extend({
     template: "#tournament-info-actions",
     ui: {
         'findTeam': '.import-team-input',
@@ -64,3 +66,8 @@ var TournamentsInfoView = Backbone.Marionette.ItemView.extend({
         return model;
     }
 });
+
+module.exports = {
+    TournamentsInfoActions: TournamentsInfoActions,
+    TournamentsInfoView: TournamentsInfoView
+}

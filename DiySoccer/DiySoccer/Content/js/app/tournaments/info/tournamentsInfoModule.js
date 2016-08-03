@@ -1,4 +1,9 @@
-﻿var tournamentsInfoModule = Marionette.Module.extend({
+﻿var MyApp = require("../../app.js");
+var Layouts = require("../../shared/layouts.js");
+var Views = require("./tournamentsInfoViews.js");
+var Models = require("../../models/tournaments.js");
+
+var tournamentsInfoModule = Backbone.Marionette.Module.extend({
     startWithParent: false,
 
     initialize: function (options, app, object) {
@@ -6,7 +11,7 @@
 
         self.app = app;
 
-        self.tournamentsInfo = new TournamentsInfo();
+        self.tournamentsInfo = new Models.TournamentsInfo();
     },
     onStart: function (options) {
         var self = this;
@@ -32,11 +37,11 @@
 
         var isEditor = MyApp.Settings.isEditor(this.options.tournamentId);
 
-        self.layout = new LayoutView();
-        self.tournamentsInfoView = new TournamentsInfoView({ model: self.tournamentsInfo });
+        self.layout = new Layouts.LayoutView();
+        self.tournamentsInfoView = new Views.TournamentsInfoView({ model: self.tournamentsInfo });
 
         if (isEditor)
-            self.tournamentsInfoActions = new TournamentsInfoActions({ model: self.tournamentsInfo });
+            self.tournamentsInfoActions = new Views.TournamentsInfoActions({ model: self.tournamentsInfo });
     },
     bindViews: function () {
         var self = this;

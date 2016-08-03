@@ -1,4 +1,6 @@
-﻿var GameInfoScoresView = Backbone.Marionette.ItemView.extend({
+﻿var SharedViews = require("../../shared/views.js");
+
+var GameInfoScoresView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
     template: "#game-info-scores",
     ui: {
@@ -17,7 +19,7 @@ var GameInfoView = Backbone.Marionette.CompositeView.extend({
     template: "#game-info",    
     childViewContainer: "tbody",
     childView: GameInfoScoresView,
-    emptyView: EmptyListView,
+    emptyView: SharedViews.EmptyListView,
     ui: {
     },
     events: {
@@ -30,3 +32,7 @@ var GameInfoView = Backbone.Marionette.CompositeView.extend({
         
     }
 });
+
+module.exports = {
+    GameInfoView: GameInfoView
+}

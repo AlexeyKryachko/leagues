@@ -1,4 +1,10 @@
-﻿var teamModule = Marionette.Module.extend({
+﻿var MyApp = require("../../app.js");
+var Layouts = require("../../shared/layouts.js");
+var Views = require("./teamView.js");
+var Models = require("../../models/teams.js");
+
+
+var teamModule = Backbone.Marionette.Module.extend({
     startWithParent: false,
 
     initialize: function (options, app, object) {
@@ -6,7 +12,7 @@
 
         self.app = app;
 
-        self.model = new Team();
+        self.model = new Models.Team();
         self.members = new Backbone.Collection();
     },
     onSubmit: function () {
@@ -53,8 +59,8 @@
     createViews: function () {
         var self = this;
 
-        self.layout = new LayoutView();
-        self.teamView = new TeamView({ model: this.model, collection: this.members, leagueId: this.options.leagueId });
+        self.layout = new Layouts.LayoutView();
+        self.teamView = new Views.TeamView({ model: this.model, collection: this.members, leagueId: this.options.leagueId });
     },
     bindViews: function () {
         var self = this;

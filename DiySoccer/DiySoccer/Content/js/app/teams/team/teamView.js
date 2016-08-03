@@ -1,4 +1,7 @@
-﻿var TeamMemberListItemView = Backbone.Marionette.ItemView.extend({
+﻿require("bootstrap-3-typeahead");
+var SharedViews = require("../../shared/views.js");
+
+var TeamMemberListItemView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
     template: "#team-member",
     ui: {
@@ -23,7 +26,7 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
     template: "#team",    
     childViewContainer: "tbody",
     childView: TeamMemberListItemView,
-    emptyView: EmptyListView,
+    emptyView: SharedViews.EmptyListView,
     ui: {
         'createMember': '.create-team-member',
         'existMember': '.exist-member-name',
@@ -34,12 +37,14 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
         'submit': '.create-team',
         'upload': '#btUpload',
         'logoContainer': '.logo-container',
-        'logoValue': '#logo-file-id'
+        'logoValue': '#logo-file-id',
+        'description': '#description'
     },
     events: {
         'click @ui.createMember': 'createMember',
         'click @ui.back': 'back',
         'change @ui.teamName': 'writeTeamName',
+        'change @ui.description': 'changeDescription',
         'change @ui.hidden': 'changeHidden',
         'click @ui.upload': 'uploadImage'
     },
@@ -87,7 +92,7 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
     onShow: function () {
         var self = this;
 
-        tinymce.init({
+        /*tinymce.init({
             selector: '#description',
             height: 300,
             toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
@@ -96,7 +101,8 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
                     self.changeDescription(ed.getContent());
                 });
             }
-        });
+        });*/
+        this.ui.description.val(this.model.get('description'));
     },
     changeDescription: function(content) {
         this.model.set('description', content);
@@ -130,3 +136,7 @@ var TeamView = Backbone.Marionette.CompositeView.extend({
         return model;
     }
 });
+
+module.exports = {
+    TeamView: TeamView
+}

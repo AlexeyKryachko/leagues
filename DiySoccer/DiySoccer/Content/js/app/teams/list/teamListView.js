@@ -1,4 +1,7 @@
-﻿var TeamListItemView = Backbone.Marionette.ItemView.extend({
+﻿var MyApp = require("../../app.js");
+var SharedViews = require("../../shared/views.js");
+
+var TeamListItemView = Backbone.Marionette.ItemView.extend({
     initialize: function() {
         this.options = {};
     },
@@ -37,7 +40,7 @@ var TeamListView = Backbone.Marionette.CompositeView.extend({
     template: "#team-list",    
     childViewContainer: "tbody",
     childView: TeamListItemView,
-    emptyView: EmptyListView,
+    emptyView: SharedViews.EmptyListView,
     initialize: function (options) {
         this.options = options;
     },
@@ -91,3 +94,8 @@ var TeamListActions = Backbone.Marionette.CompositeView.extend({
         return model;
     }
 });
+
+module.exports = {
+    TeamListActions: TeamListActions,
+    TeamListView: TeamListView
+}

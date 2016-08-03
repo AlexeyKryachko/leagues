@@ -1,11 +1,17 @@
-﻿var teamsModule = Marionette.Module.extend({
+﻿var MyApp = require("../../app.js");
+var Layouts = require("../../shared/layouts.js");
+var SharedViews = require("../../shared/views.js");
+var Views = require("./teamListView.js");
+var Models = require("../../models/teams.js");
+
+var teamsModule = Backbone.Marionette.Module.extend({
     startWithParent: false,
 
     initialize: function (options, app, object) {
         var self = this;
         this.app = app;
 
-        self.statistics = new TeamsStatistic();
+        self.statistics = new Models.TeamsStatistic();
         self.teams = new Backbone.Collection();
 
         self.listenTo(self.statistics, 'sync', function() {
@@ -31,10 +37,10 @@
     createViews: function () {
         var self = this;
         
-        self.layout = new LayoutView();
-        self.tableView = new TeamListView({ model: self.statistics, collection: self.teams, leagueId: self.options.leagueId });
-        self.actions = new TeamListActions({ leagueId: self.options.leagueId });
-        self.bottomView = new CancelView();
+        self.layout = new Layouts.LayoutView();
+        self.tableView = new Views.TeamListView({ model: self.statistics, collection: self.teams, leagueId: self.options.leagueId });
+        self.actions = new Views.TeamListActions({ leagueId: self.options.leagueId });
+        self.bottomView = new SharedViews.CancelView();
     },
     bindViews: function () {
         var self = this;

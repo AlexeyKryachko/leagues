@@ -53,7 +53,16 @@
 
 	__webpack_require__(17);
 	__webpack_require__(20);
+
 	__webpack_require__(23);
+	__webpack_require__(25);
+	__webpack_require__(27);
+
+	__webpack_require__(30);
+	__webpack_require__(33);
+	__webpack_require__(35);
+
+	__webpack_require__(37);
 
 	MyApp.start();
 
@@ -12290,19 +12299,18 @@
 	    },
 	    onRender: function () {
 	        var self = this;
-
-	        var startDate = self.model.get('startDate');
-	        var startJsDate = new Date(startDate);
-
+	        
 	        $(this.ui.startDate).datetimepicker({
+	            timepicker: false,
 	            startDate: startDate,
-	            onChangeDateTime: function(dp, $input) {
+	            onChangeDateTime: function (dp, $input) {
+	                var newDate = new Date($input.val());
 	                self.model.set('startDate', $input.val());
-	                $('input', self.ui.startDate).val($input.val().toLocaleDateString());
+	                $('input', self.ui.startDate).val(newDate.toLocaleDateString());
 	            }
 	        });
 
-	        $('input', self.ui.startDate).val(startJsDate.toLocaleDateString());
+	        $('input', self.ui.startDate).val(startDate.toLocaleDateString());
 	    },
 	    setOptions: function(options) {
 	        this.options.teams = options.teams;
@@ -12723,148 +12731,454 @@
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var MyApp = __webpack_require__(1);
+	/* WEBPACK VAR INJECTION */(function($) {var MyApp = __webpack_require__(1);
 	var Layouts = __webpack_require__(12);
+	var SharedViews = __webpack_require__(11);
 	var Views = __webpack_require__(18);
-	var Models = __webpack_require__(19);
+	var TeamModels = __webpack_require__(19);
+	var EventModels = __webpack_require__(16);
 
-	var leaguesModule = Backbone.Marionette.Module.extend({
+	var gameModule = Backbone.Marionette.Module.extend({
 	    startWithParent: false,
 
 	    initialize: function (options, app, object) {
-	        this.app = app;
+	        var self = this;
 
-	        this.leagues = new Models.LeaguesModel();
+	        self.app = app;
+
+	        self.teams = new TeamModels.Teams();
+	        self.events = new EventModels.Events();
+
+	        self.optionsModel = new Backbone.Model();
+	        self.leftModel = new Backbone.Model();
+	        self.leftScores = new Backbone.Collection();
+	        self.rightModel = new Backbone.Model();
+	        self.rightScores = new Backbone.Collection();
 	    },
+	    _formData: function () {
+	        var self = this;
 
+	        var homeTeam = self.leftModel.toJSON();
+	        homeTeam.score = self.leftModel.get('score');
+	        homeTeam.bestId = self.leftModel.get('bestId');
+	        homeTeam.members = self.leftScores.toJSON();
+
+	        var guestTeam = self.rightModel.toJSON();
+	        guestTeam.score = self.rightModel.get('score');
+	        guestTeam.bestId = self.rightModel.get('bestId');
+	        guestTeam.members = self.rightScores.toJSON();
+
+	        return {
+	            customScores: self.optionsModel.get('customScores'),
+	            eventId: self.optionsModel.get('eventId'),
+	            homeTeam: homeTeam,
+	            guestTeam: guestTeam
+	        }
+	    },
+	    _createGame: function () {
+	        var self = this;
+	        var data = self._formData();
+
+	        $.ajax({
+	            type: "POST",
+	            url: '/api/leagues/' + self.options.leagueId + '/games',
+	            data: data,
+	            success: function () {
+	                window.history.back();
+	            }
+	        });
+	    },
+	    _updateGame: function () {
+	        var self = this;
+	        var data = self._formData();
+
+	        $.ajax({
+	            type: "PUT",
+	            url: '/api/leagues/' + self.options.leagueId + '/games/' + self.options.gameId,
+	            data: data,
+	            success: function () {
+	                window.history.back();
+	            }
+	        });
+	    },
 	    onStart: function (options) {
 	        var self = this;
+
+	        self.options = options;
+
+	        if (options.gameId) {
+	            self._onEdit();
+	        } else {
+	            self._onNew();
+	        }
+
+	    },
+	    _onNew: function () {
+	        var self = this;
+
+	        self.optionsModel.clear();
+	        self.leftModel.clear();
+	        self.leftModel.set('disableScoreValue', true);
+	        self.leftScores.reset();
+	        self.rightModel.clear();
+	        self.rightModel.set('disableScoreValue', true);
+	        self.rightScores.reset();
+	        self.teams.setLeagueId(self.options.leagueId);
+	        self.events.setLeagueId(self.options.leagueId);
 
 	        self.createViews();
 	        self.bindViews();
 
-	        self.app.mainRegion.show(self.layout);
+	        self.teams.fetch();
+	        self.events.fetch();
 
-	        self.leagues.fetch();
+	        self.app.mainRegion.show(self.layout);
+	    },
+	    _onEdit: function () {
+	        var self = this;
+
+	        $.get('/api/leagues/' + self.options.leagueId + '/games/' + self.options.gameId + '/info', function (response) {
+	            self.leftModel.set('id', response.homeTeam.id);
+	            self.leftModel.set('score', response.homeTeam.score);
+	            self.leftModel.set('bestId', response.homeTeam.bestId);
+	            self.leftScores.reset(response.homeTeam.members);
+	            self.rightModel.set('id', response.guestTeam.id);
+	            self.rightModel.set('score', response.guestTeam.score);
+	            self.rightModel.set('bestId', response.guestTeam.bestId);
+	            self.rightScores.reset(response.guestTeam.members);
+	            self.teams.setLeagueId(self.options.leagueId);
+	            self.optionsModel.set('customScores', response.customScores);
+	            self.optionsModel.set('eventId', response.eventId);
+	            self.optionsModel.set('events', response.events);
+
+	            self.rightModel.set('disableScoreValue', !response.customScores);
+	            self.leftModel.set('disableScoreValue', !response.customScores);
+
+	            self.createViews();
+	            self.bindViews();
+
+	            self.teams.fetch();
+
+	            self.app.mainRegion.show(self.layout);
+
+	        });
 	    },
 	    createViews: function () {
 	        var self = this;
 
-	        self.layout = new Layouts.LayoutView();
-	        self.leagueListView = new Views.LeagueList({ model: self.leagues });
-	        self.leagueActionView = new Views.LeagueActions();
+	        self.layout = new Layouts.SplittedLayout();
+	        self.leftGameView = new Views.GameView({ model: self.leftModel, collection: self.leftScores, teams: self.teams, leagueId: self.options.leagueId });
+	        self.rightGameView = new Views.GameView({ model: self.rightModel, collection: self.rightScores, teams: self.teams, leagueId: self.options.leagueId });
+	        self.optionsView = new Views.GameOptionsView({ model: self.optionsModel });
+	        self.saveView = new SharedViews.SaveView();
 	    },
 	    bindViews: function () {
 	        var self = this;
-
-	        self.listenTo(self.leagues, 'sync', function () {
-	            self.layout.up.show(self.leagueActionView);
-	            self.layout.center.show(self.leagueListView);
+	        
+	        self.listenTo(self.layout, 'show', function () {
+	            self.layout.up.show(self.optionsView);
+	            self.layout.left.show(self.leftGameView);
+	            self.layout.right.show(self.rightGameView);
+	            self.layout.down.show(self.saveView);
 	        });
+
+	        self.listenTo(self.optionsView, 'scoring:changed', self.scoringShowing);
+
+	        self.listenTo(self.saveView, 'save', function () {
+	            if (self.options.gameId) {
+	                self._updateGame();
+	            } else {
+	                self._createGame();
+	            }
+	        });
+
+	        self.listenTo(self.saveView, 'cancel', function () {
+	            window.history.back();
+	        });
+
+	        self.listenTo(self.teams, 'sync', function () {
+	            self.leftGameView.render();
+	            self.rightGameView.render();
+	        });
+
+	        self.listenTo(self.events, 'sync', function () {
+	            self.optionsModel.set('events', self.events.toJSON());
+	            self.optionsView.render();
+	        });
+	    },
+	    scoringShowing: function (disabled) {
+	        var self = this;
+	        self.rightModel.set('disableScoreValue', !disabled);
+	        self.leftModel.set('disableScoreValue', !disabled);
 	    },
 	    onStop: function (options) {
 	        var self = this;
 
-	        self.leagueListView.destroy();
-	        self.leagueActionView.destroy();
+	        self.optionsView.destroy();
+	        self.saveView.destroy();
+	        self.leftGameView.destroy();
+	        self.rightGameView.destroy();
 	        self.layout.destroy();
 	    }
 	});
 
-	MyApp.module("leagues", leaguesModule);
+	MyApp.module("game", gameModule);
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ },
 /* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_) {var MyApp = __webpack_require__(1);
+	/* WEBPACK VAR INJECTION */(function(_, $) {var SharedViews = __webpack_require__(11);
 
-	var LeagueActions = Backbone.Marionette.ItemView.extend({
-	    template: "#leagues-actions",
+	var GameOptionsView = Backbone.Marionette.ItemView.extend({
+	    template: "#custom-game",
 	    ui: {
-	        'addLeague': '.add-league'
+	        'customScoring': '.custom-scoring',
+	        'eventChange': '.event-change'
 	    },
 	    events: {
-	        'click @ui.addLeague': 'addLeague'
+	        'change @ui.customScoring': 'customScoring',
+	        'change @ui.eventChange': 'eventChange'
 	    },
-	    addLeague: function () {
-	        document.location.href = '#leagues/new';
+	    eventChange: function () {
+	        var value = this.ui.eventChange.val();
+	        this.model.set('eventId', value);
+	    },
+	    customScoring: function () {
+	        var value = this.ui.customScoring.prop('checked');
+	        this.model.set('customScores', value);
+	        this.trigger('scoring:changed', value);
 	    },
 	    serializeData: function () {
-	        var model = {};
+	        var model = this.model.toJSON();
 
-	        model.showAdd = MyApp.Settings.isAdmin();
+	        if (!model.events)
+	            return model;
+
+	        _.each(model.events, function (obj) {
+	            if (obj.id == model.eventId)
+	                obj.selected = true;
+	        });
 
 	        return model;
 	    }
 	});
 
-	var LeagueList = Backbone.Marionette.ItemView.extend({
-	    template: "#leagues-list",
-	    initialize: function (options) {
-	        this.options = options;
+	var GameScoresView = Backbone.Marionette.ItemView.extend({
+	    tagName: 'tr',
+	    template: "#game-new-member",
+	    ui: {
+	        'editable': '.editable',
+	        'score': '.score',
+	        'help': '.help'
+	    },
+	    events: {
+	        'change @ui.score': 'changeScore',
+	        'change @ui.help': 'changeHelp'
+	    },
+	    changeScore: function() {
+	        this.model.set('score', this.ui.score.val());
+	        this.trigger('score:changed');
+	    },
+	    changeHelp: function () {
+	        this.model.set('help', this.ui.help.val());
+	    },
+	    onShow: function () {
+	        this.ui.editable.editable();
 	    },
 	    serializeData: function () {
-	        var model = this.model.toJSON();
-	        model.isAdmin = MyApp.Settings.isAdmin();
+	        if (!this.model.get('score'))
+	            this.model.set('score', 0);
+	        if (!this.model.get('help'))
+	            this.model.set('help', 0);
+	        return this.model.toJSON();;
+	    }
+	});
 
-	        if (!model.isAdmin)
+	var GameView = Backbone.Marionette.CompositeView.extend({
+	    template: "#game-new",    
+	    childViewContainer: "tbody",
+	    childView: GameScoresView,
+	    emptyView: SharedViews.EmptyListView,
+	    childEvents: {
+	        'score:changed': 'recalculateScore'
+	    },
+	    ui: {
+	        'changeTeam': '.change-team',
+	        'score': '.team-score',
+	        'rent': '.add-custom-member',
+	        'addRent': '.add-custom-member-button',
+	        'bestMember': '.best-member'
+	    },
+	    events: {
+	        'change @ui.changeTeam': 'changeTeam',
+	        'change @ui.score': 'changeScore',
+	        'click @ui.addRent': 'addRent',
+	        'change @ui.bestMember': 'changeBestMember'
+	    },
+	    triggers: {
+	    },
+	    changeBestMember: function (e) {
+	        var val = this.ui.bestMember.val();
+	        this.model.set('bestId', val);
+	    },
+	    recalculateScore: function () {
+	        var score = 0;
+	        _.each(this.collection.models, function (obj) {
+	            score += parseInt(obj.get('score'));
+	        });
+	        this.model.set('score', score);
+	    },
+	    changeTeam: function () {
+	        var team = _.findWhere(this.teams.models, { id: this.ui.changeTeam.val() });
+	        this.model.set('id', team.get('id'));
+	        this.collection.reset(team.get('members'));
+	    },
+	    changeScore: function () {
+	        this.model.set('score', this.ui.score.val());
+	    },
+	    initialize: function (options) {
+	        this.teams = options.teams;
+	        this.leagueId = options.leagueId;
+	    },
+	    addRent: function () {
+	        var self = this;
+
+	        var val = self.ui.rent.val();
+	        if (!self.selectedRent || !val)
+	            return;
+
+	        self.collection.add(self.selectedRent);
+	        self.ui.rent.val('');
+	        self.selectedRent = null;
+	    },
+	    onRender: function () {
+	        var self = this;
+
+	        $(this.ui.rent).typeahead({
+	            source: function (query, process) {
+	                var url = '/api/league/' + self.leagueId + '/users?page=0&pageSize=10';
+	                if (self.model.get('id'))
+	                    url += '&exceptTeamIds=' + self.model.get('id');
+	                return $.get(url, { query: query }, function (response) {
+	                    return process(response);
+	                });
+	            },
+	            displayText: function (item) {
+	                return item.name;
+	            },
+	            updater: function (item) {
+	                self.selectedRent = item;
+	                return item.name;
+	            }
+	        });
+	    },
+	    serializeData: function() {
+	        var model = this.model.toJSON();
+
+	        if (this.teams.length == 0)
 	            return model;
 
-	        if (model.leagues) {
-	            _.each(model.leagues, function (obj) {
-	                obj.href = '#leagues/' + obj.id + '/edit';
-	            });
-	        }
-	        if (model.tournaments) {
-	            _.each(model.tournaments, function (obj) {
-	                obj.href = '#leagues/' + obj.id + '/edit';
-	            });
-	        }
+	        model.teamSelected = false;
+	        model.teams = [];
+	        _.each(this.teams.models, function (team) {
+	            var selected = team.get('id') == model.id;
+	            if (selected)
+	                model.teamSelected = true;
+
+	            model.teams.push({ id: team.get('id'), name: team.get('name'), selected: team.get('id') == model.id });
+	        });
+
+	        model.members = [];
+	        _.each(this.collection.models, function (member) {
+	            var memberJson = { id: member.get('id'), name: member.get('name') };
+
+	            var selected = member.get('id') == model.bestId;
+	            if (selected)
+	                memberJson.selected = true;
+
+	            model.members.push(memberJson);
+	        });
+
 	        return model;
+	    },
+	    modelEvents: {
+	        'change': 'render'
 	    }
 	});
 
 	module.exports = {
-	    LeagueActions: LeagueActions,
-	    LeagueList: LeagueList
+	    GameView: GameView,
+	    GameOptionsView: GameOptionsView
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(2)))
 
 /***/ },
 /* 19 */
 /***/ function(module, exports) {
 
-	var LeagueInfo = Backbone.Model.extend({
+	var TeamInfo = Backbone.Model.extend({
+	    initialize: function () {
+	        this.leagueId = 0;
+	    },
 	    url: function () {
-	        return '/api/leagues/' + this.id + '/info/';
+	        return '/api/leagues/' + this.leagueId + '/teams/' + this.id + '/info';
+	    },
+	    setLeagueId: function (leagueId) {
+	        this.leagueId = leagueId;
+	    },
+	    setId: function (id) {
+	        this.id = id;
 	    }
 	});
 
-	var League = Backbone.Model.extend({
+	var Team = Backbone.Model.extend({
+	    initialize: function () {
+	        this.leagueId = 0;
+	    },
 	    url: function() {
 	        return this.id 
-	            ? '/api/leagues/' + this.id
-	            : '/api/leagues';
+	            ? '/api/leagues/' + this.leagueId + '/teams/' + this.id
+	            : '/api/leagues/' + this.leagueId + '/teams/';
 	    },
-	    create: function() {
-	        
+	    setLeagueId: function (leagueId) {
+	        this.leagueId = leagueId;
 	    },
-	    update: function() {
-	        
+	    setId: function (id) {
+	        this.id = id;
 	    }
 	});
 
-	var LeaguesModel = Backbone.Model.extend({
+	var Teams = Backbone.Collection.extend({
+	    initialize: function() {
+	        this.leagueId = 0;
+	    },
 	    url: function() {
-	        return '/api/leagues';
+	        return '/api/leagues/' + this.leagueId + '/teams/';
+	    },
+	    setLeagueId: function(leagueId) {
+	        this.leagueId = leagueId;
+	    }
+	});
+
+	var TeamsStatistic = Backbone.Model.extend({
+	    initialize: function() {
+	        this.leagueId = 0;
+	    },
+	    url: function() {
+	        return '/api/leagues/' + this.leagueId + '/statistic/';
+	    },
+	    setLeagueId: function(leagueId) {
+	        this.leagueId = leagueId;
 	    }
 	});
 
 	module.exports = {
-	    LeagueInfo: LeagueInfo,
-	    League: League,
-	    LeaguesModel: LeaguesModel
+	    TeamInfo: TeamInfo,
+	    Team: Team,
+	    Teams: Teams,
+	    TeamsStatistic: TeamsStatistic
 	}
 
 /***/ },
@@ -12875,9 +13189,168 @@
 	var Layouts = __webpack_require__(12);
 	var SharedViews = __webpack_require__(11);
 	var Views = __webpack_require__(21);
+	var Models = __webpack_require__(22);
+
+	var gameInfoModule = Backbone.Marionette.Module.extend({
+	    startWithParent: false,
+
+	    initialize: function (options, app, object) {
+	        var self = this;
+
+	        self.app = app;
+	        
+	        self.leftModel = new Backbone.Model();
+	        self.leftScores = new Backbone.Collection();
+	        self.rightModel = new Backbone.Model();
+	        self.rightScores = new Backbone.Collection();
+
+	        self.gameInfo = new Models.GameInfo();
+	    },
+	    onStart: function (options) {
+	        var self = this;
+
+	        self.options = options;
+
+	        self.leftModel.clear();
+	        self.leftScores.reset();
+	        self.rightModel.clear();
+	        self.rightScores.reset();
+
+	        self.createViews();
+	        self.bindViews();
+
+	        self.gameInfo.setLeagueId(self.options.leagueId);
+	        self.gameInfo.setId(self.options.gameId);
+	        self.gameInfo.fetch();
+	        self.app.mainRegion.show(self.layout);
+	    },
+	    createViews: function () {
+	        var self = this;
+
+	        self.layout = new Layouts.SplittedLayout();
+	        self.leftGameView = new Views.GameInfoView({ model: self.leftModel, collection: self.leftScores, teams: self.teams, leagueId: self.options.leagueId });
+	        self.rightGameView = new Views.GameInfoView({ model: self.rightModel, collection: self.rightScores, teams: self.teams, leagueId: self.options.leagueId });
+	        self.cancelView = new SharedViews.CancelView();
+	    },
+	    bindViews: function () {
+	        var self = this;
+	        
+	        self.listenTo(self.layout, 'show', function () {
+	            self.layout.left.show(self.leftGameView);
+	            self.layout.right.show(self.rightGameView);
+	            self.layout.down.show(self.cancelView);
+	        });
+
+	        self.listenTo(self.cancelView, 'cancel', function () {
+	            window.history.back();
+	        });
+
+	        self.listenTo(self.gameInfo, 'sync', function () {
+	            self.leftModel.set('name', self.gameInfo.get('homeTeamName'));
+	            self.leftModel.set('score', self.gameInfo.get('homeTeamScore'));
+	            self.leftModel.set('mediaId', self.gameInfo.get('homeTeamMediaId'));
+	            self.leftModel.set('best', self.gameInfo.get('homeTeamBest'));
+	            self.leftScores.reset(self.gameInfo.get('homeTeamScores'));
+	            self.leftGameView.render();
+
+	            self.rightModel.set('name', self.gameInfo.get('guestTeamName'));
+	            self.rightModel.set('score', self.gameInfo.get('guestTeamScore'));
+	            self.rightModel.set('mediaId', self.gameInfo.get('guestTeamMediaId'));
+	            self.rightModel.set('best', self.gameInfo.get('guestTeamBest'));
+	            self.rightScores.reset(self.gameInfo.get('guestTeamScores'));
+	            self.rightGameView.render();
+	        });
+	    },
+	    onStop: function (options) {
+	        var self = this;
+
+	        self.cancelView.destroy();
+	        self.leftGameView.destroy();
+	        self.rightGameView.destroy();
+	        self.layout.destroy();
+	    }
+	});
+
+	MyApp.module("gameInfo", gameInfoModule);
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SharedViews = __webpack_require__(11);
+
+	var GameInfoScoresView = Backbone.Marionette.ItemView.extend({
+	    tagName: 'tr',
+	    template: "#game-info-scores",
+	    ui: {
+	    },
+	    events: {
+	    },
+	    changeScore: function() {
+	    },
+	    changeHelp: function () {
+	    },
+	    onShow: function () {
+	    }
+	});
+
+	var GameInfoView = Backbone.Marionette.CompositeView.extend({
+	    template: "#game-info",    
+	    childViewContainer: "tbody",
+	    childView: GameInfoScoresView,
+	    emptyView: SharedViews.EmptyListView,
+	    ui: {
+	    },
+	    events: {
+	    },
+	    triggers: {
+	    },
+	    initialize: function () {
+	    },
+	    onRender: function () {
+	        
+	    }
+	});
+
+	module.exports = {
+	    GameInfoView: GameInfoView
+	}
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	var GameInfo = Backbone.Model.extend({
+	    initialize: function () {
+	        this.leagueId = 0;
+	    },
+	    url: function () {
+	        return '/api/leagues/' + this.leagueId + '/games/' + this.id;
+	    },
+	    setLeagueId: function (leagueId) {
+	        this.leagueId = leagueId;
+	    },
+	    setId: function (id) {
+	        this.id = id;
+	    }
+	});
+
+	module.exports = {
+	    GameInfo: GameInfo
+	}
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var MyApp = __webpack_require__(1);
+	var Layouts = __webpack_require__(12);
+	var SharedViews = __webpack_require__(11);
+	var Views = __webpack_require__(24);
 	var Models = __webpack_require__(19);
 
-	var leagueModule = Backbone.Marionette.Module.extend({
+	var teamInfoModule = Backbone.Marionette.Module.extend({
 	    startWithParent: false,
 
 	    initialize: function (options, app, object) {
@@ -12885,23 +13358,384 @@
 
 	        self.app = app;
 
-	        self.league = new Models.League();
-	        self.admins = new Backbone.Collection();
+	        self.teamInfo = new Models.TeamInfo();
+	        self.games = new Backbone.Collection();
 	    },
 	    onStart: function (options) {
 	        var self = this;
-
 	        self.options = options;
-	        self.league.clear();
-	        self.admins.reset();
+
+	        self.teamInfo.clear();
+	        self.teamInfo.setId(self.options.teamId);
+	        self.teamInfo.setLeagueId(self.options.leagueId);
+	        self.games.reset();
 
 	        self.createViews();
 	        self.bindViews();
 
-	        if (options.leagueId) {
-	            self.league.set('id', self.options.leagueId);
-	            self.league.fetch();
+	        self.teamInfo.fetch();
+	    },
+	    createViews: function () {
+	        var self = this;
+
+	        self.layout = new Layouts.LayoutView();
+	        self.teamInfoView = new Views.TeamGamesView({ model: self.teamInfo, collection: self.games, leagueId: self.options.leagueId });
+	        self.bottomView = new SharedViews.CancelView();
+	    },
+	    bindViews: function () {
+	        var self = this;
+
+	        self.listenTo(self.layout, 'show', function () {
+	            self.layout.center.show(self.teamInfoView);
+	            self.layout.down.show(self.bottomView);
+	        });
+
+	        self.listenTo(self.bottomView, 'cancel', function () {
+	            window.history.back();
+	        });
+
+	        self.listenTo(self.teamInfo, 'sync', function () {
+	            self.games.reset(self.teamInfo.get('games'));
+	            self.app.mainRegion.show(self.layout);
+	        });
+	    },
+	    onStop: function (options) {
+	        var self = this;
+	        
+	        self.bottomView.destroy();
+	        self.teamInfoView.destroy();
+	        self.layout.destroy();
+	    }
+	});
+
+	MyApp.module("teamInfo", teamInfoModule);
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($) {var MyApp = __webpack_require__(1);
+	var SharedViews = __webpack_require__(11);
+
+	var TeamGameView = Backbone.Marionette.ItemView.extend({
+	    tagName: 'tr',
+	    template: "#team-game",
+	    className: 'cursor-pointer',
+	    ui: {
+	        'edit': '.edit-game',
+	        'delete': '.delete-game'
+	    },
+	    events: {
+	        'click @ui.edit': 'editRedirect',
+	        'click @ui.delete': 'deleteGame',
+	        'click': 'viewRedirect'
+	    },
+	    viewRedirect: function() {
+	        document.location.href = '#leagues/' + this.options.leagueId + '/games/' + this.model.get('id');
+	    },
+	    editRedirect: function (e) {
+	        e.preventDefault();
+	        if (e.stopPropagation)
+	            e.stopPropagation();
+
+	        this.trigger('game:edit', this.model);
+	    },
+	    deleteGame: function (e) {
+	        e.preventDefault();
+	        if (e.stopPropagation)
+	            e.stopPropagation();
+
+	        this.trigger('game:delete', this.model);
+	    },
+	    setLeagueId: function(leagueId) {
+	        this.options.leagueId = leagueId;
+	    },
+	    onShow: function () {
+	    },
+	    serializeData: function () {
+	        var model = this.model.toJSON();
+
+	        model.isEditor = MyApp.Settings.isEditor(this.options.leagueId);
+
+	        return model;
+	    }
+	});
+
+	var TeamGamesView = Backbone.Marionette.CompositeView.extend({
+	    template: "#team-info",    
+	    childViewContainer: ".games-container",
+	    childView: TeamGameView,
+	    emptyView: SharedViews.EmptyListView,
+	    childEvents: {
+	        'game:delete': 'deleteGame',
+	        'game:edit': 'editGame'
+	    },
+	    onBeforeAddChild: function (childView) {
+	        childView.setLeagueId(this.options.leagueId);
+	    },
+	    editGame: function (view, model) {
+	        document.location.href = '#leagues/' + this.options.leagueId + '/games/' + model.get('id') + '/edit';
+	    },
+	    deleteGame: function (view, model) {
+	        var self = this;
+
+	        $.ajax({
+	            method: "DELETE",
+	            url: '/api/leagues/' + self.options.leagueId + '/games/' + model.get('id')
+	        }).done(function (response) {
+	            self.collection.remove(model);
+	        });
+	    },
+	    ui: {
+	    },
+	    initialize: function (options) {
+	        this.options = options;
+	    }
+	});
+
+	module.exports = {
+	    TeamGamesView: TeamGamesView
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var MyApp = __webpack_require__(1);
+	var Layouts = __webpack_require__(12);
+	var SharedViews = __webpack_require__(11);
+	var Views = __webpack_require__(26);
+	var Models = __webpack_require__(19);
+
+	var teamsModule = Backbone.Marionette.Module.extend({
+	    startWithParent: false,
+
+	    initialize: function (options, app, object) {
+	        var self = this;
+	        this.app = app;
+
+	        self.statistics = new Models.TeamsStatistic();
+	        self.teams = new Backbone.Collection();
+
+	        self.listenTo(self.statistics, 'sync', function() {
+	            self.teams.reset(self.statistics.get('teamStats'));
+	        });
+	    },
+
+	    onStart: function (options) {
+	        var self = this;
+
+	        self.teams.reset();
+
+	        self.options = options;
+
+	        self.createViews();
+	        self.bindViews();
+
+	        self.app.mainRegion.show(self.layout);
+
+	        self.statistics.setLeagueId(self.options.leagueId);
+	        self.statistics.fetch();
+	    },
+	    createViews: function () {
+	        var self = this;
+	        
+	        self.layout = new Layouts.LayoutView();
+	        self.tableView = new Views.TeamListView({ model: self.statistics, collection: self.teams, leagueId: self.options.leagueId });
+	        self.actions = new Views.TeamListActions({ leagueId: self.options.leagueId });
+	        self.bottomView = new SharedViews.CancelView();
+	    },
+	    bindViews: function () {
+	        var self = this;
+
+	        self.listenTo(self.layout, 'show', function () {
+	            self.layout.up.show(self.actions);
+	            self.layout.center.show(self.tableView);
+	            self.layout.down.show(self.bottomView);
+	        });
+
+	        self.listenTo(self.bottomView, 'cancel', function () {
+	            window.history.back();
+	        });
+	    },
+	    onStop: function (options) {
+	        var self = this;
+
+	        self.bottomView.destroy();
+	        self.actions.destroy();
+	        self.tableView.destroy();
+	        self.layout.destroy();
+	    }
+	});
+
+	MyApp.module("teamList", teamsModule);
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var MyApp = __webpack_require__(1);
+	var SharedViews = __webpack_require__(11);
+
+	var TeamListItemView = Backbone.Marionette.ItemView.extend({
+	    initialize: function() {
+	        this.options = {};
+	    },
+	    tagName: 'tr',
+	    className: 'cursor-pointer',
+	    template: "#team-item",
+	    events:{
+	        'click': 'onRedirect',
+	        'click .edit-team': 'editTeam'
+	    },
+	    editTeam: function (e) {
+	        e.preventDefault();
+	        if (e.stopPropagation)
+	            e.stopPropagation();
+	        document.location.href = '#leagues/' + this.options.leagueId + '/teams/' + this.model.get('id') + '/edit';
+	    },
+	    onRedirect: function () {
+	        document.location.href = '#leagues/' + this.options.leagueId + '/teams/' + this.model.get('id');
+	    },
+	    onShow: function () {
+	    },
+	    serializeData: function () {
+	        var model = this.model.toJSON();
+
+	        model.goals = model.scores + '-' + model.missed + ' (' + (model.scores - model.missed) + ')';
+	        model.showEdit = MyApp.Settings.isEditor(this.options.leagueId);
+	        
+	        return model;
+	    },
+	    setLeagueId: function(leagueId) {
+	        this.options.leagueId = leagueId;
+	    }
+	});
+
+	var TeamListView = Backbone.Marionette.CompositeView.extend({
+	    template: "#team-list",    
+	    childViewContainer: "tbody",
+	    childView: TeamListItemView,
+	    emptyView: SharedViews.EmptyListView,
+	    initialize: function (options) {
+	        this.options = options;
+	    },
+	    onBeforeAddChild: function(childView) {
+	        childView.setLeagueId(this.options.leagueId);
+	    },
+	    modelEvents: {
+	        'sync': 'render'
+	    },
+	    collectionEvents: {
+	        'sync': 'render'
+	    },
+	    serializeData: function() {
+	        var model = this.model.toJSON();
+
+	        model.showEditColumn = MyApp.Settings.isEditor(this.options.leagueId);
+	        
+	        return model;
+	    }
+	});
+
+	var TeamListActions = Backbone.Marionette.CompositeView.extend({
+	    template: "#team-list-actions",
+	    ui: {
+	        'addBtn': '.add-new-team',
+	        'addGame': '.add-new-game',
+	        'calendarLink': '.calendar-link'
+	    },
+	    events: {
+	        'click @ui.addBtn': 'redirectAddTeam',
+	        'click @ui.addGame': 'redirectAddGame',
+	        'click @ui.calendarLink': 'redirectCalendar'
+	    },
+	    initialize: function (options) {
+	        this.options = options;
+	    },
+	    redirectAddTeam: function (e) {
+	        document.location.href = "#leagues/" + this.options.leagueId + "/teams/new";
+	    },
+	    redirectAddGame: function (e) {
+	        document.location.href = "#leagues/" + this.options.leagueId + "/games/new";
+	    },
+	    redirectCalendar: function (e) {
+	        document.location.href = "#leagues/" + this.options.leagueId + "/calendar";
+	    },
+	    serializeData: function() {
+	        var model = {};
+
+	        model.isEditor = MyApp.Settings.isEditor(this.options.leagueId);
+
+	        return model;
+	    }
+	});
+
+	module.exports = {
+	    TeamListActions: TeamListActions,
+	    TeamListView: TeamListView
+	}
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var MyApp = __webpack_require__(1);
+	var Layouts = __webpack_require__(12);
+	var Views = __webpack_require__(28);
+	var Models = __webpack_require__(19);
+
+
+	var teamModule = Backbone.Marionette.Module.extend({
+	    startWithParent: false,
+
+	    initialize: function (options, app, object) {
+	        var self = this;
+
+	        self.app = app;
+
+	        self.model = new Models.Team();
+	        self.members = new Backbone.Collection();
+	    },
+	    onSubmit: function () {
+	        var self = this;
+
+	        self.model.set('members', self.members.toJSON());
+
+	        self.model.save(null, {
+	            success: function(model, response) {
+	                window.history.back();
+	            }
+	        });
+	    },
+	    onCancel: function () {
+	        window.history.back();
+	    },
+	    onStart: function (options) {
+	        var self = this;
+
+	        self.model.clear();
+	        self.members.reset();
+
+	        self.options = options;
+	        self.model.setLeagueId(self.options.leagueId);
+
+	        if (options.teamId) {
+	            self.model.setId(self.options.teamId);
+	            self.listenToOnce(self.model, 'sync', self._onStart);
+	            self.model.fetch();
+	        } else {
+	            self._onStart();
 	        }
+	    },
+	    _onStart: function () {
+	        var self = this;
+
+	        self.members.reset(self.model.get('members'));
+
+	        self.createViews();
+	        self.bindViews();
 
 	        self.app.mainRegion.show(self.layout);
 	    },
@@ -12909,96 +13743,86 @@
 	        var self = this;
 
 	        self.layout = new Layouts.LayoutView();
-	        self.leagueView = new Views.LeagueView({ model: self.league, collection: self.admins });
-	        self.saveView = new SharedViews.SaveView();
+	        self.teamView = new Views.TeamView({ model: this.model, collection: this.members, leagueId: this.options.leagueId });
 	    },
 	    bindViews: function () {
 	        var self = this;
-	        
+
 	        self.listenTo(self.layout, 'show', function () {
-	            self.layout.center.show(self.leagueView);
-	            self.layout.down.show(self.saveView);
+	            self.layout.center.show(self.teamView);
 	        });
 
-	        self.listenToOnce(self.league, 'sync', function () {
-	            self.admins.reset(self.league.get('admins'));
-	        });
-
-	        self.listenTo(self.saveView, 'save', function () {
-	            self.listenToOnce(self.league, 'sync', function() {
-	                document.location.href = '#leagues/';
-	            });
-
-	            self.league.set('admins', self.admins.toJSON());
-	            self.league.save();
-	        });
-
-	        self.listenTo(self.saveView, 'cancel', function () {
-	            window.history.back();
-	        });
+	        self.listenTo(self.teamView, 'submit', this.onSubmit);
+	        self.listenTo(self.teamView, 'back', this.onCancel);
 	    },
+
 	    onStop: function (options) {
 	        var self = this;
 
-	        self.leagueView.destroy();
-	        self.saveView.destroy();
+	        self.teamView.destroy();
 	        self.layout.destroy();
 	    }
 	});
 
-	MyApp.module("league", leagueModule);
+	MyApp.module("team", teamModule);
 
 /***/ },
-/* 21 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {var Views = __webpack_require__(11);
-	__webpack_require__(22);
+	/* WEBPACK VAR INJECTION */(function($) {__webpack_require__(29);
+	var SharedViews = __webpack_require__(11);
 
-	var LeagueAdminListItemView = Backbone.Marionette.ItemView.extend({
+	var TeamMemberListItemView = Backbone.Marionette.ItemView.extend({
 	    tagName: 'tr',
-	    template: "#league-admin",
+	    template: "#team-member",
 	    ui: {
-	        'removeAdmin': '.remove-league-admin'
+	        'removeMember': '.remove-team-member'
 	    },
 	    events: {
-	        'click @ui.removeAdmin': 'removeAdmin'
+	        'click @ui.removeMember': 'removeMember'
 	    },
-	    removeAdmin: function () {
+	    removeMember: function () {
 	        this.model.set('id', null);
 	        this.model.destroy();
 	    },
 	    onShow: function () {
-
+	        
 	    },
 	    serializeData: function () {
 	        return this.model.toJSON();
 	    }
 	});
 
-	var LeagueView = Backbone.Marionette.CompositeView.extend({
-	    template: "#league",
+	var TeamView = Backbone.Marionette.CompositeView.extend({
+	    template: "#team",    
 	    childViewContainer: "tbody",
-	    childView: LeagueAdminListItemView,
-	    emptyView: Views.EmptyListView,
+	    childView: TeamMemberListItemView,
+	    emptyView: SharedViews.EmptyListView,
 	    ui: {
-	        'addAdmin': '.add-league-admin',
-	        'name': '.league-name',
-	        'description': '.league-description',
-	        'group': '.league-vkGroup',
+	        'createMember': '.create-team-member',
+	        'existMember': '.exist-member-name',
+	        'back': '.create-team-back',
+	        'memberName': '.member-name',
+	        'hidden': '.team-hidden',
+	        'teamName': '.team-name',
+	        'submit': '.create-team',
 	        'upload': '#btUpload',
 	        'logoContainer': '.logo-container',
 	        'logoValue': '#logo-file-id',
-	        'type': '#league-type',
-	        'subName': '.league-sub-name'
+	        'description': '#description'
 	    },
 	    events: {
-	        'change @ui.name': 'changeName',
-	        'change @ui.subName': 'changeSubName',
+	        'click @ui.createMember': 'createMember',
+	        'click @ui.back': 'back',
+	        'change @ui.teamName': 'writeTeamName',
 	        'change @ui.description': 'changeDescription',
-	        'change @ui.group': 'changeGroup',
-	        'change @ui.type': 'changeType',
+	        'change @ui.hidden': 'changeHidden',
 	        'click @ui.upload': 'uploadImage'
+	    },
+	    triggers: {
+	        'click @ui.submit': 'submit',
+	        'click @ui.back': 'back'
 	    },
 	    uploadImage: function () {
 	        var self = this;
@@ -13014,7 +13838,7 @@
 	            data: data, 		        // DATA OR FILES IN THIS CONTEXT.
 	            success: function (data, textStatus, xhr) {
 	                self.ui.logoContainer.html('<img src="/api/image/' + data.id + '" />');
-	                self.model.set('mediaId', data.id);
+	                self.model.set('media', data.id);
 	                document.getElementById("logo-upload-form").reset();
 	            },
 	            error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -13023,27 +13847,46 @@
 	            }
 	        });
 	    },
-	    changeType: function () {
-	        this.model.set('type', this.ui.type.val());
+	    writeTeamName: function() {
+	        this.model.set('name', this.ui.teamName.val());
 	    },
-	    changeSubName: function () {
-	        this.model.set('subName', this.ui.subName.val());
+	    changeHidden: function () {
+	        this.model.set('hidden', this.ui.hidden.prop('checked'));
 	    },
-	    changeName: function () {
-	        this.model.set('name', this.ui.name.val());
+	    createMember: function () {
+	        var name = this.ui.memberName.val();
+	        if (!name || name == '')
+	            return;
+
+	        this.collection.add({ name: name });
+	        this.ui.memberName.val('');
 	    },
-	    changeDescription: function () {
-	        this.model.set('description', this.ui.description.val());
+	    onShow: function () {
+	        var self = this;
+
+	        /*tinymce.init({
+	            selector: '#description',
+	            height: 300,
+	            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+	            setup: function (ed) {
+	                ed.on('change', function(e) {
+	                    self.changeDescription(ed.getContent());
+	                });
+	            }
+	        });*/
+	        this.ui.description.val(this.model.get('description'));
 	    },
-	    changeGroup: function () {
-	        this.model.set('vkGroup', this.ui.group.val());
+	    changeDescription: function(content) {
+	        this.model.set('description', content);
 	    },
 	    onRender: function () {
 	        var self = this;
-
-	        $(this.ui.addAdmin).typeahead({
+	        
+	        $(this.ui.existMember).typeahead({
 	            source: function (query, process) {
-	                var url = '/api/users?page=0&pageSize=10';
+	                var url = '/api/league/' + self.options.leagueId + '/users?page=0&pageSize=10';
+	                if (self.model.get('id'))
+	                    url += '&exceptTeamIds=' + self.model.get('id');
 	                return $.get(url, { query: query }, function (response) {
 	                    return process(response);
 	                });
@@ -13057,24 +13900,22 @@
 	            }
 	        });
 	    },
+	    initialize: function (options) {
+	        this.options = options;
+	    },
 	    serializeData: function() {
 	        var model = this.model.toJSON();
-	        model.types = [
-	            { value: 1, name: 'Лига', selected: model.type == '1' },
-	            { value: 2, name: 'Турнир', selected: model.type == '2' }
-	        ];
 	        return model;
-	    },
-	    modelEvents: {
-	        'sync': 'render'
 	    }
 	});
 
-	module.exports = { LeagueView: LeagueView }
+	module.exports = {
+	    TeamView: TeamView
+	}
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ },
-/* 22 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* =============================================================
@@ -13603,13 +14444,13 @@
 
 
 /***/ },
-/* 23 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var MyApp = __webpack_require__(1);
-	var Models = __webpack_require__(19);
+	var Models = __webpack_require__(31);
 	var Layouts = __webpack_require__(12);
-	var Views = __webpack_require__(24);
+	var Views = __webpack_require__(32);
 
 	var leagueInfoModule = Backbone.Marionette.Module.extend({
 	    startWithParent: false,
@@ -13661,7 +14502,43 @@
 	MyApp.module("leagueInfo", leagueInfoModule);
 
 /***/ },
-/* 24 */
+/* 31 */
+/***/ function(module, exports) {
+
+	var LeagueInfo = Backbone.Model.extend({
+	    url: function () {
+	        return '/api/leagues/' + this.id + '/info/';
+	    }
+	});
+
+	var League = Backbone.Model.extend({
+	    url: function() {
+	        return this.id 
+	            ? '/api/leagues/' + this.id
+	            : '/api/leagues';
+	    },
+	    create: function() {
+	        
+	    },
+	    update: function() {
+	        
+	    }
+	});
+
+	var LeaguesModel = Backbone.Model.extend({
+	    url: function() {
+	        return '/api/leagues';
+	    }
+	});
+
+	module.exports = {
+	    LeagueInfo: LeagueInfo,
+	    League: League,
+	    LeaguesModel: LeaguesModel
+	}
+
+/***/ },
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(_) {var LeagueInfoView = Backbone.Marionette.ItemView.extend({
@@ -13682,6 +14559,491 @@
 
 	module.exports = { LeagueInfoView: LeagueInfoView }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var MyApp = __webpack_require__(1);
+	var Layouts = __webpack_require__(12);
+	var Views = __webpack_require__(34);
+	var Models = __webpack_require__(31);
+
+	var leaguesModule = Backbone.Marionette.Module.extend({
+	    startWithParent: false,
+
+	    initialize: function (options, app, object) {
+	        this.app = app;
+
+	        this.leagues = new Models.LeaguesModel();
+	    },
+
+	    onStart: function (options) {
+	        var self = this;
+
+	        self.createViews();
+	        self.bindViews();
+
+	        self.app.mainRegion.show(self.layout);
+
+	        self.leagues.fetch();
+	    },
+	    createViews: function () {
+	        var self = this;
+
+	        self.layout = new Layouts.LayoutView();
+	        self.leagueListView = new Views.LeagueList({ model: self.leagues });
+	        self.leagueActionView = new Views.LeagueActions();
+	    },
+	    bindViews: function () {
+	        var self = this;
+
+	        self.listenTo(self.leagues, 'sync', function () {
+	            self.layout.up.show(self.leagueActionView);
+	            self.layout.center.show(self.leagueListView);
+	        });
+	    },
+	    onStop: function (options) {
+	        var self = this;
+
+	        self.leagueListView.destroy();
+	        self.leagueActionView.destroy();
+	        self.layout.destroy();
+	    }
+	});
+
+	MyApp.module("leagues", leaguesModule);
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(_) {var MyApp = __webpack_require__(1);
+
+	var LeagueActions = Backbone.Marionette.ItemView.extend({
+	    template: "#leagues-actions",
+	    ui: {
+	        'addLeague': '.add-league'
+	    },
+	    events: {
+	        'click @ui.addLeague': 'addLeague'
+	    },
+	    addLeague: function () {
+	        document.location.href = '#leagues/new';
+	    },
+	    serializeData: function () {
+	        var model = {};
+
+	        model.showAdd = MyApp.Settings.isAdmin();
+
+	        return model;
+	    }
+	});
+
+	var LeagueList = Backbone.Marionette.ItemView.extend({
+	    template: "#leagues-list",
+	    initialize: function (options) {
+	        this.options = options;
+	    },
+	    serializeData: function () {
+	        var model = this.model.toJSON();
+	        model.isAdmin = MyApp.Settings.isAdmin();
+
+	        if (!model.isAdmin)
+	            return model;
+
+	        if (model.leagues) {
+	            _.each(model.leagues, function (obj) {
+	                obj.href = '#leagues/' + obj.id + '/edit';
+	            });
+	        }
+	        if (model.tournaments) {
+	            _.each(model.tournaments, function (obj) {
+	                obj.href = '#leagues/' + obj.id + '/edit';
+	            });
+	        }
+	        return model;
+	    }
+	});
+
+	module.exports = {
+	    LeagueActions: LeagueActions,
+	    LeagueList: LeagueList
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var MyApp = __webpack_require__(1);
+	var Layouts = __webpack_require__(12);
+	var SharedViews = __webpack_require__(11);
+	var Views = __webpack_require__(36);
+	var Models = __webpack_require__(31);
+
+	var leagueModule = Backbone.Marionette.Module.extend({
+	    startWithParent: false,
+
+	    initialize: function (options, app, object) {
+	        var self = this;
+
+	        self.app = app;
+
+	        self.league = new Models.League();
+	        self.admins = new Backbone.Collection();
+	    },
+	    onStart: function (options) {
+	        var self = this;
+
+	        self.options = options;
+	        self.league.clear();
+	        self.admins.reset();
+
+	        self.createViews();
+	        self.bindViews();
+
+	        if (options.leagueId) {
+	            self.league.set('id', self.options.leagueId);
+	            self.league.fetch();
+	        }
+
+	        self.app.mainRegion.show(self.layout);
+	    },
+	    createViews: function () {
+	        var self = this;
+
+	        self.layout = new Layouts.LayoutView();
+	        self.leagueView = new Views.LeagueView({ model: self.league, collection: self.admins });
+	        self.saveView = new SharedViews.SaveView();
+	    },
+	    bindViews: function () {
+	        var self = this;
+	        
+	        self.listenTo(self.layout, 'show', function () {
+	            self.layout.center.show(self.leagueView);
+	            self.layout.down.show(self.saveView);
+	        });
+
+	        self.listenToOnce(self.league, 'sync', function () {
+	            self.admins.reset(self.league.get('admins'));
+	        });
+
+	        self.listenTo(self.saveView, 'save', function () {
+	            self.listenToOnce(self.league, 'sync', function() {
+	                document.location.href = '#leagues/';
+	            });
+
+	            self.league.set('admins', self.admins.toJSON());
+	            self.league.save();
+	        });
+
+	        self.listenTo(self.saveView, 'cancel', function () {
+	            window.history.back();
+	        });
+	    },
+	    onStop: function (options) {
+	        var self = this;
+
+	        self.leagueView.destroy();
+	        self.saveView.destroy();
+	        self.layout.destroy();
+	    }
+	});
+
+	MyApp.module("league", leagueModule);
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($) {var Views = __webpack_require__(11);
+	__webpack_require__(29);
+
+	var LeagueAdminListItemView = Backbone.Marionette.ItemView.extend({
+	    tagName: 'tr',
+	    template: "#league-admin",
+	    ui: {
+	        'removeAdmin': '.remove-league-admin'
+	    },
+	    events: {
+	        'click @ui.removeAdmin': 'removeAdmin'
+	    },
+	    removeAdmin: function () {
+	        this.model.set('id', null);
+	        this.model.destroy();
+	    },
+	    onShow: function () {
+
+	    },
+	    serializeData: function () {
+	        return this.model.toJSON();
+	    }
+	});
+
+	var LeagueView = Backbone.Marionette.CompositeView.extend({
+	    template: "#league",
+	    childViewContainer: "tbody",
+	    childView: LeagueAdminListItemView,
+	    emptyView: Views.EmptyListView,
+	    ui: {
+	        'addAdmin': '.add-league-admin',
+	        'name': '.league-name',
+	        'description': '.league-description',
+	        'group': '.league-vkGroup',
+	        'upload': '#btUpload',
+	        'logoContainer': '.logo-container',
+	        'logoValue': '#logo-file-id',
+	        'type': '#league-type',
+	        'subName': '.league-sub-name'
+	    },
+	    events: {
+	        'change @ui.name': 'changeName',
+	        'change @ui.subName': 'changeSubName',
+	        'change @ui.description': 'changeDescription',
+	        'change @ui.group': 'changeGroup',
+	        'change @ui.type': 'changeType',
+	        'click @ui.upload': 'uploadImage'
+	    },
+	    uploadImage: function () {
+	        var self = this;
+
+	        var data = new FormData($('#logo-upload-form')[0]);
+	        $.ajax({
+	            type: "POST",
+	            url: '/api/upload/logo/',    // CALL WEB API TO SAVE THE FILES.
+	            enctype: 'multipart/form-data',
+	            contentType: false,
+	            processData: false,         // PREVENT AUTOMATIC DATA PROCESSING.
+	            cache: false,
+	            data: data, 		        // DATA OR FILES IN THIS CONTEXT.
+	            success: function (data, textStatus, xhr) {
+	                self.ui.logoContainer.html('<img src="/api/image/' + data.id + '" />');
+	                self.model.set('mediaId', data.id);
+	                document.getElementById("logo-upload-form").reset();
+	            },
+	            error: function (XMLHttpRequest, textStatus, errorThrown) {
+	                self.logoContainer.html('');
+	                document.getElementById("logo-upload-form").reset();
+	            }
+	        });
+	    },
+	    changeType: function () {
+	        this.model.set('type', this.ui.type.val());
+	    },
+	    changeSubName: function () {
+	        this.model.set('subName', this.ui.subName.val());
+	    },
+	    changeName: function () {
+	        this.model.set('name', this.ui.name.val());
+	    },
+	    changeDescription: function () {
+	        this.model.set('description', this.ui.description.val());
+	    },
+	    changeGroup: function () {
+	        this.model.set('vkGroup', this.ui.group.val());
+	    },
+	    onRender: function () {
+	        var self = this;
+
+	        $(this.ui.addAdmin).typeahead({
+	            source: function (query, process) {
+	                var url = '/api/users?page=0&pageSize=10';
+	                return $.get(url, { query: query }, function (response) {
+	                    return process(response);
+	                });
+	            },
+	            displayText: function (item) {
+	                return item.name;
+	            },
+	            updater: function (item) {
+	                self.collection.add(item);
+	                return '';
+	            }
+	        });
+	    },
+	    serializeData: function() {
+	        var model = this.model.toJSON();
+	        model.types = [
+	            { value: 1, name: 'Лига', selected: model.type == '1' },
+	            { value: 2, name: 'Турнир', selected: model.type == '2' }
+	        ];
+	        return model;
+	    },
+	    modelEvents: {
+	        'sync': 'render'
+	    }
+	});
+
+	module.exports = { LeagueView: LeagueView }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var MyApp = __webpack_require__(1);
+	var Layouts = __webpack_require__(12);
+	var Views = __webpack_require__(38);
+	var Models = __webpack_require__(39);
+
+	var tournamentsInfoModule = Backbone.Marionette.Module.extend({
+	    startWithParent: false,
+
+	    initialize: function (options, app, object) {
+	        var self = this;
+
+	        self.app = app;
+
+	        self.tournamentsInfo = new Models.TournamentsInfo();
+	    },
+	    onStart: function (options) {
+	        var self = this;
+
+	        self.options = options;
+	        self.tournamentsInfo.clear();
+
+	        if (options.tournamentId) {
+	            self.tournamentsInfo.set('id', self.options.tournamentId);
+	        }
+
+	        self.createViews();
+	        self.bindViews();
+
+	        if (options.tournamentId) {
+	            self.tournamentsInfo.fetch();
+	        }
+
+	        self.app.mainRegion.show(self.layout);
+	    },
+	    createViews: function () {
+	        var self = this;
+
+	        var isEditor = MyApp.Settings.isEditor(this.options.tournamentId);
+
+	        self.layout = new Layouts.LayoutView();
+	        self.tournamentsInfoView = new Views.TournamentsInfoView({ model: self.tournamentsInfo });
+
+	        if (isEditor)
+	            self.tournamentsInfoActions = new Views.TournamentsInfoActions({ model: self.tournamentsInfo });
+	    },
+	    bindViews: function () {
+	        var self = this;
+
+	        if (self.tournamentsInfoActions) {
+	            self.listenTo(self.layout, 'show', function () {
+	                self.layout.up.show(self.tournamentsInfoActions);
+	            });
+	        }
+
+	        self.listenTo(self.tournamentsInfo, 'sync', function () {
+	            self.layout.center.show(self.tournamentsInfoView);
+	        });
+	    },
+	    onStop: function () {
+	        var self = this;
+
+	        self.tournamentsInfoView.destroy();
+	        if (self.tournamentsInfoActions)
+	            self.tournamentsInfoActions.destroy();
+	        self.layout.destroy();
+	    }
+	});
+
+	MyApp.module("tournamentsInfo", tournamentsInfoModule);
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($, _) {__webpack_require__(29);
+
+	var TournamentsInfoActions = Backbone.Marionette.ItemView.extend({
+	    template: "#tournament-info-actions",
+	    ui: {
+	        'findTeam': '.import-team-input',
+	        'importTeam': '.import-team-button'
+	    },
+	    events: {
+	        'click @ui.importTeam': 'importTeam'
+	    },
+	    importTeam: function () {
+	        var val = $(this.ui.importTeam).data('teamId');
+
+	        if (!val || val == '')
+	            return;
+
+	        var self = this;
+	        $.ajax({
+	            type: "POST",
+	            url: '/api/unions/' + this.model.get('id') + '/teams/' + val + '/copy/',
+	            success: function (data, textStatus, xhr) {
+	                self.ui.findTeam.val('');
+	            }
+	        });
+	    },
+	    onRender: function () {
+	        var self = this;
+
+	        $(this.ui.findTeam).typeahead({
+	            source: function (query, process) {
+	                var url = '/api/teams/search?page=0&pageSize=10';
+	                return $.get(url, { query: query }, function (response) {
+	                    return process(response);
+	                });
+	            },
+	            displayText: function (item) {
+	                return item.name;
+	            },
+	            updater: function (item) {
+	                $(self.ui.importTeam).data('teamId', item.id);
+	                return item.name;
+	            }
+	        });
+	    },
+	    modelEvents: {
+	        'sync': 'render'
+	    }
+	});
+
+	var TournamentsInfoView = Backbone.Marionette.ItemView.extend({
+	    template: "#tournament-info",
+	    serializeData: function () {
+	        var model = this.model.toJSON();
+
+	        if (!model.events)
+	            return model;
+
+	        _.each(model.events, function (obj) {
+	            var col = obj.length;
+	            _.each(obj, function(group) {
+	                group.col = 12/col;
+	            });
+	        });
+
+	        return model;
+	    }
+	});
+
+	module.exports = {
+	    TournamentsInfoActions: TournamentsInfoActions,
+	    TournamentsInfoView: TournamentsInfoView
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(6)))
+
+/***/ },
+/* 39 */
+/***/ function(module, exports) {
+
+	var TournamentsInfo = Backbone.Model.extend({
+	    url: function () {
+	        return '/api/tournaments/' + this.id + '/info/';
+	    }
+	});
+
+	module.exports = {
+	    TournamentsInfo: TournamentsInfo
+	}
 
 /***/ }
 /******/ ]);

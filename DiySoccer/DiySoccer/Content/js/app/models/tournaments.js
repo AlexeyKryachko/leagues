@@ -3,3 +3,7 @@
         return '/api/tournaments/' + this.id + '/info/';
     }
 });
+
+module.exports = {
+    TournamentsInfo: TournamentsInfo
+}

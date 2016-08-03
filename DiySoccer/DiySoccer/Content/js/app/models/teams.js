@@ -53,3 +53,10 @@ var TeamsStatistic = Backbone.Model.extend({
         this.leagueId = leagueId;
     }
 });
+
+module.exports = {
+    TeamInfo: TeamInfo,
+    Team: Team,
+    Teams: Teams,
+    TeamsStatistic: TeamsStatistic
+}

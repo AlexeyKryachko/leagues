@@ -1,4 +1,40 @@
-﻿var GameScoresView = Backbone.Marionette.ItemView.extend({
+﻿var SharedViews = require("../../shared/views.js");
+
+var GameOptionsView = Backbone.Marionette.ItemView.extend({
+    template: "#custom-game",
+    ui: {
+        'customScoring': '.custom-scoring',
+        'eventChange': '.event-change'
+    },
+    events: {
+        'change @ui.customScoring': 'customScoring',
+        'change @ui.eventChange': 'eventChange'
+    },
+    eventChange: function () {
+        var value = this.ui.eventChange.val();
+        this.model.set('eventId', value);
+    },
+    customScoring: function () {
+        var value = this.ui.customScoring.prop('checked');
+        this.model.set('customScores', value);
+        this.trigger('scoring:changed', value);
+    },
+    serializeData: function () {
+        var model = this.model.toJSON();
+
+        if (!model.events)
+            return model;
+
+        _.each(model.events, function (obj) {
+            if (obj.id == model.eventId)
+                obj.selected = true;
+        });
+
+        return model;
+    }
+});
+
+var GameScoresView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
     template: "#game-new-member",
     ui: {
@@ -33,7 +69,7 @@ var GameView = Backbone.Marionette.CompositeView.extend({
     template: "#game-new",    
     childViewContainer: "tbody",
     childView: GameScoresView,
-    emptyView: EmptyListView,
+    emptyView: SharedViews.EmptyListView,
     childEvents: {
         'score:changed': 'recalculateScore'
     },
@@ -140,3 +176,8 @@ var GameView = Backbone.Marionette.CompositeView.extend({
         'change': 'render'
     }
 });
+
+module.exports = {
+    GameView: GameView,
+    GameOptionsView: GameOptionsView
+}

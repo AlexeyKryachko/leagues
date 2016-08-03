@@ -1,4 +1,10 @@
-﻿var teamInfoModule = Marionette.Module.extend({
+﻿var MyApp = require("../../app.js");
+var Layouts = require("../../shared/layouts.js");
+var SharedViews = require("../../shared/views.js");
+var Views = require("./teamInfoView.js");
+var Models = require("../../models/teams.js");
+
+var teamInfoModule = Backbone.Marionette.Module.extend({
     startWithParent: false,
 
     initialize: function (options, app, object) {
@@ -6,7 +12,7 @@
 
         self.app = app;
 
-        self.teamInfo = new TeamInfo();
+        self.teamInfo = new Models.TeamInfo();
         self.games = new Backbone.Collection();
     },
     onStart: function (options) {
@@ -26,9 +32,9 @@
     createViews: function () {
         var self = this;
 
-        self.layout = new LayoutView();
-        self.teamInfoView = new TeamGamesView({ model: self.teamInfo, collection: self.games, leagueId: self.options.leagueId });
-        self.bottomView = new CancelView();
+        self.layout = new Layouts.LayoutView();
+        self.teamInfoView = new Views.TeamGamesView({ model: self.teamInfo, collection: self.games, leagueId: self.options.leagueId });
+        self.bottomView = new SharedViews.CancelView();
     },
     bindViews: function () {
         var self = this;

@@ -1,4 +1,7 @@
-﻿var TeamGameView = Backbone.Marionette.ItemView.extend({
+﻿var MyApp = require("../../app.js");
+var SharedViews = require("../../shared/views.js");
+
+var TeamGameView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
     template: "#team-game",
     className: 'cursor-pointer',
@@ -46,7 +49,7 @@ var TeamGamesView = Backbone.Marionette.CompositeView.extend({
     template: "#team-info",    
     childViewContainer: ".games-container",
     childView: TeamGameView,
-    emptyView: EmptyListView,
+    emptyView: SharedViews.EmptyListView,
     childEvents: {
         'game:delete': 'deleteGame',
         'game:edit': 'editGame'
@@ -73,3 +76,7 @@ var TeamGamesView = Backbone.Marionette.CompositeView.extend({
         this.options = options;
     }
 });
+
+module.exports = {
+    TeamGamesView: TeamGamesView
+}
