@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Interfaces.Leagues.BuisnessLogic.Model
@@ -10,5 +11,8 @@ namespace Interfaces.Leagues.BuisnessLogic.Model
 
         [JsonProperty("date")]
         public DateTime? Date { get; set; }
+
+        [JsonProperty("teams")]
+        public IEnumerable<string> Teams { get; set; }
     }
 }

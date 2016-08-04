@@ -74,7 +74,7 @@ namespace Implementations.Leagues
             };
         }
 
-        public LeagueInfoViewModel MapInfo(LeagueDb league, IEnumerable<TeamDb> teams, IEnumerable<GameDb> games, IEnumerable<EventDb> events, Dictionary<string, UserDb> users)
+        public LeagueInfoViewModel MapInfo(LeagueDb league, List<TeamDb> teams, IEnumerable<GameDb> games, IEnumerable<EventDb> events, Dictionary<string, UserDb> users)
         {
             var teamsStatistic = teams
                 .Where(x => !x.Hidden)
@@ -136,23 +136,9 @@ namespace Implementations.Leagues
             var futureEvents = events
                 .Where(x => x.StartDate > DateTime.UtcNow)
                 .OrderBy(x => x.StartDate)
-                .Take(3)
-                .Select(x => new LeagueInfoEventViewModel
-                {
-                    Name = x.Name,
-                    Date = x.StartDate
-                })
+                .Take(1)
+                .Select(x => MapEvent(x, teams))
                 .ToList();
-            
-            var pastEvents = events
-                .Where(x => x.StartDate <= DateTime.UtcNow)
-                .OrderByDescending(x => x.StartDate)
-                .Take(3 - futureEvents.Count)
-                .Select(x => new LeagueInfoEventViewModel
-                {
-                    Name = x.Name,
-                    Date = x.StartDate
-                });
 
             return new LeagueInfoViewModel
             {
@@ -164,7 +150,21 @@ namespace Implementations.Leagues
                 BestGoalPlayer = bestGoalPlayer,
                 BestHelpPlayer = bestHelpPlayer,
                 Teams = teamsStatistic,
-                Events = futureEvents.Concat(pastEvents),
+                Events = futureEvents
+            };
+        }
+
+        private LeagueInfoEventViewModel MapEvent(EventDb eventDb, IEnumerable<TeamDb> teams)
+        {
+            var dictionary = teams.ToDictionary(x => x.EntityId, x => x);
+            var teamValues = eventDb.Games
+                .Select(x => dictionary[x.HomeTeamId].Name + " - " + dictionary[x.GuestTeamId].Name);
+
+            return new LeagueInfoEventViewModel
+            {
+                Name = eventDb.Name,
+                Date = eventDb.StartDate,
+                Teams = teamValues
             };
         }
     }

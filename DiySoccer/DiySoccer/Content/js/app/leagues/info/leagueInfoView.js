@@ -7,6 +7,14 @@
             obj.number = index + 1 + '.';
         });
 
+        _.each(model.events, function (obj, index) {
+            if (!obj.date)
+                return;
+
+            var date = new Date(obj.date);
+            obj.date = date.toLocaleDateString();
+        });
+
         return model;
     },
     modelEvents: {

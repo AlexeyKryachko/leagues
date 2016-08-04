@@ -55,7 +55,9 @@ var CalendarListItemView = Backbone.Marionette.ItemView.extend({
     },
     onRender: function () {
         var self = this;
-        
+
+        var startDate = new Date(self.model.get('startDate'));
+
         $(this.ui.startDate).datetimepicker({
             timepicker: false,
             startDate: startDate,

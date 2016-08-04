@@ -12299,7 +12299,9 @@
 	    },
 	    onRender: function () {
 	        var self = this;
-	        
+
+	        var startDate = new Date(self.model.get('startDate'));
+
 	        $(this.ui.startDate).datetimepicker({
 	            timepicker: false,
 	            startDate: startDate,
@@ -14548,6 +14550,14 @@
 
 	        _.each(model.teams, function (obj, index) {
 	            obj.number = index + 1 + '.';
+	        });
+
+	        _.each(model.events, function (obj, index) {
+	            if (!obj.date)
+	                return;
+
+	            var date = new Date(obj.date);
+	            obj.date = date.toLocaleDateString();
 	        });
 
 	        return model;

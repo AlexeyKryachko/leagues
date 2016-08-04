@@ -34,11 +34,10 @@
             <div class="dashboard-box">
                 <div class="dashboard-box-header row m0">
                     <div class="dashboard-box-header__title col-sm-7 p0">
-                        Таблица
                     </div>
                     <div class="dashboard-box-header__link col-sm-5 p0">
                         <i class="fa fa-share"></i>
-                        <a href="#leagues/{{id}}/table">Вся таблица</a>
+                        <a href="#leagues/{{id}}/table">Таблица</a>
                     </div>
                 </div>
                 <div class="dashboard-box-content">
@@ -79,27 +78,39 @@
             <div class="dashboard-box">
                 <div class="dashboard-box-header dashboard-box-header-border row m0">
                     <div class="dashboard-box-header__title col-sm-7 p0">
-                        События
                     </div>
                     <div class="dashboard-box-header__link col-sm-5 p0">
                         <i class="fa fa-share"></i>
-                        <a href="#leagues/{{id}}/calendar">Все события</a>
+                        <a href="#leagues/{{id}}/calendar">события</a>
                     </div>
                 </div>
                 <div class="dashboard-box-content">
                     <table class="table table-hovered mb0">
                         <thead>
                         <tr>
-                            <th class="width-200">Название</th>
-                            <th>Дата проведения</th>
+                            <th class="width-200">Событе</th>
+                            <th>Команды</th>
                         </tr>
                         </thead>
                         <tbody>
                         {{#if events}}
                         {{#each events}}
                         <tr>
-                            <td class="width-200">{{name}}</td>
-                            <td>{{date}}</td>
+                            <td class="width-200">
+                                <div>
+                                    {{name}}
+                                </div>
+                                <div>
+                                    {{date}}
+                                </div>
+                            </td>
+                            <td>
+                                {{#if teams}}
+                                {{#each teams}}
+                                <div>{{ this }}</div>
+                                {{/each}}
+                                {{/if}}
+                            </td>
                         </tr>
                         {{/each}}
                         {{else}}
@@ -113,11 +124,10 @@
             <div class="dashboard-box">
                 <div class="dashboard-box-header dashboard-box-header-border row m0">
                     <div class="dashboard-box-header__title col-sm-7 p0">
-                        Статистика
                     </div>
                     <div class="dashboard-box-header__link col-sm-5 p0">
                         <i class="fa fa-share"></i>
-                        <a href="#leagues/{{id}}/table">Вся статистика</a>
+                        <a href="#leagues/{{id}}/table">статистика</a>
                     </div>
                 </div>
                 <div class="dashboard-box-content">
@@ -125,7 +135,7 @@
                         <thead>
                         <tr>
                             <th class="width-200">Название</th>
-                            <th>Дата проведения</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
