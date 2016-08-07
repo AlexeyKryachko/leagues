@@ -21,7 +21,7 @@ Backbone.Marionette.TemplateCache.preloadTemplate = function (templateId, contex
     } else {
         // load the specified template as an .htm file.
         var fileName = hasHasTag ? templateId.substr(1) : templateId;
-        var url = '/Frontend/templates/' + fileName + '.html';
+        var url = '/Content/templates/' + fileName + '.html';
         $.get(url, function (serverTemplate) {
             if (!serverTemplate || serverTemplate.length == 0) {
                 msg = "Could not find template: '" + templateId + "'";

@@ -1,0 +1,39 @@
+﻿<div class="row">
+    <div class="main-league-title">
+        {{#if mediaId}}
+        <img class="img-120-120" src="/api/image/{{mediaId}}?width=120&height=120"/>
+        {{else}}
+        <img class="img-120-120" src="/content/img/DefaultLogo_120x120.jpg" />
+        {{/if}}
+    </div>
+    <div class="main-league-title">
+        <h3>{{name}}</h3>
+    </div>
+</div>
+
+<div class="main-league-title">
+    <h3>{{score}}</h3>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Имя
+            </th>
+            <th>
+                Гол
+            </th>
+            <th>
+                Пас
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+{{#if best}}
+<div>
+    Лучший игрок: {{best}}
+</div>
+{{/if}}
