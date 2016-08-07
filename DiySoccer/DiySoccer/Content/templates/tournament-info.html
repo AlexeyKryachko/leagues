@@ -15,8 +15,8 @@
 
             {{#if playoffGames}}
             {{#each playoffGames}}
-            <div class="dashboard-content">
-                <div class="dashboard-content__half-left">
+            <div class="dashboard-box-content">
+                <div class="dashboard-box-content__half-left">
                     {{#if homeTeamMediaId}}
                     <img class="inline-block" src="/api/image/{{homeTeamMediaId}}?width=50&height=50" />
                     {{else}}
@@ -31,7 +31,7 @@
                         </b>
                     </h4>
                 </div>
-                <div class="dashboard-content__half-right">
+                <div class="dashboard-box-content__half-right">
                     <h5 class="inline-block">{{guestTeamName}}</h5>
                     {{#if guestTeamMediaId}}
                     <img class="inline-block" src="/api/image/{{guestTeamMediaId}}?width=50&height=50" />
