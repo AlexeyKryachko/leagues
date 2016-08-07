@@ -31,6 +31,7 @@ namespace Implementations.Leagues.DataAccess
             {
                 EntityId = ObjectId.GenerateNewId().ToString(),
                 Name = model.Name,
+                Type = model.Type,
                 Description = model.Description,
                 VkSecurityGroup = model.VkGroup,
                 Admins = admins
