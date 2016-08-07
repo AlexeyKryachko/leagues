@@ -25,6 +25,16 @@ var LeagueList = Backbone.Marionette.ItemView.extend({
     initialize: function (options) {
         this.options = options;
     },
+    ui: {
+        'union': '.dashboard-list-item'
+    },
+    events: {
+        'click @ui.union': 'unionRedirect'
+    },
+    unionRedirect: function(e) {
+        var id = $(e.currentTarget).data('id');
+        document.location.href = '#leagues/' + id;
+    },
     serializeData: function () {
         var model = this.model.toJSON();
         model.isAdmin = MyApp.Settings.isAdmin();

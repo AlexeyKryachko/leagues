@@ -1,62 +1,54 @@
-﻿<div class="row">
-    <div class="col-sm-6">
-        <h1 class="main-league-title">Лиги</h1>
-        <div class="leagues-container">
-            {{#if leagues}}
-            {{#if isAdmin}}
-            {{#each leagues}}
-            <div class="list-group-item mb10 row">
-                <a href="#leagues/{{id}}" class="col-sm-9">
-                    <h4 class="list-group-item-heading">{{ name }}</h4>
-                    <p class="list-group-item-text">{{ description }}</p>
-
-                </a>
-                <div class="col-sm-3">
-                    <a href="{{href}}" class="btn btn-primary pull-right">Редактировать</a>
+﻿<div class="dashboard">
+    {{#if leagues}}
+    <div class="dashboard-list">
+        <div class="col-sm-12 dashboard-list-title">
+            Лиги
+        </div>
+        {{#each leagues}}
+        <div class="col-sm-4">
+            <div class="dashboard-list-item cursor-pointer" data-id="{{id}}">
+                {{#if mediaId}}
+                <div class="dashboard-list-item_logo">
+                    <img class="img-70-70 " src="/api/image/{{mediaId}}?width=70&height=70"/>
+                </div>
+                {{/if}}
+                <div class="dashboard-list-item_name">
+                    {{name}}
+                </div>
+                <div class="dashboard-list-item_description">
+                    {{description}}
                 </div>
             </div>
-            {{/each}}
-            {{else}}
-            {{#each leagues}}
-            <a href="#leagues/{{id}}" class="list-group-item mb10">
-                <h4 class="list-group-item-heading">{{ name }}</h4>
-                <p class="list-group-item-text">{{ description }}</p>
-            </a>
-            {{/each}}
-            {{/if}}
-            {{else}}
-            Нет лиг
-            {{/if}}
+            {{#if href}}
+            <div>
+                <a href="{{href}}" class="btn btn-primary">Редактировать</a>
             </div>
-    </div>
-    <div class="col-sm-6">
-        <h1 class="main-league-title">Турниры</h1>
-        <div class="cups-container">
-            {{#if tournaments}}
-            {{#if isAdmin}}
-            {{#each tournaments}}
-            <div class="list-group-item mb10 row">
-                <a href="#tournaments/{{id}}" class="col-sm-9">
-                    <h4 class="list-group-item-heading">{{ name }}</h4>
-                    <p class="list-group-item-text">{{ description }}</p>
-
-                </a>
-                <div class="col-sm-3">
-                    <a href="{{href}}" class="btn btn-primary pull-right">Редактировать</a>
-                </div>
-            </div>
-            {{/each}}
-            {{else}}
-            {{#each tournaments}}
-            <a href="#tournaments/{{id}}" class="list-group-item mb10">
-                <h4 class="list-group-item-heading">{{ name }}</h4>
-                <p class="list-group-item-text">{{ description }}</p>
-            </a>
-            {{/each}}
-            {{/if}}
-            {{else}}
-            Нет турниров
             {{/if}}
         </div>
+        {{/each}}
     </div>
+    {{/if}}
+
+    {{#if tournaments}}
+    <div class="dashboard-list">
+        <div class="col-sm-12 dashboard-list-title">
+            Турниры
+        </div>
+        {{#each tournaments}}
+        <div class="col-sm-4">
+            <div class="dashboard-list-item cursor-pointer">
+                <div class="dashboard-list-item_name">
+                    {{name}}
+                </div>
+                <div class="dashboard-list-item_description">
+                    {{description}}
+                </div>
+            </div>
+            {{#if href}}
+            <div><a href="{{href}}" class="btn btn-primary pull-right">Редактировать</a></div>
+            {{/if}}
+        </div>
+        {{/each}}
+    </div>
+    {{/if}}
 </div>

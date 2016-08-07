@@ -45,8 +45,8 @@ namespace Implementations.Leagues
             {
                 Id = league.EntityId,
                 Name = league.Name,
-                SubName = league.SubName,
-                Description = league.Description,
+                MediaId = league.MediaId,
+                Description = league.SubName,
                 Type = league.Type
             };
         }

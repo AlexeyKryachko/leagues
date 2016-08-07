@@ -14668,7 +14668,7 @@
 /* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_) {var MyApp = __webpack_require__(20);
+	/* WEBPACK VAR INJECTION */(function($, _) {var MyApp = __webpack_require__(20);
 
 	var LeagueActions = Backbone.Marionette.ItemView.extend({
 	    template: "#leagues-actions",
@@ -14695,6 +14695,16 @@
 	    initialize: function (options) {
 	        this.options = options;
 	    },
+	    ui: {
+	        'union': '.dashboard-list-item'
+	    },
+	    events: {
+	        'click @ui.union': 'unionRedirect'
+	    },
+	    unionRedirect: function(e) {
+	        var id = $(e.currentTarget).data('id');
+	        document.location.href = '#leagues/' + id;
+	    },
 	    serializeData: function () {
 	        var model = this.model.toJSON();
 	        model.isAdmin = MyApp.Settings.isAdmin();
@@ -14720,7 +14730,7 @@
 	    LeagueActions: LeagueActions,
 	    LeagueList: LeagueList
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(25)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21), __webpack_require__(25)))
 
 /***/ },
 /* 54 */

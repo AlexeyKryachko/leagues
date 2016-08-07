@@ -1,11 +1,29 @@
-﻿#main-header .navbar {
+﻿.navbar {
     background-color: $diys-header-color;
 }
 
-#main-header .navbar .navbar-brand {
+.navbar .diys-top-band {
     text-transform: uppercase;
     font-weight: bold;
     color: white;
+}
+
+.navbar .diys-bottom-band {
+    
+    color: white;
+    font-size: 12px;
+}
+
+.center {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
+#main-footer {
+    position: absolute;
+    left: 0px;
+    right: 0px;
 }
 
 .navbar .container {

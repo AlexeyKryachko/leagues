@@ -1,0 +1,56 @@
+﻿.dashboard-list {
+        .dashboard-list-title {
+            color: $diys-box-table-cell-lighted;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-list-item {
+            background: #fff;
+            box-shadow: 0px 0px 10px #ccc;
+            background-color: white;
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid;
+            border-color: white;
+
+            min-height: 80px;
+
+            .dashboard-list-item_logo ~ .dashboard-list-item_name {
+                position: absolute;                
+                top: 27px;
+                left: 140px;
+                margin: 0px;
+            }
+
+            .dashboard-list-item_name {
+                font-weight: bold;
+                font-size: 24px;
+                margin: auto;
+                width: 50%;
+                text-align: center; 
+            }
+
+            .dashboard-list-item_logo ~ .dashboard-list-item_description {
+                position: absolute;
+                top: 64px;
+                left: 140px;
+                margin: 0px;
+            }
+
+            .dashboard-list-item_description {
+                font-size: 14px;
+                color: $diys-box-table-cell-lighted;
+                margin: auto;
+                width: 50%;
+                text-align: center; 
+            }
+
+            &:hover {
+                border-color: $diys-box-header-color;
+                color: $diys-box-header-color;
+            }
+        }
+}
+

@@ -11,11 +11,11 @@ namespace Interfaces.Leagues.BuisnessLogic.Model
         [JsonProperty("type")]
         public LeagueType Type { get; set; }
 
+        [JsonProperty("mediaId")]
+        public string MediaId { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
-
-        [JsonProperty("subName")]
-        public string SubName { get; set; }
 
         [JsonProperty("description")]
         public string Description { get; set; }
