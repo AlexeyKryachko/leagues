@@ -33,6 +33,12 @@ var LeagueList = Backbone.Marionette.ItemView.extend({
     },
     unionRedirect: function(e) {
         var id = $(e.currentTarget).data('id');
+
+        var tournament = _.findWhere(model.tournaments, { id: id });
+        if (!tournament) {
+            document.location.href = '#tournaments/' + id;
+        }
+
         document.location.href = '#leagues/' + id;
     },
     serializeData: function () {

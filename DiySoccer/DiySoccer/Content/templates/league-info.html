@@ -53,7 +53,7 @@
                         <tbody>
                         {{#if teams}}
                         {{#each teams}}
-                        <tr>
+                        <tr class="team-row cursor-pointer" data-id="{{id}}">
                             <td class="number-cell">{{number}}</td>
                             <td>
                                 {{#if mediaId}}
@@ -66,7 +66,7 @@
                         </tr>
                         {{/each}}
                         {{else}}
-                        <tr><td colspan="3">Нет данных</td></tr>
+                        <tr><td colspan="4">Нет данных</td></tr>
                         {{/if}}
                         </tbody>
                     </table>
