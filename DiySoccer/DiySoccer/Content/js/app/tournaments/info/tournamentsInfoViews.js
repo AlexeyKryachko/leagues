@@ -50,6 +50,7 @@ var TournamentsInfoActions = Backbone.Marionette.ItemView.extend({
 
 var TournamentsInfoView = Backbone.Marionette.ItemView.extend({
     template: "#tournament-info",
+    className: 'dashboard',
     serializeData: function () {
         var model = this.model.toJSON();
 

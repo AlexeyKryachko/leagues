@@ -98,7 +98,6 @@ namespace Implementations.Teams.BuisnessLogic
 
         public TeamInfoViewModel GetInfo(string leagueId, string teamId)
         {
-            var league = _leaguesRepository.Get(leagueId);
             var events = _eventsRepository.GetByLeague(leagueId).ToList();
             var games = _gamesRepository.GetByTeam(leagueId, teamId).ToList();
             var teamIds = games.Select(x => x.GuestTeam.Id).Concat(games.Select(x => x.HomeTeam.Id)).ToList();

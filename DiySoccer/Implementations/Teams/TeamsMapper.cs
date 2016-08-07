@@ -47,36 +47,35 @@ namespace Implementations.Teams
             };
         }
 
-        private IEnumerable<TeamInfoGameViewModel> MapTeamInfoGames(List<GameDb> games, Dictionary<string, TeamDb> teams, List<EventDb> events)
+        private IEnumerable<TeamInfoGameViewModel> MapTeamInfoGames(string teamId, List<GameDb> games, Dictionary<string, TeamDb> teams, List<EventDb> events)
         {
             var result = new List<Tuple<DateTime?, TeamInfoGameViewModel>>();
 
-            foreach (var game in games)
+            foreach (var eventDb in events)
             {
+                var game = eventDb.Games.FirstOrDefault(x => x.HomeTeamId == teamId || x.GuestTeamId == teamId);
+                if (game == null)
+                    continue;
+
                 var model = new TeamInfoGameViewModel
                 {
-                    Id = game.EntityId,
-                    Name = teams[game.HomeTeam.Id].Name + " - " + teams[game.GuestTeam.Id].Name,
-                    Goals = game.HomeTeam.Score + " : " + game.GuestTeam.Score
+                    Name = teams[game.HomeTeamId].Name + " - " + teams[game.GuestTeamId].Name,
                 };
 
-                if (string.IsNullOrEmpty(game.EventId))
+                var gameDb = games.FirstOrDefault(x => x.EventId == eventDb.EntityId);
+                if (gameDb == null || !eventDb.StartDate.HasValue)
                 {
                     result.Add(new Tuple<DateTime?, TeamInfoGameViewModel>(null, model));
                     continue;
                 }
 
-                var ev = events.FirstOrDefault(x => x.EntityId == game.EventId);
-                if (ev == null || !ev.StartDate.HasValue)
-                {
-                    result.Add(new Tuple<DateTime?, TeamInfoGameViewModel>(null, model));
-                    continue;
-                }
-
-                model.Event = ev.Name;
-                result.Add(new Tuple<DateTime?, TeamInfoGameViewModel>(ev.StartDate, model));
+                model.Id = gameDb.EntityId;
+                model.Goals = gameDb.HomeTeam.Score + " : " + gameDb.GuestTeam.Score;
+                
+                model.Event = eventDb.Name;
+                result.Add(new Tuple<DateTime?, TeamInfoGameViewModel>(eventDb.StartDate, model));
             }
-
+            
             return result
                 .OrderByDescending(x => x.Item1)
                 .Select(x => x.Item2);
@@ -95,7 +94,7 @@ namespace Implementations.Teams
                 Name = teams[teamId].Name,
                 MediaId = teams[teamId].MediaId,
                 Description = teams[teamId].Description,
-                Games = MapTeamInfoGames(games, teams, events),
+                Games = MapTeamInfoGames(teamId, games, teams, events),
                 Players = users.Select(y => new TeamInfoMemberViewModel
                 {
                     Id = y.EntityId,

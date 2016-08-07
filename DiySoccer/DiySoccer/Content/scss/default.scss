@@ -7,7 +7,7 @@
  */
 
 // 2: Variables and global styles
-@import "variables";
+@import "partials/variables";
 
 // 2: Boostrap and other 3rd party libraries
 @import "font-awesome/scss/font-awesome";
@@ -16,7 +16,5 @@
 
 // Core CSS
 @import "partials/dashboards";
-@import "partials/bootstrap-datetimepicker";
-@import "partials/ie10-viewport-bug-workaround";
 @import "partials/spinner";
 @import "partials/theme";

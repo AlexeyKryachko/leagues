@@ -1,4 +1,14 @@
-﻿.navbar .container {
+﻿#main-header .navbar {
+    background-color: $diys-header-color;
+}
+
+#main-header .navbar .navbar-brand {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: white;
+}
+
+.navbar .container {
     padding-left: 30px !important;
     padding-right: 0px !important;
 }
@@ -102,48 +112,7 @@ body {
     text-align: center;
 }
 
-.box {
-    border: 1px solid lightgrey;
-}
 
-.box .box-header {
-    padding: 10px;
-    height: 41px;
-}
-
-.box .box-header-border {
-    border-bottom: 1px solid lightgrey;
-}
-
-.box .box-content .box-content__half-right {
-    display: inline-block;
-    text-align: left;
-    padding-left: 20px;
-    width: 45%;
-}
-
-.box .box-content .box-content__half-left {
-    display: inline-block;
-    text-align: right;
-    padding-right: 20px;
-    width: 45%;
-}
-
-.box .box-header .box-header__link {
-    text-align: right;
-}
-
-.box .box-header .box-header__title {
-    text-align: left;
-}
-
-.box .box-content .tab-pane {
-    margin: 0px;
-}
-
-.box ~ .box {
-    margin-top: 20px;
-}
 
 .number-cell {
     width: 50px;

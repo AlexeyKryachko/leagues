@@ -256,6 +256,7 @@
     <Content Include="Content\scss\bootstrap\javascripts\bootstrap\tab.js" />
     <Content Include="Content\scss\bootstrap\javascripts\bootstrap\tooltip.js" />
     <Content Include="Content\scss\bootstrap\javascripts\bootstrap\transition.js" />
+    <Content Include="Content\scss\datetimepicker\jquery.datetimepicker.min.css" />
     <Content Include="Content\scss\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\scss\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\scss\font-awesome\fonts\fontawesome-webfont.ttf" />
@@ -343,8 +344,8 @@
     <Content Include="Content\scss\bootstrap\fonts\bootstrap\glyphicons-halflings-regular.woff" />
     <Content Include="Content\scss\bootstrap\fonts\bootstrap\glyphicons-halflings-regular.woff2" />
     <None Include="Content\scss\partials\dashboards.scss" />
-    <None Include="Content\scss\partials\ie10-viewport-bug-workaround.scss" />
     <None Include="Content\scss\partials\spinner.scss" />
+    <Content Include="Content\scss\partials\variables.scss" />
     <None Include="Content\scss\partials\theme.scss" />
     <Content Include="Content\js\app\app.js" />
     <Content Include="Content\entry.js" />
@@ -364,8 +365,6 @@
     <Content Include="Content\js\app\models\tournaments.js" />
     <Content Include="Content\js\app\router.js" />
     <Content Include="Content\js\app\template.js" />
-    <Content Include="Content\scss\partials\bootstrap-datetimepicker.scss" />
-    <None Include="Content\scss\variables.scss" />
     <Content Include="Content\js\app\calendar\calendarModule.js" />
     <Content Include="Content\js\app\calendar\calendarView.js" />
     <Content Include="Content\js\app\games\gameInfo\gameInfoModule.js" />
@@ -456,7 +455,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Frontend\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

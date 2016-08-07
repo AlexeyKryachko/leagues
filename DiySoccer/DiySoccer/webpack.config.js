@@ -1,4 +1,4 @@
-﻿var webpack = require('webpack')
+﻿var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
@@ -19,7 +19,11 @@ module.exports = {
         filename: "[name].bundle.js"
     },
 	module: {
-		loaders: [
+	    loaders: [
+            {
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+            },
             {
 				test: /\.scss$/,
 				loader: ExtractTextPlugin.extract(
