@@ -15019,6 +15019,7 @@
 	        self.bindViews();
 
 	        if (options.tournamentId) {
+	            self.tournamentsInfoView.setTournamentId(options.tournamentId);
 	            self.tournamentsInfo.fetch();
 	        }
 
