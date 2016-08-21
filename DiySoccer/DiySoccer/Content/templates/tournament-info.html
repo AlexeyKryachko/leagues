@@ -1,12 +1,59 @@
-﻿<h2 class="mb30">{{name}}</h2>
+﻿{{#if name}}
+<div class="dashboard">
+    <div class="row">
+        {{#if description}}
+        <div class="col-sm-6">
+            <div class="dashboard-box dashboard-box-padded height-140">
+                <div class="dashboard-box__image">
+                    {{#if mediaId}}
+                    <img class="img-120-120" src="/api/image/uncut/{{mediaId}}?width=120&height=120"/>
+                    {{else}}
+                    <img class="img-120-120" src="/content/img/DefaultLogo_120x120.png"/>
+                    {{/if}}
+                </div>
+                <div class="dashboard-box__name">
+                    {{name}}
+                </div>
+                {{#if subName}}
+                <div class="dashboard-box__sub-name">
+                    {{subName}}
+                </div>
+                {{/if}}
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="dashboard-box dashboard-box-padded height-140">
+                {{{description}}}
+            </div>
+        </div>
+        {{else}}
+        <div class="col-sm-12">
+            <div class="dashboard-box dashboard-box-padded height-140">
+                <div class="dashboard-box__image">
+                    {{#if mediaId}}
+                    <img class="img-120-120" src="/api/image/uncut/{{mediaId}}?width=120&height=120"/>
+                    {{else}}
+                    <img class="img-120-120" src="/content/img/DefaultLogo_120x120.png"/>
+                    {{/if}}
+                </div>
+                <div class="dashboard-box__name">
+                    {{name}}
+                </div>
+                {{#if subName}}
+                <div class="dashboard-box__sub-name">
+                    {{subName}}
+                </div>
+                {{/if}}
+            </div>
+        </div>
+        {{/if}}
+    </div>
 
-{{#if events}}
-<div class="row">
+    {{#if events}}
     {{#each events}}
-    <div class="dashboard">
-        {{#each []}}
-
-        <div class="col-sm-{{groupCol}}">
+    <div class="row">
+        {{#if playoffGames}}
+        <div class="col-sm-12">
             <div class="dashboard-box">
                 <div class="dashboard-box-header row m0">
                     <div class="dashboard-box-header__title col-sm-7 p0">
@@ -14,46 +61,60 @@
                     </div>
                 </div>
 
-                {{#if playoffGames}}
                 {{#each playoffGames}}
-                <div class="dashboard-box-content">
-                    <div class="dashboard-box-content__half-left">
-                        {{#if homeTeamMediaId}}
-                        <img class="inline-block" src="/api/image/{{homeTeamMediaId}}?width=50&height=50"/>
-                        {{else}}
-                        <img class="inline-block" src="/content/img/DefaultLogo_50x50.jpg"/>
-                        {{/if}}
-                        <h5 class="inline-block">{{homeTeamName}}</h5>
-                    </div>
-                    <div class="inline-block">
-                        <h4>
-                            <b>
-                                {{homeTeamScore}} - {{guestTeamScore}}
-                            </b>
-                        </h4>
-                    </div>
-                    <div class="dashboard-box-content__half-right">
-                        <h5 class="inline-block">{{guestTeamName}}</h5>
-                        {{#if guestTeamMediaId}}
-                        <img class="inline-block" src="/api/image/{{guestTeamMediaId}}?width=50&height=50"/>
-                        {{else}}
-                        <img class="inline-block" src="/content/img/DefaultLogo_50x50.jpg"/>
-                        {{/if}}
+                <div class="dashboard-box-content dashboard-box-content__padded">
+                    <div class="dashboard-box-content__row" data-id="{{gameId}}">
+                        <div class="dashboard-box-content__half-left">
+                            <h5 class="inline-block">{{homeTeamName}}</h5>
+                            {{#if homeTeamMediaId}}
+                            <img class="inline-block" src="/api/image/{{homeTeamMediaId}}?width=50&height=50"/>
+                            {{else}}
+                            <img class="inline-block" src="/content/img/DefaultLogo_50x50.jpg"/>
+                            {{/if}}
+                        </div>
+                        <div class="inline-block">
+                            <h4>
+                                <b>
+                                    {{homeTeamScore}} - {{guestTeamScore}}
+                                </b>
+                            </h4>
+                        </div>
+                        <div class="dashboard-box-content__half-right">
+                            {{#if guestTeamMediaId}}
+                            <img class="inline-block" src="/api/image/{{guestTeamMediaId}}?width=50&height=50"/>
+                            {{else}}
+                            <img class="inline-block" src="/content/img/DefaultLogo_50x50.jpg"/>
+                            {{/if}}
+                            <h5 class="inline-block">{{guestTeamName}}</h5>
+                        </div>
                     </div>
                 </div>
                 {{/each}}
-                {{else}}
-                {{#if groupGames}}
+            </div>
+        </div>
+        {{/if}}
+
+        {{#if groupGames}}
+        <div class="col-sm-6">
+            <div class="dashboard-box">
+                <div class="dashboard-box-header row m0">
+                    <div class="dashboard-box-header__title col-sm-7 p0">
+                        {{name}}
+                    </div>
+                </div>
+
                 <div class="dashboard-box-content">
                     <table class="table table-hovered mb0">
                         <thead>
                         <tr>
                             <th></th>
                             <th>Команда</th>
-                            <th class="text-right width-100">В</th>
-                            <th class="text-right width-100">Н</th>
-                            <th class="text-right width-100">П</th>
-                            <th class="text-right width-100">О</th>
+                            <th class="text-right width-50">Г</th>
+                            <th class="text-right width-50">Пр</th>
+                            <th class="text-right width-50">В</th>
+                            <th class="text-right width-50">Н</th>
+                            <th class="text-right width-50">П</th>
+                            <th class="text-right width-50">О</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -68,16 +129,22 @@
                                 {{/if}}
                                 {{name}}
                             </td>
-                            <td class="text-right width-100">
+                            <td class="text-right width-50">
+                                {{goals}}
+                            </td>
+                            <td class="text-right width-50">
+                                {{missed}}
+                            </td>
+                            <td class="text-right width-50">
                                 {{wins}}
                             </td>
-                            <td class="text-right width-100">
+                            <td class="text-right width-50">
                                 {{drafts}}
                             </td>
-                            <td class="text-right width-100">
+                            <td class="text-right width-50">
                                 {{loses}}
                             </td>
-                            <td class="text-right width-100">
+                            <td class="text-right width-50">
                                 {{points}}
                             </td>
                         </tr>
@@ -85,13 +152,52 @@
                         </tbody>
                     </table>
                 </div>
-                {{/if}}
-                {{/if}}
             </div>
         </div>
-        {{/each}}
+
+        <div class="col-sm-6">
+            <div class="dashboard-box">
+                <div class="dashboard-box-header row m0">
+                    <div class="dashboard-box-header__title col-sm-7 p0">
+                        Игры
+                    </div>
+                </div>
+
+                <div class="dashboard-box-content dashboard-box-content__padded">
+                    {{#each games}}
+                    <div class="dashboard-box-content__row" data-id="{{gameId}}">
+                        <div class="dashboard-box-content__half-left">
+                            <div class="inline-block">{{homeTeamName}}</div>
+                            {{#if homeTeamMediaId}}
+                            <img class="inline-block" src="/api/image/{{homeTeamMediaId}}?width=50&height=50"/>
+                            {{else}}
+                            <img class="inline-block" src="/content/img/DefaultLogo_50x50.jpg"/>
+                            {{/if}}
+                        </div>
+                        <div class="inline-block">
+                            <div>
+                                <b>
+                                    {{homeTeamScore}} - {{guestTeamScore}}
+                                </b>
+                            </div>
+                        </div>
+                        <div class="dashboard-box-content__half-right">
+                            {{#if guestTeamMediaId}}
+                            <img class="inline-block" src="/api/image/{{guestTeamMediaId}}?width=50&height=50"/>
+                            {{else}}
+                            <img class="inline-block" src="/content/img/DefaultLogo_50x50.jpg"/>
+                            {{/if}}
+                            <div class="inline-block">{{guestTeamName}}</div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+        {{/if}}
     </div>
     {{/each}}
+    {{/if}}
 </div>
 {{else}}
 <div class="spinner">
@@ -102,4 +208,3 @@
     <div class="rect5"></div>
 </div>
 {{/if}}
-

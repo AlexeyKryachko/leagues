@@ -54,7 +54,7 @@ namespace Implementations.Teams
             foreach (var eventDb in events)
             {
                 var game = eventDb.Games.FirstOrDefault(x => x.HomeTeamId == teamId || x.GuestTeamId == teamId);
-                if (game == null)
+                if (game == null || string.IsNullOrEmpty(game.HomeTeamId) || string.IsNullOrEmpty(game.GuestTeamId))
                     continue;
 
                 var model = new TeamInfoGameViewModel
@@ -155,21 +155,8 @@ namespace Implementations.Teams
             model.Wins = _scoreCalculation.WinsCount(games, team.EntityId);
             model.Loses = _scoreCalculation.LosesCount(games, team.EntityId);
             model.Draws = _scoreCalculation.DraftCount(games, team.EntityId);
-
-            model.Scores = games
-                .Where(x => x.GuestTeam.Id == team.EntityId)
-                .Sum(x => x.GuestTeam.Score);
-            model.Scores += games
-                .Where(x => x.HomeTeam.Id == team.EntityId)
-                .Sum(x => x.HomeTeam.Score);
-
-            model.Missed = games
-                .Where(x => x.GuestTeam.Id == team.EntityId)
-                .Sum(x => x.HomeTeam.Score);
-            model.Missed += games
-                .Where(x => x.HomeTeam.Id == team.EntityId)
-                .Sum(x => x.GuestTeam.Score);
-
+            model.Scores = _scoreCalculation.GoalsCount(games, team.EntityId);
+            model.Missed = _scoreCalculation.MissedCount(games, team.EntityId);
             model.Points = _scoreCalculation.Default(model.Wins, model.Loses, model.Draws);
 
             return model;

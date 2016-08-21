@@ -5,11 +5,17 @@
  * 2. Boostrap and other 3rd party libraries
  * 3. Partials
  */
-.height-120 {
-  height: 120px; }
+.width-10 {
+  width: 10px; }
 
-.height-140 {
-  height: 140px; }
+.width-20 {
+  width: 20px; }
+
+.width-30 {
+  width: 30px; }
+
+.width-50 {
+  width: 50px; }
 
 .width-60 {
   width: 60px; }
@@ -19,6 +25,12 @@
 
 .width-125 {
   width: 125px; }
+
+.height-120 {
+  height: 120px; }
+
+.height-140 {
+  height: 140px; }
 
 .width-150 {
   width: 150px; }
@@ -2324,6 +2336,17 @@
       color: #414242 !important;
       text-transform: uppercase;
       font-weight: bold; }
+  .dashboard .dashboard-box .dashboard-box-content .dashboard-box-content__row {
+    padding-bottom: 3px;
+    padding-top: 3px;
+    cursor: pointer; }
+    .dashboard .dashboard-box .dashboard-box-content .dashboard-box-content__row:hover {
+      background-color: #fafafa; }
+    .dashboard .dashboard-box .dashboard-box-content .dashboard-box-content__row:last-child {
+      padding-bottom: 0px; }
+  .dashboard .dashboard-box .dashboard-box-content.dashboard-box-content__padded {
+    padding-top: 10px;
+    padding-bottom: 10px; }
   .dashboard .dashboard-box .dashboard-box-content .dashboard-box-content__half-right {
     display: inline-block;
     text-align: left;
