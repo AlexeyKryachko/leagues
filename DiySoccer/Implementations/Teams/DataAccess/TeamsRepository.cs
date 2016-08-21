@@ -20,7 +20,7 @@ namespace Implementations.Teams.DataAccess
         {
             return Collection
                 .AsQueryable()
-                .Where(x => x.Name.Contains(query))
+                .Where(x => x.Name.Contains(query) && x.ReferenceId == null)
                 .Page(page, pageSize);
         }
 
