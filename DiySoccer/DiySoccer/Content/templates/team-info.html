@@ -1,103 +1,82 @@
-﻿<div class="row mb30">
-    <div class="col-sm-3">
-        {{#if mediaId}}
-        <img class="img-150-150" src="/api/image/uncut/{{mediaId}}?width=150&height=150"/>
-        {{else}}
-        <img class="img-150-150" src="/content/img/DefaultLogo_150x150.png" />
-        {{/if}}
+﻿<div class="dashboard">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="dashboard-box dashboard-box-padded height-140">
+                <div class="dashboard-box__image">
+                    {{#if mediaId}}
+                    <img class="img-120-120" src="/api/image/uncut/{{mediaId}}?width=120&height=120" />
+                    {{else}}
+                    <img class="img-120-120" src="/content/img/DefaultLogo_120x120.png" />
+                    {{/if}}
+                </div>
+                <div class="dashboard-box__name">
+                    {{name}}
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-sm-9">
-    </div>
-</div>
 
-<ul class="nav nav-tabs">
-    <li class="active">
-        <a data-toggle="tab" href="#games">Календарь</a>
-    </li>
     {{#if description}}
-    <li><a data-toggle="tab" href="#description">Описание</a></li>
+    <div class="dashboard-box">
+        <div class="dashboard-box-header row m0">
+            <div class="dashboard-box-header__title col-sm-12 p0">
+                Описание
+            </div>
+        </div>
+        <div class="dashboard-box-content">
+            {{{description}}}
+        </div>
+    </div>
     {{/if}}
-    {{#if players}}
-    <li><a data-toggle="tab" href="#players">Состав</a></li>
-    {{/if}}
-    {{#if stats}}
-    <li><a data-toggle="tab" href="#statistic">Статистика команды</a></li>
-    {{/if}}
-    {{#if playersStats}}
-    <li><a data-toggle="tab" href="#players-statistic">Статистика игроков</a></li>
-    {{/if}}
-</ul>
 
-<div class="tab-content">
-    <div id="games" class="tab-pane fade tab-inner active in">
-        <table class="table table-striped">
-            <thead>
+    {{#if stats}}
+    <div class="dashboard-box">
+        <div class="dashboard-box-header row m0">
+            <div class="dashboard-box-header__title col-sm-12 p0">
+                Статистика команды
+            </div>
+        </div>
+        <div class="dashboard-box-content">
+            {{#each stats}}
+            <table class="table table-striped">
+                <thead>
                 <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>Кол-во игр</th>
+                    <th>Победы</th>
+                    <th>Поражения</th>
+                    <th>Ничьи</th>
+                    <th>Голы</th>
+                    <th>Пропущенные</th>
+                    <th>Очки</th>
                 </tr>
-            </thead>
-            <tbody class="games-container"></tbody>
-        </table>
-    </div>
-    {{#if description}}
-    <div id="description" class="tab-pane fade tab-inner">
-        {{{description}}}
-    </div>
-    {{/if}}
-    {{#if players}}
-    <div id="players" class="tab-pane fade tab-inner">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Имя</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{#each players}}
-            <tr><td>{{name}}</td></tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{gamesCount}}</td>
+                    <td>{{wins}}</td>
+                    <td>{{loses}}</td>
+                    <td>{{draw}}</td>
+                    <td>{{scores}}</td>
+                    <td>{{missed}}</td>
+                    <td>{{points}}</td>
+                </tr>
+                </tbody>
+            </table>
             {{/each}}
-            </tbody>
-        </table>
+        </div>
     </div>
     {{/if}}
-    {{#if stats}}
-    <div id="statistic" class="tab-pane fade tab-inner">
-        {{#each stats}}
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Кол-во игр</th>
-                <th>Победы</th>
-                <th>Поражения</th>
-                <th>Ничьи</th>
-                <th>Голы</th>
-                <th>Пропущенные</th>
-                <th>Очки</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>{{gamesCount}}</td>
-                <td>{{wins}}</td>
-                <td>{{loses}}</td>
-                <td>{{draw}}</td>
-                <td>{{scores}}</td>
-                <td>{{missed}}</td>
-                <td>{{points}}</td>
-            </tr>
-            </tbody>
-        </table>
 
-        {{/each}}
-    </div>
-    {{/if}}
     {{#if playersStats}}
-    <div id="players-statistic" class="tab-pane fade tab-inner">
-        <table class="table table-striped">
-            <thead>
+    <div class="dashboard-box">
+        <div class="dashboard-box-header row m0">
+            <div class="dashboard-box-header__title col-sm-12 p0">
+                Статистика игроков
+            </div>
+        </div>
+        <div class="dashboard-box-content">
+            <table class="table table-striped">
+                <thead>
                 <tr>
                     <th class="text-left width-100">Номер</th>
                     <th class="text-left width-620">Имя</th>
@@ -106,20 +85,35 @@
                     <th class="text-right width-100">Пас</th>
                     <th class="text-right width-100">Гол + пас</th>
                 </tr>
-            </thead>
-            <tbody>
-            {{#each playersStats}}
-            <tr>
-                <td class="text-left width-100">{{num}}</td>
-                <td class="text-left width-620">{{name}}</td>
-                <td class="text-right width-100">{{best}}</td>
-                <td class="text-right width-100">{{goal}}</td>
-                <td class="text-right width-100">{{help}}</td>
-                <td class="text-right width-100">{{sum}}</td>
-            </tr>
+                </thead>
+                <tbody>
+                {{#each playersStats}}
+                <tr>
+                    <td class="text-left width-100">{{num}}</td>
+                    <td class="text-left width-620">{{name}}</td>
+                    <td class="text-right width-100">{{best}}</td>
+                    <td class="text-right width-100">{{goal}}</td>
+                    <td class="text-right width-100">{{help}}</td>
+                    <td class="text-right width-100">{{sum}}</td>
+                </tr>
                 {{/each}}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
     {{/if}}
+
+    <div class="dashboard-box">
+        <div class="dashboard-box-header row m0">
+            <div class="dashboard-box-header__title col-sm-12 p0">
+                Календарь
+            </div>
+        </div>
+
+        <div class="dashboard-box-content">
+            <table class="table table-striped">
+                <tbody class="games-container"></tbody>
+            </table>
+        </div>
+    </div>
 </div>

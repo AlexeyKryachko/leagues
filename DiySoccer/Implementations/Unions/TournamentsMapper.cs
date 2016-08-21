@@ -51,7 +51,7 @@ namespace Implementations.Unions
         {
             var grouppedEvents = events
                 .Where(x => x.StartDate.HasValue)
-                .GroupBy(x => x.StartDate.Value.AddSeconds(-x.StartDate.Value.Second).AddMilliseconds(-x.StartDate.Value.Millisecond))
+                .GroupBy(x => x.Group)
                 .OrderByDescending(x => x.Key);
 
             var groups = grouppedEvents
@@ -66,7 +66,7 @@ namespace Implementations.Unions
             };
         }
 
-        private List<TournamentInfoGroupViewModel> MapTournamentGroups(IGrouping<DateTime, EventDb> events, IList<TeamDb> teams, IList<GameDb> games)
+        private List<TournamentInfoGroupViewModel> MapTournamentGroups(IGrouping<string, EventDb> events, IList<TeamDb> teams, IList<GameDb> games)
         {
             return events
                 .Select(eventDb => MapTournamentGroup(eventDb, teams, games))
@@ -79,11 +79,11 @@ namespace Implementations.Unions
             var teamsDictionary = teams.ToDictionary(x => x.EntityId, x => x);
 
             return eventEntity.Games.All(x => !string.IsNullOrEmpty(x.GuestTeamId) && !string.IsNullOrEmpty(x.HomeTeamId))
-                ? MapTournamentGroupGames(eventEntity, teamsDictionary, games)
-                : MapTournamentPlayoffGames(eventEntity, teams, games);
+                ? MapTournamentPlayoffGames(eventEntity, teamsDictionary, games)
+                : MapTournamentGroupGames(eventEntity, teams, games);
         }
 
-        private TournamentInfoGroupViewModel MapTournamentGroupGames(EventDb eventEntity, IDictionary<string, TeamDb> teams, IList<GameDb> games)
+        private TournamentInfoGroupViewModel MapTournamentPlayoffGames(EventDb eventEntity, IDictionary<string, TeamDb> teams, IList<GameDb> games)
         {
             var eventGames = games.Where(x => x.EventId == eventEntity.EntityId).ToList();
             if (!eventGames.Any())
@@ -92,6 +92,7 @@ namespace Implementations.Unions
             return new TournamentInfoGroupViewModel
             {
                 Name = eventEntity.Name,
+                Minor = eventEntity.Minor,
                 PlayOffGames = eventGames.Select(x => MapPlayoffGame(x, teams))
             };
         }
@@ -112,7 +113,7 @@ namespace Implementations.Unions
             };
         }
 
-        public TournamentInfoGroupViewModel MapTournamentPlayoffGames(EventDb eventEntity, IList<TeamDb> teams, IList<GameDb> games)
+        public TournamentInfoGroupViewModel MapTournamentGroupGames(EventDb eventEntity, IList<TeamDb> teams, IList<GameDb> games)
         {
             var teamIdsInGroup = eventEntity.Games.Select(x => x.HomeTeamId);
             var teamsInGroup = teams.Where(x => teamIdsInGroup.Contains(x.EntityId));

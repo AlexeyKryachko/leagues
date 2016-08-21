@@ -1,9 +1,10 @@
 ﻿<td>{{event}}</td>
 <td>{{name}}</td>
 <td>{{goals}}</td>
+{{#if isEditor}}
 <td>
-    {{#if isEditor}}
     <button class="btn btn-primary edit-game">Редактировать</button>
     <button class="btn btn-primary delete-game">Удалить</button>
-    {{/if}}    
 </td>
+{{/if}}    
+

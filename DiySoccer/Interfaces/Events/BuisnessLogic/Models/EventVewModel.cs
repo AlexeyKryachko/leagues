@@ -13,6 +13,12 @@ namespace Interfaces.Events.BuisnessLogic.Models
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("group")]
+        public string Group { get; set; }
+
+        [JsonProperty("minor")]
+        public bool Minor { get; set; }
+
         [JsonProperty("startDate")]
         public DateTime? StartDate { get; set; }
 

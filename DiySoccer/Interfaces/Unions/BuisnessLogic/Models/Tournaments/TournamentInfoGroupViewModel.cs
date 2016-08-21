@@ -9,6 +9,9 @@ namespace Interfaces.Unions.BuisnessLogic.Models.Tournaments
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("minor")]
+        public bool Minor { get; set; }
+
         [JsonProperty("playoffGames")]
         public IEnumerable<TournamentInfoPlayOffGameViewModel> PlayOffGames { get; set; }
 

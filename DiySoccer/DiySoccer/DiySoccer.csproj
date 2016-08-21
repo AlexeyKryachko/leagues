@@ -355,6 +355,7 @@
     <Content Include="Content\dist\e6cf7c6ec7c2d6f670ae9d762604cb0b.woff2" />
     <Content Include="Content\dist\f4769f9bdb7466be65088239c12046d1.eot" />
     <Content Include="Content\dist\fa2772327f55d8198301fdb8bcfc8158.woff" />
+    <Content Include="Content\scss\partials\pages.scss" />
     <None Include="Content\scss\partials\dashboards.scss" />
     <None Include="Content\scss\partials\spinner.scss" />
     <Content Include="Content\scss\partials\variables.scss" />

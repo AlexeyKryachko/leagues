@@ -19,6 +19,7 @@ var GameInfoView = Backbone.Marionette.CompositeView.extend({
     template: "#game-info",    
     childViewContainer: "tbody",
     childView: GameInfoScoresView,
+    className: 'page',
     emptyView: SharedViews.EmptyListView,
     ui: {
     },

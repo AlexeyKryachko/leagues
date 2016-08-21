@@ -12,6 +12,8 @@ var CalendarListItemView = Backbone.Marionette.ItemView.extend({
         'homeTeamChange': '.home-team-change',
         'guestTeamChange': '.guest-team-change',
         'nameTeam': '.name-event',
+        'minorTeam': '.minor-event',
+        'groupTeam': '.group-event',
         'startDate': '.date',
         'startDateInput': '.start-date'
     },
@@ -22,7 +24,9 @@ var CalendarListItemView = Backbone.Marionette.ItemView.extend({
         'change @ui.homeTeamChange': 'homeTeamChange',
         'change @ui.guestTeamChange': 'guestTeamChange',
         'change @ui.startDateInput': 'timeChange',
-        'change @ui.nameTeam': 'nameChange'
+        'change @ui.nameTeam': 'nameChange',
+        'change @ui.groupTeam': 'groupTeam',
+        'change @ui.minorTeam': 'minorChange'
     },
     homeTeamChange: function (e) {
         var val = $(e.currentTarget).val();
@@ -51,6 +55,18 @@ var CalendarListItemView = Backbone.Marionette.ItemView.extend({
         var val = this.ui.nameTeam.val();
 
         this.model.set('name', val);
+        this.model.save();
+    },
+    groupChange: function (e) {
+        var val = this.ui.groupTeam.val();
+
+        this.model.set('group', val);
+        this.model.save();
+    },
+    minorChange: function (e) {
+        var val = this.ui.minorTeam.prop('checked');
+
+        this.model.set('minor', val);
         this.model.save();
     },
     onRender: function () {
@@ -107,6 +123,7 @@ var CalendarListItemView = Backbone.Marionette.ItemView.extend({
 var CalendarView = Backbone.Marionette.CompositeView.extend({
     template: "#calendar",    
     childViewContainer: "tbody",
+    className: 'page',
     childView: CalendarListItemView,
     emptyView: Views.EmptyListView,
     ui: {

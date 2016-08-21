@@ -34,6 +34,8 @@ namespace Implementations.Events.DataAccess
                 .Set(x => x.Name, model.Name)
                 .Set(x => x.StartDate, model.StartDate)
                 .Set(x => x.EndDate, model.EndDate)
+                .Set(x => x.Minor, model.Minor)
+                .Set(x => x.Group, model.Group)
                 .Set(x => x.Games, games);
 
             Collection.UpdateOne(filter, update);
@@ -47,6 +49,7 @@ namespace Implementations.Events.DataAccess
                 .Set(x => x.Name, entity.Name)
                 .Set(x => x.StartDate, entity.StartDate)
                 .Set(x => x.EndDate, entity.EndDate)
+                .Set(x => x.Minor, entity.Minor)
                 .Set(x => x.Games, entity.Games);
 
             Collection.UpdateOne(filter, update);

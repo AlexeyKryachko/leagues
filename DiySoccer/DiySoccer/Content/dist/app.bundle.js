@@ -12190,7 +12190,7 @@
 	    },
 	    addEvent: function () {
 	        var self = this;
-	        var event = new Event();
+	        var event = new Models.Event();
 	        event.setLeagueId(self.options.leagueId);
 
 	        event.save({}, {
@@ -12296,6 +12296,7 @@
 	        'homeTeamChange': '.home-team-change',
 	        'guestTeamChange': '.guest-team-change',
 	        'nameTeam': '.name-event',
+	        'minorTeam': '.minor-event',
 	        'startDate': '.date',
 	        'startDateInput': '.start-date'
 	    },
@@ -12306,7 +12307,8 @@
 	        'change @ui.homeTeamChange': 'homeTeamChange',
 	        'change @ui.guestTeamChange': 'guestTeamChange',
 	        'change @ui.startDateInput': 'timeChange',
-	        'change @ui.nameTeam': 'nameChange'
+	        'change @ui.nameTeam': 'nameChange',
+	        'change @ui.minorTeam': 'minorChange'
 	    },
 	    homeTeamChange: function (e) {
 	        var val = $(e.currentTarget).val();
@@ -12335,6 +12337,12 @@
 	        var val = this.ui.nameTeam.val();
 
 	        this.model.set('name', val);
+	        this.model.save();
+	    },
+	    minorChange: function (e) {
+	        var val = this.ui.minorTeam.prop('checked');
+
+	        this.model.set('minor', val);
 	        this.model.save();
 	    },
 	    onRender: function () {
@@ -12391,6 +12399,7 @@
 	var CalendarView = Backbone.Marionette.CompositeView.extend({
 	    template: "#calendar",    
 	    childViewContainer: "tbody",
+	    className: 'page',
 	    childView: CalendarListItemView,
 	    emptyView: Views.EmptyListView,
 	    ui: {
@@ -13340,6 +13349,7 @@
 	    template: "#game-info",    
 	    childViewContainer: "tbody",
 	    childView: GameInfoScoresView,
+	    className: 'page',
 	    emptyView: SharedViews.EmptyListView,
 	    ui: {
 	    },
@@ -13660,6 +13670,7 @@
 	    childViewContainer: "tbody",
 	    childView: TeamListItemView,
 	    emptyView: SharedViews.EmptyListView,
+	    className: 'page',
 	    initialize: function (options) {
 	        this.options = options;
 	    },
@@ -14718,30 +14729,18 @@
 	    unionRedirect: function(e) {
 	        var id = $(e.currentTarget).data('id');
 
-	        var tournament = _.findWhere(model.tournaments, { id: id });
-	        if (!tournament) {
+	        var tournament = _.findWhere(this.model.get('tournaments'), { id: id });
+	        if (tournament) {
 	            document.location.href = '#tournaments/' + id;
+	        } else {
+	            document.location.href = '#leagues/' + id;
 	        }
-
-	        document.location.href = '#leagues/' + id;
 	    },
 	    serializeData: function () {
 	        var model = this.model.toJSON();
+
 	        model.isAdmin = MyApp.Settings.isAdmin();
 
-	        if (!model.isAdmin)
-	            return model;
-
-	        if (model.leagues) {
-	            _.each(model.leagues, function (obj) {
-	                obj.href = '#leagues/' + obj.id + '/edit';
-	            });
-	        }
-	        if (model.tournaments) {
-	            _.each(model.tournaments, function (obj) {
-	                obj.href = '#leagues/' + obj.id + '/edit';
-	            });
-	        }
 	        return model;
 	    }
 	});
@@ -15095,10 +15094,20 @@
 	        if (!model.events)
 	            return model;
 
-	        _.each(model.events, function (obj) {
+	        _.each(model.events, function (obj) {            
+
 	            var col = obj.length;
 	            _.each(obj, function(group) {
-	                group.col = 12/col;
+	                group.col = 12 / col;
+
+	                group.groupCol = '12';
+	                if (group.minor) {
+	                    group.groupCol = '6';
+	                }
+	                
+	                _.each(group.groupGames, function (game, index) {
+	                    game.number = index + 1;
+	                });
 	            });
 	        });
 

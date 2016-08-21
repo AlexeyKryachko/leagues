@@ -49,13 +49,12 @@
 
         .dashboard-box-header {
             padding: 15px;
-            height: 61px;
+            height: 48px;
             background: $diys-box-header-color;
 
             .dashboard-box-header__link {
                 text-align: right;
                 position: relative;
-                top: 6px;
                 color: #414242 !important;
 
                 a {
@@ -67,9 +66,12 @@
 
             .dashboard-box-header__title {
                 position: relative;
-                top: 6px;
                 color: white;
                 text-align: left;
+                color: #414242 !important;
+
+                text-transform: uppercase;
+                font-weight: bold;
             }
         }
 
