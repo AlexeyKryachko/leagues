@@ -54,7 +54,6 @@ var GameScoresView = Backbone.Marionette.ItemView.extend({
         this.model.set('help', this.ui.help.val());
     },
     onShow: function () {
-        this.ui.editable.editable();
     },
     serializeData: function () {
         if (!this.model.get('score'))

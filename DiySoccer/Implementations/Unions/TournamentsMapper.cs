@@ -99,6 +99,7 @@ namespace Implementations.Unions
                     Points = _scoreCalculation.Points(eventGames, team.EntityId),
                     Wins = _scoreCalculation.WinsCount(eventGames, team.EntityId),
                     Drafts = _scoreCalculation.DraftCount(eventGames, team.EntityId),
+                    Loses = _scoreCalculation.LosesCount(eventGames, team.EntityId),
                     Goals = _scoreCalculation.GoalsCount(eventGames, team.EntityId),
                     Missed = _scoreCalculation.MissedCount(eventGames, team.EntityId)
                 })
