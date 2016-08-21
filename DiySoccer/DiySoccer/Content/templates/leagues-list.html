@@ -19,9 +19,12 @@
                     {{description}}
                 </div>
             </div>
-            {{#if href}}
+            {{#if isAdmin}}
             <div>
-                <a href="{{href}}" class="btn btn-primary">Редактировать</a>
+                <button class="btn btn-primary edit-league" data-id="{{id}}">Редактировать</button>
+            </div>
+            <div>
+                <button class="btn btn-primary delete-league" data-id="{{id}}">Удалить</button>
             </div>
             {{/if}}
         </div>

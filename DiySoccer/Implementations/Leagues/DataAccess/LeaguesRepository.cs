@@ -56,5 +56,12 @@ namespace Implementations.Leagues.DataAccess
 
             Collection.UpdateOne(filter, update);
         }
+
+        public void Delete(string leagueId)
+        {
+            var filter = Builders<LeagueDb>.Filter.Eq(x => x.EntityId, leagueId);
+
+            Collection.DeleteMany(filter);
+        }
     }
 }

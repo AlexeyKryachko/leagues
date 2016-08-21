@@ -26,10 +26,14 @@ var LeagueList = Backbone.Marionette.ItemView.extend({
         this.options = options;
     },
     ui: {
-        'union': '.dashboard-list-item'
+        'union': '.dashboard-list-item',
+        'deleteLeague': '.delete-league',
+        'editLeague': '.edit-league'
     },
     events: {
-        'click @ui.union': 'unionRedirect'
+        'click @ui.union': 'unionRedirect',
+        'click @ui.editLeague': 'editLeague',
+        'click @ui.deleteLeague': 'deleteLeague'
     },
     unionRedirect: function(e) {
         var id = $(e.currentTarget).data('id');
@@ -41,10 +45,27 @@ var LeagueList = Backbone.Marionette.ItemView.extend({
             document.location.href = '#leagues/' + id;
         }
     },
+    editLeague: function (e) {
+        var id = $(e.currentTarget).data('id');
+
+        document.location.href = '#leagues/' + id + '/edit';
+    },
+    deleteLeague: function (e) {
+        var id = $(e.currentTarget).data('id');
+
+        $.ajax({
+            url: "/api/leagues/" + id,
+            method: "DELETE"
+        });
+    },
     serializeData: function () {
         var model = this.model.toJSON();
 
         model.isAdmin = MyApp.Settings.isAdmin();
+
+        _.each(model.leagues, function (obj) {
+            obj.isAdmin = model.isAdmin;
+        });
 
         return model;
     }
