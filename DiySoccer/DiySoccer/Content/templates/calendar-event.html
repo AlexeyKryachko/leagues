@@ -1,7 +1,7 @@
-﻿<td>
-    {{#if isEditor}}
+﻿{{#if isEditor}}
+<td>
     <div class="mb10">
-        <input type="text" class="form-control name-event" data-id="{{id}}" value="{{name}}" />
+        <input type="text" class="form-control name-event" data-id="{{id}}" value="{{name}}"/>
     </div>
     <div class="mb10">
         <button class="btn btn-primary add-event-game">Добавить игру</button>
@@ -9,12 +9,8 @@
     <div class="mb10">
         <button class="btn btn-primary delete-event">Удалить тур</button>
     </div>
-    {{else}}
-    {{name}}
-    {{/if}}
 </td>
 <td>
-    {{#if isEditor}}
     {{#each games}}
     <div class="row">
         <div class="col-sm-5">
@@ -46,7 +42,22 @@
         </div>
     </div>
     {{/each}}
-    {{else}}
+</td>
+<td>
+    <div class="form-group">
+        <div class='input-group date'>
+            <input type='text' class="form-control start-date" />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
+</td>
+{{else}}
+<td>
+    {{name}}
+</td>
+<td>
     {{#each games}}
     <div class="row">
         <div class="col-sm-6">
@@ -57,19 +68,8 @@
         </div>
     </div>
     {{/each}}
-    {{/if}}
 </td>
 <td>
-    {{#if isEditor}}
-    <div class="form-group">
-        <div class='input-group date'>
-            <input type='text' class="form-control start-date"/>
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
-        </div>
-    </div>
-    {{else}}
     {{startDate}}
-    {{/if}}
 </td>
+{{/if}}

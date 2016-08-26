@@ -41,6 +41,7 @@ var TeamListView = Backbone.Marionette.CompositeView.extend({
     childViewContainer: "tbody",
     childView: TeamListItemView,
     emptyView: SharedViews.EmptyListView,
+    className: 'page',
     initialize: function (options) {
         this.options = options;
     },

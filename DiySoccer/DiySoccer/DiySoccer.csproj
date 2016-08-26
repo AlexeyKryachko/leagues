@@ -237,7 +237,9 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Startup.cs" />
+    <Content Include="Content\dist\89889688147bd7575d6327160d64e760.svg" />
     <Content Include="Content\dist\app.bundle.js" />
+    <Content Include="Content\dist\d7c639084f684d66a1bc66855d193ed8.svg" />
     <Content Include="Content\dist\styles.bundle.css" />
     <Content Include="Content\dist\vendor.bundle.js" />
     <Content Include="Content\img\DefaultLogo_70x70.png" />
@@ -345,6 +347,15 @@
     <Content Include="Content\scss\bootstrap\fonts\bootstrap\glyphicons-halflings-regular.woff" />
     <Content Include="Content\scss\bootstrap\fonts\bootstrap\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\scss\partials\main-page.scss" />
+    <Content Include="Content\dist\1dc35d25e61d819a9c357074014867ab.ttf" />
+    <Content Include="Content\dist\25a32416abee198dd821b0b17a198a8f.eot" />
+    <Content Include="Content\dist\448c34a56d699c29117adc64c43affeb.woff2" />
+    <Content Include="Content\dist\c8ddf1e5e5bf3682bc7bebf30f394148.woff" />
+    <Content Include="Content\dist\e18bbf611f2a2e43afc071aa2f4e1512.ttf" />
+    <Content Include="Content\dist\e6cf7c6ec7c2d6f670ae9d762604cb0b.woff2" />
+    <Content Include="Content\dist\f4769f9bdb7466be65088239c12046d1.eot" />
+    <Content Include="Content\dist\fa2772327f55d8198301fdb8bcfc8158.woff" />
+    <Content Include="Content\scss\partials\pages.scss" />
     <None Include="Content\scss\partials\dashboards.scss" />
     <None Include="Content\scss\partials\spinner.scss" />
     <Content Include="Content\scss\partials\variables.scss" />

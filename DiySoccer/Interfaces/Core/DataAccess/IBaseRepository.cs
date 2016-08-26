@@ -15,5 +15,7 @@ namespace Interfaces.Core.DataAccess
         IEnumerable<T> GetRange(IEnumerable<string> ids);
 
         void Delete(string id);
+
+        void DeleteByLeagueId(string leagueId);
     }
 }

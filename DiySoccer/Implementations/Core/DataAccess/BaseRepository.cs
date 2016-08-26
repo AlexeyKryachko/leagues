@@ -52,5 +52,12 @@ namespace Implementations.Core.DataAccess
         {
             Collection.DeleteOne(x => x.EntityId == id);
         }
+
+        public void DeleteByLeagueId(string leagueId)
+        {
+            var filter = Builders<T>.Filter.Eq(x => x.LeagueId, leagueId);
+
+            Collection.DeleteMany(filter);
+        }
     }
 }

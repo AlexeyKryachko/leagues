@@ -4,6 +4,9 @@ namespace Interfaces.Unions.BuisnessLogic.Models.Tournaments
 {
     public class TournamentInfoPlayOffGameViewModel
     {
+        [JsonProperty("gameId")]
+        public string GameId { get; set; }
+
         [JsonProperty("homeTeamMediaId")]
         public string HomeTeamMediaId { get; set; }
 

@@ -1,5 +1,18 @@
 ﻿var LeagueInfoView = Backbone.Marionette.ItemView.extend({
     template: "#league-info",
+    ui: {
+        'team': '.team-row'
+    },
+    events: {
+        'click @ui.team': 'teamRedirect'
+    },
+    teamRedirect: function(e) {
+        var id = $(e.currentTarget).data('id');
+        document.location.href = '#leagues/' + this.leagueId + '/teams/' + id;
+    },
+    setLeagueId: function (leagueId) {
+        this.leagueId = leagueId;
+    },
     serializeData: function () {
         var model = this.model.toJSON();
 

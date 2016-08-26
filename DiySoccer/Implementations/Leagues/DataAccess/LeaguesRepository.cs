@@ -31,6 +31,7 @@ namespace Implementations.Leagues.DataAccess
             {
                 EntityId = ObjectId.GenerateNewId().ToString(),
                 Name = model.Name,
+                Type = model.Type,
                 Description = model.Description,
                 VkSecurityGroup = model.VkGroup,
                 Admins = admins
@@ -55,6 +56,13 @@ namespace Implementations.Leagues.DataAccess
                 .Set(x => x.Admins, admins);
 
             Collection.UpdateOne(filter, update);
+        }
+
+        public void Delete(string leagueId)
+        {
+            var filter = Builders<LeagueDb>.Filter.Eq(x => x.EntityId, leagueId);
+
+            Collection.DeleteMany(filter);
         }
     }
 }

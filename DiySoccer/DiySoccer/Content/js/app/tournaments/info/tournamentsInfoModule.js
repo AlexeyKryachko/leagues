@@ -27,6 +27,7 @@ var tournamentsInfoModule = Backbone.Marionette.Module.extend({
         self.bindViews();
 
         if (options.tournamentId) {
+            self.tournamentsInfoView.setTournamentId(options.tournamentId);
             self.tournamentsInfo.fetch();
         }
 

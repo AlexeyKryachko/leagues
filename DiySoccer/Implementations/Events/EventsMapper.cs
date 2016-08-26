@@ -33,6 +33,8 @@ namespace Implementations.Events
             return new EventVewModel
             {
                 Id = entity.EntityId,
+                Minor = entity.Minor,
+                Group = entity.Group,
                 Name = entity.Name,
                 StartDate = entity.StartDate,
                 EndDate = entity.EndDate,

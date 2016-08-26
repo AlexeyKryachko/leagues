@@ -20,7 +20,7 @@ namespace Implementations.Teams.DataAccess
         {
             return Collection
                 .AsQueryable()
-                .Where(x => x.Name.Contains(query))
+                .Where(x => x.Name.Contains(query) && x.ReferenceId == null)
                 .Page(page, pageSize);
         }
 
@@ -28,6 +28,7 @@ namespace Implementations.Teams.DataAccess
         {
             var filter = Builders<TeamDb>.Filter.Eq(x => x.LeagueId, leagueId) & Builders<TeamDb>.Filter.Eq(x => x.EntityId, entity.EntityId);
             var update = Builders<TeamDb>.Update
+                .Set(x => x.ReferenceId, entity.ReferenceId)
                 .Set(x => x.Name, entity.Name)
                 .Set(x => x.Hidden, entity.Hidden)
                 .Set(x => x.MemberIds, entity.MemberIds)

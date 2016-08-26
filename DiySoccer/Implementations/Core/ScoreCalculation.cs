@@ -14,6 +14,30 @@ namespace Implementations.Core
             return Default(wins, loses, drafts);
         }
 
+        public int GoalsCount(IEnumerable<GameDb> games, string teamId)
+        {
+            var scores = games
+               .Where(x => x.GuestTeam.Id == teamId)
+               .Sum(x => x.GuestTeam.Score);
+            scores += games
+                .Where(x => x.HomeTeam.Id == teamId)
+                .Sum(x => x.HomeTeam.Score);
+            
+            return scores;
+        }
+
+        public int MissedCount(IEnumerable<GameDb> games, string teamId)
+        {
+            var missed = games
+                .Where(x => x.GuestTeam.Id == teamId)
+                .Sum(x => x.HomeTeam.Score);
+            missed += games
+                .Where(x => x.HomeTeam.Id == teamId)
+                .Sum(x => x.GuestTeam.Score);
+
+            return missed;
+        }
+
         public int DraftCount(IEnumerable<GameDb> games, string teamId)
         {
             return games.Count(x =>

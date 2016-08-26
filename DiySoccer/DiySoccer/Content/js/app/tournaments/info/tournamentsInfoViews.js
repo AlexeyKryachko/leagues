@@ -51,21 +51,37 @@ var TournamentsInfoActions = Backbone.Marionette.ItemView.extend({
 var TournamentsInfoView = Backbone.Marionette.ItemView.extend({
     template: "#tournament-info",
     className: 'dashboard',
+    ui: {
+        'groupGamesRow': '.dashboard-box-content__row'
+    },
+    events: {
+        'click @ui.groupGamesRow': 'gameRedirect'
+    },
+    setTournamentId: function (tournamentId) {
+        this.tournamentId = tournamentId;
+    },
+    gameRedirect: function(e) {
+        var id = $(e.currentTarget).data('id');
+
+        document.location.href = '#leagues/' + this.tournamentId + '/games/' + id;
+    },
     serializeData: function () {
         var model = this.model.toJSON();
 
         if (!model.events)
             return model;
 
-        _.each(model.events, function (obj, index) {
-            var col = obj.length;
-            _.each(obj, function (group) {
+        _.each(model.events, function(obj, eventIndex) {
 
-                if (index === 0) {
-                    group.information = model.information;
+            if (model.information) {
+                obj.informationSpace = 'test';
+                if (eventIndex === 0) {
+                    obj.information = model.information;
                 }
-
-                group.col = 12/col;
+            }
+            
+            _.each(obj.groupGames, function (game, index) {
+                game.number = index + 1;
             });
         });
 

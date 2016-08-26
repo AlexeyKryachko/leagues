@@ -18,6 +18,12 @@ namespace Interfaces.Events.DataAccess.Model
         [BsonElement("name")]
         public string Name { get; set; }
 
+        [BsonElement("group")]
+        public string Group { get; set; }
+
+        [BsonElement("minor")]
+        public bool Minor { get; set; }
+
         [BsonElement("startDate")]
         public DateTime? StartDate { get; set; }
 

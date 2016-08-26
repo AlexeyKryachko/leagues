@@ -5,11 +5,17 @@
  * 2. Boostrap and other 3rd party libraries
  * 3. Partials
  */
-.height-120 {
-  height: 120px; }
+.width-10 {
+  width: 10px; }
 
-.height-140 {
-  height: 140px; }
+.width-20 {
+  width: 20px; }
+
+.width-30 {
+  width: 30px; }
+
+.width-50 {
+  width: 50px; }
 
 .width-60 {
   width: 60px; }
@@ -19,6 +25,12 @@
 
 .width-125 {
   width: 125px; }
+
+.height-120 {
+  height: 120px; }
+
+.height-140 {
+  height: 140px; }
 
 .width-150 {
   width: 150px; }
@@ -2307,12 +2319,11 @@
     max-width: 710px; }
   .dashboard .dashboard-box .dashboard-box-header {
     padding: 15px;
-    height: 61px;
+    height: 48px;
     background: #e69200; }
     .dashboard .dashboard-box .dashboard-box-header .dashboard-box-header__link {
       text-align: right;
       position: relative;
-      top: 6px;
       color: #414242 !important; }
       .dashboard .dashboard-box .dashboard-box-header .dashboard-box-header__link a {
         color: #414242;
@@ -2320,9 +2331,22 @@
         font-weight: bold; }
     .dashboard .dashboard-box .dashboard-box-header .dashboard-box-header__title {
       position: relative;
-      top: 6px;
       color: white;
-      text-align: left; }
+      text-align: left;
+      color: #414242 !important;
+      text-transform: uppercase;
+      font-weight: bold; }
+  .dashboard .dashboard-box .dashboard-box-content .dashboard-box-content__row {
+    padding-bottom: 3px;
+    padding-top: 3px;
+    cursor: pointer; }
+    .dashboard .dashboard-box .dashboard-box-content .dashboard-box-content__row:hover {
+      background-color: #fafafa; }
+    .dashboard .dashboard-box .dashboard-box-content .dashboard-box-content__row:last-child {
+      padding-bottom: 0px; }
+  .dashboard .dashboard-box .dashboard-box-content.dashboard-box-content__padded {
+    padding-top: 10px;
+    padding-bottom: 10px; }
   .dashboard .dashboard-box .dashboard-box-content .dashboard-box-content__half-right {
     display: inline-block;
     text-align: left;
@@ -2343,6 +2367,9 @@
     color: #949494; }
   .dashboard .dashboard-box .dashboard-box-content tbody tr:nth-child(even) {
     background: #fafafa; }
+
+.page {
+  background-color: white; }
 
 .spinner {
   margin: 100px auto;

@@ -81,7 +81,7 @@ var calendarModule = Backbone.Marionette.Module.extend({
     },
     addEvent: function () {
         var self = this;
-        var event = new Event();
+        var event = new Models.Event();
         event.setLeagueId(self.options.leagueId);
 
         event.save({}, {

@@ -12190,7 +12190,7 @@
 	    },
 	    addEvent: function () {
 	        var self = this;
-	        var event = new Event();
+	        var event = new Models.Event();
 	        event.setLeagueId(self.options.leagueId);
 
 	        event.save({}, {
@@ -12296,6 +12296,8 @@
 	        'homeTeamChange': '.home-team-change',
 	        'guestTeamChange': '.guest-team-change',
 	        'nameTeam': '.name-event',
+	        'minorTeam': '.minor-event',
+	        'groupTeam': '.group-event',
 	        'startDate': '.date',
 	        'startDateInput': '.start-date'
 	    },
@@ -12306,7 +12308,9 @@
 	        'change @ui.homeTeamChange': 'homeTeamChange',
 	        'change @ui.guestTeamChange': 'guestTeamChange',
 	        'change @ui.startDateInput': 'timeChange',
-	        'change @ui.nameTeam': 'nameChange'
+	        'change @ui.nameTeam': 'nameChange',
+	        'change @ui.groupTeam': 'groupTeam',
+	        'change @ui.minorTeam': 'minorChange'
 	    },
 	    homeTeamChange: function (e) {
 	        var val = $(e.currentTarget).val();
@@ -12335,6 +12339,18 @@
 	        var val = this.ui.nameTeam.val();
 
 	        this.model.set('name', val);
+	        this.model.save();
+	    },
+	    groupChange: function (e) {
+	        var val = this.ui.groupTeam.val();
+
+	        this.model.set('group', val);
+	        this.model.save();
+	    },
+	    minorChange: function (e) {
+	        var val = this.ui.minorTeam.prop('checked');
+
+	        this.model.set('minor', val);
 	        this.model.save();
 	    },
 	    onRender: function () {
@@ -12391,6 +12407,7 @@
 	var CalendarView = Backbone.Marionette.CompositeView.extend({
 	    template: "#calendar",    
 	    childViewContainer: "tbody",
+	    className: 'page',
 	    childView: CalendarListItemView,
 	    emptyView: Views.EmptyListView,
 	    ui: {
@@ -13027,7 +13044,6 @@
 	        this.model.set('help', this.ui.help.val());
 	    },
 	    onShow: function () {
-	        this.ui.editable.editable();
 	    },
 	    serializeData: function () {
 	        if (!this.model.get('score'))
@@ -13340,6 +13356,7 @@
 	    template: "#game-info",    
 	    childViewContainer: "tbody",
 	    childView: GameInfoScoresView,
+	    className: 'page',
 	    emptyView: SharedViews.EmptyListView,
 	    ui: {
 	    },
@@ -13660,6 +13677,7 @@
 	    childViewContainer: "tbody",
 	    childView: TeamListItemView,
 	    emptyView: SharedViews.EmptyListView,
+	    className: 'page',
 	    initialize: function (options) {
 	        this.options = options;
 	    },
@@ -14515,6 +14533,7 @@
 
 	        if (options.leagueId) {
 	            self.leagueInfo.set('id', self.options.leagueId);
+	            self.leagueInfoView.setLeagueId(self.options.leagueId);
 	            self.leagueInfo.fetch();
 	        }
 
@@ -14583,8 +14602,21 @@
 /* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_) {var LeagueInfoView = Backbone.Marionette.ItemView.extend({
+	/* WEBPACK VAR INJECTION */(function($, _) {var LeagueInfoView = Backbone.Marionette.ItemView.extend({
 	    template: "#league-info",
+	    ui: {
+	        'team': '.team-row'
+	    },
+	    events: {
+	        'click @ui.team': 'teamRedirect'
+	    },
+	    teamRedirect: function(e) {
+	        var id = $(e.currentTarget).data('id');
+	        document.location.href = '#leagues/' + this.leagueId + '/teams/' + id;
+	    },
+	    setLeagueId: function (leagueId) {
+	        this.leagueId = leagueId;
+	    },
 	    serializeData: function () {
 	        var model = this.model.toJSON();
 
@@ -14608,7 +14640,7 @@
 	});
 
 	module.exports = { LeagueInfoView: LeagueInfoView }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(25)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21), __webpack_require__(25)))
 
 /***/ },
 /* 52 */
@@ -14696,32 +14728,47 @@
 	        this.options = options;
 	    },
 	    ui: {
-	        'union': '.dashboard-list-item'
+	        'union': '.dashboard-list-item',
+	        'deleteLeague': '.delete-league',
+	        'editLeague': '.edit-league'
 	    },
 	    events: {
-	        'click @ui.union': 'unionRedirect'
+	        'click @ui.union': 'unionRedirect',
+	        'click @ui.editLeague': 'editLeague',
+	        'click @ui.deleteLeague': 'deleteLeague'
 	    },
 	    unionRedirect: function(e) {
 	        var id = $(e.currentTarget).data('id');
-	        document.location.href = '#leagues/' + id;
+
+	        var tournament = _.findWhere(this.model.get('tournaments'), { id: id });
+	        if (tournament) {
+	            document.location.href = '#tournaments/' + id;
+	        } else {
+	            document.location.href = '#leagues/' + id;
+	        }
+	    },
+	    editLeague: function (e) {
+	        var id = $(e.currentTarget).data('id');
+
+	        document.location.href = '#leagues/' + id + '/edit';
+	    },
+	    deleteLeague: function (e) {
+	        var id = $(e.currentTarget).data('id');
+
+	        $.ajax({
+	            url: "/api/leagues/" + id,
+	            method: "DELETE"
+	        });
 	    },
 	    serializeData: function () {
 	        var model = this.model.toJSON();
+
 	        model.isAdmin = MyApp.Settings.isAdmin();
 
-	        if (!model.isAdmin)
-	            return model;
+	        _.each(model.leagues, function (obj) {
+	            obj.isAdmin = model.isAdmin;
+	        });
 
-	        if (model.leagues) {
-	            _.each(model.leagues, function (obj) {
-	                obj.href = '#leagues/' + obj.id + '/edit';
-	            });
-	        }
-	        if (model.tournaments) {
-	            _.each(model.tournaments, function (obj) {
-	                obj.href = '#leagues/' + obj.id + '/edit';
-	            });
-	        }
 	        return model;
 	    }
 	});
@@ -14976,6 +15023,7 @@
 	        self.bindViews();
 
 	        if (options.tournamentId) {
+	            self.tournamentsInfoView.setTournamentId(options.tournamentId);
 	            self.tournamentsInfo.fetch();
 	        }
 
@@ -15074,21 +15122,37 @@
 	var TournamentsInfoView = Backbone.Marionette.ItemView.extend({
 	    template: "#tournament-info",
 	    className: 'dashboard',
+	    ui: {
+	        'groupGamesRow': '.dashboard-box-content__row'
+	    },
+	    events: {
+	        'click @ui.groupGamesRow': 'gameRedirect'
+	    },
+	    setTournamentId: function (tournamentId) {
+	        this.tournamentId = tournamentId;
+	    },
+	    gameRedirect: function(e) {
+	        var id = $(e.currentTarget).data('id');
+
+	        document.location.href = '#leagues/' + this.tournamentId + '/games/' + id;
+	    },
 	    serializeData: function () {
 	        var model = this.model.toJSON();
 
 	        if (!model.events)
 	            return model;
 
-	        _.each(model.events, function (obj, index) {
-	            var col = obj.length;
-	            _.each(obj, function (group) {
+	        _.each(model.events, function(obj, eventIndex) {
 
-	                if (index === 0) {
-	                    group.information = model.information;
+	            if (model.information) {
+	                obj.informationSpace = 'test';
+	                if (eventIndex === 0) {
+	                    obj.information = model.information;
 	                }
-
-	                group.col = 12/col;
+	            }
+	            
+	            _.each(obj.groupGames, function (game, index) {
+	                game.number = index + 1;
 	            });
 	        });
 

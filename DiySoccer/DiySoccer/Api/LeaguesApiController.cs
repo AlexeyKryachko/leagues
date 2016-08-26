@@ -81,5 +81,18 @@ namespace DiySoccer.Api
         }
 
         #endregion
+
+        #region DELETE
+
+        [Route("api/leagues/{id}")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Admin)]
+        [HttpDelete]
+        public IHttpActionResult Delete(string id)
+        {
+            _leaguesManager.Delete(id);
+            return Ok();
+        }
+
+        #endregion
     }
 }

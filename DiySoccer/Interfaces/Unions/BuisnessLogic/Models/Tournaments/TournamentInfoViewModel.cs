@@ -9,15 +9,24 @@ namespace Interfaces.Unions.BuisnessLogic.Models.Tournaments
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("information")]
+        [JsonProperty("subName")]
+        public string SubName { get; set; }
+
+        [JsonProperty("mediaId")]
+        public string MediaId { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+		[JsonProperty("information")]
         public string Information { get; set; }
 
         [JsonProperty("events")]
-        public IEnumerable<IEnumerable<ITournamentInfoGroupViewModel>> Events { get; set; }
+        public IEnumerable<ITournamentInfoGroupViewModel> Events { get; set; }
 
         public TournamentInfoViewModel()
         {
-            Events = Enumerable.Empty<IEnumerable<ITournamentInfoGroupViewModel>>();
+            Events = Enumerable.Empty<ITournamentInfoGroupViewModel>();
         }
     }
 }

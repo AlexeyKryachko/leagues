@@ -180,7 +180,12 @@ namespace Implementations.Leagues.BuisnessLogic
 
         public void Delete(string leagueId)
         {
-            throw new System.NotImplementedException();
+            _leaguesRepository.Delete(leagueId);
+
+            _eventsRepository.DeleteByLeagueId(leagueId);
+            _gamesRepository.DeleteByLeagueId(leagueId);
+            _teamsRepository.DeleteByLeagueId(leagueId);
+            _playersRepository.DeleteByLeagueId(leagueId);
         }
     }
 }

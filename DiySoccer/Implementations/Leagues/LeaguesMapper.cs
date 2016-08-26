@@ -81,6 +81,7 @@ namespace Implementations.Leagues
                 .Where(x => !x.Hidden)
                 .Select(x => new LeagueInfoTeamViewModel
                 {
+                    Id = x.EntityId,
                     Name = x.Name,
                     MediaId = x.MediaId,
                     Games = _scoreCalculation.GameCount(games, x.EntityId),

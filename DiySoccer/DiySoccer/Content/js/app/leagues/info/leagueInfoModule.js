@@ -24,6 +24,7 @@ var leagueInfoModule = Backbone.Marionette.Module.extend({
 
         if (options.leagueId) {
             self.leagueInfo.set('id', self.options.leagueId);
+            self.leagueInfoView.setLeagueId(self.options.leagueId);
             self.leagueInfo.fetch();
         }
 

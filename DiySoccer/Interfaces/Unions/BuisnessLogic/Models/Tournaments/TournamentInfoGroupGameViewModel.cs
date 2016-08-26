@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
 
 namespace Interfaces.Unions.BuisnessLogic.Models.Tournaments
 {
@@ -6,6 +8,9 @@ namespace Interfaces.Unions.BuisnessLogic.Models.Tournaments
     {
         [JsonProperty("id")]
         public string Id { get; set; }
+
+        [JsonProperty("mediaId")]
+        public string MediaId { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -19,7 +24,15 @@ namespace Interfaces.Unions.BuisnessLogic.Models.Tournaments
         [JsonProperty("loses")]
         public int Loses { get; set; }
 
+        [JsonProperty("goals")]
+        public int Goals { get; set; }
+
+        [JsonProperty("missed")]
+        public int Missed { get; set; }
+
         [JsonProperty("points")]
         public int Points { get; set; }
+
+        
     }
 }

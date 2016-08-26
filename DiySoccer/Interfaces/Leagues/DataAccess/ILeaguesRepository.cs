@@ -13,5 +13,7 @@ namespace Interfaces.Leagues.DataAccess
         void Create(LeagueUnsecureViewModel model);
 
         void Update(LeagueUnsecureViewModel model);
+
+        void Delete(string leagueId);
     }
 }
