@@ -59,6 +59,7 @@ namespace Implementations.Leagues
                 Name = league.Name,
                 SubName = league.SubName,
                 Description = league.Description,
+                Information = league.Information,
                 VkGroup = league.VkSecurityGroup,
                 MediaId = league.MediaId,
                 Type = league.Type,

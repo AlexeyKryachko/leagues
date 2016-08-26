@@ -9,6 +9,9 @@ namespace Interfaces.Unions.BuisnessLogic.Models.Tournaments
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("information")]
+        public string Information { get; set; }
+
         [JsonProperty("events")]
         public IEnumerable<IEnumerable<ITournamentInfoGroupViewModel>> Events { get; set; }
 

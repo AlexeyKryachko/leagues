@@ -31,6 +31,7 @@ var LeagueView = Backbone.Marionette.CompositeView.extend({
         'addAdmin': '.add-league-admin',
         'name': '.league-name',
         'description': '.league-description',
+        'information': '.league-information',
         'group': '.league-vkGroup',
         'upload': '#btUpload',
         'logoContainer': '.logo-container',
@@ -42,6 +43,7 @@ var LeagueView = Backbone.Marionette.CompositeView.extend({
         'change @ui.name': 'changeName',
         'change @ui.subName': 'changeSubName',
         'change @ui.description': 'changeDescription',
+        'change @ui.information': 'changeInformation',
         'change @ui.group': 'changeGroup',
         'change @ui.type': 'changeType',
         'click @ui.upload': 'uploadImage'
@@ -80,6 +82,9 @@ var LeagueView = Backbone.Marionette.CompositeView.extend({
     },
     changeDescription: function () {
         this.model.set('description', this.ui.description.val());
+    },
+    changeInformation: function () {
+        this.model.set('information', this.ui.information.val());
     },
     changeGroup: function () {
         this.model.set('vkGroup', this.ui.group.val());

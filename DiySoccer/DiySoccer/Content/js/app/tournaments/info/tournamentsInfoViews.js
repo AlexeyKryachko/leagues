@@ -57,9 +57,14 @@ var TournamentsInfoView = Backbone.Marionette.ItemView.extend({
         if (!model.events)
             return model;
 
-        _.each(model.events, function (obj) {
+        _.each(model.events, function (obj, index) {
             var col = obj.length;
-            _.each(obj, function(group) {
+            _.each(obj, function (group) {
+
+                if (index === 0) {
+                    group.information = model.information;
+                }
+
                 group.col = 12/col;
             });
         });

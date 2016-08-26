@@ -9,6 +9,7 @@
   "devDependencies": {
     "backbone.marionette": "^2.4.7",
     "bootstrap-3-typeahead": "^4.0.1",
+    "css-loader": "^0.24.0",
     "eonasdan-bootstrap-datetimepicker": "^4.15.35",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
@@ -20,6 +21,8 @@
     "jquery-deferred": "^0.3.0",
     "node-sass": "^3.8.0",
     "npm": "^3.10.5",
+    "sass-loader": "^4.0.0",
+    "style-loader": "^0.13.1",
     "tinymce": "^4.4.1",
     "underscore": "^1.8.3",
     "url-loader": "^0.5.7",

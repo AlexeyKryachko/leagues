@@ -26,6 +26,9 @@ namespace Interfaces.Leagues.BuisnessLogic.Model
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        [JsonProperty("information")]
+        public string Information { get; set; }
+
         [JsonProperty("vkGroup")]
         public string VkGroup { get; set; }
 

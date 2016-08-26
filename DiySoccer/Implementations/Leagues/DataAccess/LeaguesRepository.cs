@@ -48,6 +48,7 @@ namespace Implementations.Leagues.DataAccess
                 .Set(x => x.Name, model.Name)
                 .Set(x => x.SubName, model.SubName)
                 .Set(x => x.Description, model.Description)
+                .Set(x => x.Information, model.Information)
                 .Set(x => x.VkSecurityGroup, model.VkGroup)
                 .Set(x => x.MediaId, model.MediaId)
                 .Set(x => x.Type, model.Type)

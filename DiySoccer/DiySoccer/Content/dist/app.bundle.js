@@ -14850,6 +14850,7 @@
 	        'addAdmin': '.add-league-admin',
 	        'name': '.league-name',
 	        'description': '.league-description',
+	        'information': '.league-information',
 	        'group': '.league-vkGroup',
 	        'upload': '#btUpload',
 	        'logoContainer': '.logo-container',
@@ -14861,6 +14862,7 @@
 	        'change @ui.name': 'changeName',
 	        'change @ui.subName': 'changeSubName',
 	        'change @ui.description': 'changeDescription',
+	        'change @ui.information': 'changeInformation',
 	        'change @ui.group': 'changeGroup',
 	        'change @ui.type': 'changeType',
 	        'click @ui.upload': 'uploadImage'
@@ -14899,6 +14901,9 @@
 	    },
 	    changeDescription: function () {
 	        this.model.set('description', this.ui.description.val());
+	    },
+	    changeInformation: function () {
+	        this.model.set('information', this.ui.information.val());
 	    },
 	    changeGroup: function () {
 	        this.model.set('vkGroup', this.ui.group.val());
@@ -15075,9 +15080,14 @@
 	        if (!model.events)
 	            return model;
 
-	        _.each(model.events, function (obj) {
+	        _.each(model.events, function (obj, index) {
 	            var col = obj.length;
-	            _.each(obj, function(group) {
+	            _.each(obj, function (group) {
+
+	                if (index === 0) {
+	                    group.information = model.information;
+	                }
+
 	                group.col = 12/col;
 	            });
 	        });

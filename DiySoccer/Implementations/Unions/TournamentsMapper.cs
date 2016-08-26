@@ -62,6 +62,7 @@ namespace Implementations.Unions
             return new TournamentInfoViewModel
             {
                 Name = league.Name,
+                Information = league.Information,
                 Events = groups
             };
         }

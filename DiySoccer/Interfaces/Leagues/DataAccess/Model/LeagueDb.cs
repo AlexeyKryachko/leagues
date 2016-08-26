@@ -22,6 +22,9 @@ namespace Interfaces.Leagues.DataAccess.Model
         [BsonElement("desc")]
         public string Description { get; set; }
 
+        [BsonElement("inf")]
+        public string Information { get; set; }
+
         [BsonElement("vkgroup")]
         public string VkSecurityGroup { get; set; }
 
