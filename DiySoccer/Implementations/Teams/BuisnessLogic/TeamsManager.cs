@@ -100,12 +100,8 @@ namespace Implementations.Teams.BuisnessLogic
         {
             var events = _eventsRepository.GetByLeague(leagueId).ToList();
             var games = _gamesRepository.GetByTeam(leagueId, teamId).ToList();
-            var teamIds = games.Select(x => x.GuestTeam.Id).Concat(games.Select(x => x.HomeTeam.Id)).ToList();
-            teamIds.Add(teamId);
-            teamIds = teamIds.Distinct().ToList();
-
             var teams = _teamsRepository
-                .GetRange(teamIds)
+                .GetByLeague(leagueId)
                 .ToDictionary(x => x.EntityId, y => y);
 
             var userIds = teams[teamId].MemberIds;

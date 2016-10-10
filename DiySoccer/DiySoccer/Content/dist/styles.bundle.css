@@ -52,6 +52,9 @@
   height: 150px;
   width: 150px; }
 
+.no-margin {
+  margin: 0px !important; }
+
 /*!
  *  Font Awesome 4.6.3 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -2357,15 +2360,15 @@
     text-align: right;
     padding-right: 20px;
     width: 45%; }
-  .dashboard .dashboard-box .dashboard-box-content thead {
+  .dashboard .dashboard-box .dashboard-box-content .table thead {
     background-color: #e4f5fb; }
-  .dashboard .dashboard-box .dashboard-box-content th:nth-child(odd) {
+  .dashboard .dashboard-box .dashboard-box-content .table.table-colored-columns th:nth-child(odd) {
     background: #DEEFF5; }
-  .dashboard .dashboard-box .dashboard-box-content td:nth-child(odd) {
+  .dashboard .dashboard-box .dashboard-box-content .table.table-colored-columns td:nth-child(odd) {
     background: #f4f4f4; }
-  .dashboard .dashboard-box .dashboard-box-content tbody .number-cell {
+  .dashboard .dashboard-box .dashboard-box-content .table.table-colored-columns tbody .number-cell {
     color: #949494; }
-  .dashboard .dashboard-box .dashboard-box-content tbody tr:nth-child(even) {
+  .dashboard .dashboard-box .dashboard-box-content .table.table-colored-columns tbody tr:nth-child(even) {
     background: #fafafa; }
 
 .page {

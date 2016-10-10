@@ -20,6 +20,7 @@ require("./js/app/teams/team/teamModule.js");
 
 require("./js/app/leagues/info/leagueinfoModule.js");
 require("./js/app/leagues/list/leaguesModule.js");
+require("./js/app/leagues/statistic/statisticModule.js");
 require("./js/app/leagues/league/leagueModule.js");
 
 require("./js/app/tournaments/info/tournamentsInfoModule.js");

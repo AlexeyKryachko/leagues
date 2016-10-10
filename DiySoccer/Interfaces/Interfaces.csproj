@@ -98,7 +98,8 @@
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueInfoTeamViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueInfoViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueMemberStatisticViewModel.cs" />
-    <Compile Include="Leagues\BuisnessLogic\Model\LeagueStatisticViewModel.cs" />
+    <Compile Include="Leagues\BuisnessLogic\Model\LeagueStatisticsViewModel.cs" />
+    <Compile Include="Leagues\BuisnessLogic\Model\LeagueTableViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeaguesViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueUnsecureViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueViewModel.cs" />
@@ -109,7 +110,7 @@
     <Compile Include="Unions\BuisnessLogic\Models\Tournaments\TournamentInfoViewModel.cs" />
     <Compile Include="Leagues\DataAccess\Model\LeagueType.cs" />
     <Compile Include="Teams\BuisnessLogic\Models\TeamInfoPlayersStatisticViewModel.cs" />
-    <Compile Include="Teams\BuisnessLogic\Models\TeamStatisticViewModel.cs" />
+    <Compile Include="Teams\BuisnessLogic\Models\TeamStatisticsViewModel.cs" />
     <Compile Include="Leagues\DataAccess\ILeaguesRepository.cs" />
     <Compile Include="Leagues\DataAccess\Model\LeagueDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -141,9 +141,9 @@ namespace Implementations.Teams
             return result.OrderByDescending(x => x.Sum);
         }
 
-        public TeamStatisticViewModel MapTeamStatistic(TeamDb team, IEnumerable<GameDb> games)
+        public TeamStatisticsViewModel MapTeamStatistic(TeamDb team, IEnumerable<GameDb> games)
         {
-            var model = new TeamStatisticViewModel
+            var model = new TeamStatisticsViewModel
             {
                 Id = team.EntityId,
                 Name = team.Name,

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Interfaces.Leagues.BuisnessLogic.Model
 {
-    public class LeagueStatisticViewModel
+    public class LeagueStatisticsViewModel
     {
         [JsonProperty("bestHelpers")]
         public IEnumerable<LeagueMemberStatisticViewModel> BestHelpers { get; set; }
@@ -15,12 +15,8 @@ namespace Interfaces.Leagues.BuisnessLogic.Model
         [JsonProperty("bestPlayers")]
         public IEnumerable<LeagueMemberStatisticViewModel> BestPlayers { get; set; }
 
-        [JsonProperty("teamStats")]
-        public IEnumerable<TeamStatisticViewModel> TeamStatistics { get; set; }
-
-        public LeagueStatisticViewModel()
+        public LeagueStatisticsViewModel()
         {
-            TeamStatistics = Enumerable.Empty<TeamStatisticViewModel>();
             BestHelpers = Enumerable.Empty<LeagueMemberStatisticViewModel>();
             BestForwards = Enumerable.Empty<LeagueMemberStatisticViewModel>();
             BestPlayers = Enumerable.Empty<LeagueMemberStatisticViewModel>();

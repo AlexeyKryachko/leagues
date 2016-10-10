@@ -1,44 +1,24 @@
-﻿<table class="table table-striped">
-    <thead>
-    <tr>
-        <th>Название</th>
-        <th class="width-100 text-right">Кол-во игр</th>
-        <th class="width-100 text-right">Победы</th>
-        <th class="width-100 text-right">Ничьи</th>
-        <th class="width-100 text-right">Поражения</th>
-        <th class="width-125 text-right">Голы</th>
-        <th class="width-100 text-right">Очки</th>
-    </tr>
-    </thead>
-    <tbody></tbody>
-</table>
-
-<div class="row form-group">
-    <div class="col-sm-4">
-        <h4><strong>Лучшие игроки</strong></h4>
-        {{#each bestPlayers}}
-        <div class="row">
-            <div class="col-sm-10">{{name}}</div>
-            <div class="col-sm-2">{{num}}</div>
+﻿<div class="dashboard">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="dashboard-box">
+                <div class="dashboard-box-content">
+                    <table class="table table-striped mb0">
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th class="width-100 text-right">Кол-во игр</th>
+                                <th class="width-100 text-right">Победы</th>
+                                <th class="width-100 text-right">Ничьи</th>
+                                <th class="width-100 text-right">Поражения</th>
+                                <th class="width-125 text-right">Голы</th>
+                                <th class="width-100 text-right">Очки</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        {{/each}}
-    </div>
-    <div class="col-sm-4">
-        <h4><strong>Лучшие ассисстенты</strong></h4>
-        {{#each bestHelpers}}
-        <div class="row">
-            <div class="col-sm-10">{{name}}</div>
-            <div class="col-sm-2">{{num}}</div>
-        </div>
-        {{/each}}
-    </div>
-    <div class="col-sm-4">
-        <h4><strong>Лучшие забивалы</strong></h4>
-        {{#each bestForwards}}
-        <div class="row">
-            <div class="col-sm-10">{{name}}</div>
-            <div class="col-sm-2">{{num}}</div>
-        </div>
-        {{/each}}
     </div>
 </div>

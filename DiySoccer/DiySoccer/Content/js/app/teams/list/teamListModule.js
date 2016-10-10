@@ -40,7 +40,6 @@ var teamsModule = Backbone.Marionette.Module.extend({
         self.layout = new Layouts.LayoutView();
         self.tableView = new Views.TeamListView({ model: self.statistics, collection: self.teams, leagueId: self.options.leagueId });
         self.actions = new Views.TeamListActions({ leagueId: self.options.leagueId });
-        self.bottomView = new SharedViews.CancelView();
     },
     bindViews: function () {
         var self = this;
@@ -48,17 +47,11 @@ var teamsModule = Backbone.Marionette.Module.extend({
         self.listenTo(self.layout, 'show', function () {
             self.layout.up.show(self.actions);
             self.layout.center.show(self.tableView);
-            self.layout.down.show(self.bottomView);
-        });
-
-        self.listenTo(self.bottomView, 'cancel', function () {
-            window.history.back();
         });
     },
     onStop: function (options) {
         var self = this;
 
-        self.bottomView.destroy();
         self.actions.destroy();
         self.tableView.destroy();
         self.layout.destroy();

@@ -38,7 +38,7 @@ namespace Implementations.Leagues.BuisnessLogic
             _leaguesMapper = leaguesMapper;
             _eventsRepository = eventsRepository;
         }
-
+        
         public LeagueInfoViewModel GetInfo(string leagueId)
         {
             var league = _leaguesRepository.Get(leagueId);
@@ -109,16 +109,12 @@ namespace Implementations.Leagues.BuisnessLogic
             _leaguesRepository.Update(model);
         }
 
-        public LeagueStatisticViewModel GetStatisticByLeague(string leagueId)
+        public LeagueStatisticsViewModel GetStatisticByLeague(string leagueId)
         {
             var teams = _teamsRepository.GetByLeague(leagueId).ToList();
             var games = _gamesRepository.GetByLeague(leagueId).ToList();
 
-            var teamsStatistic = teams
-                .Where(x => !x.Hidden)
-                .Select(x => _teamMapper.MapTeamStatistic(x, games));
-            
-            var bestPlayers = _userStatisticCalculation.GetBestStatistic(games) 
+            var bestPlayers = _userStatisticCalculation.GetBestStatistic(games)
                 .OrderByDescending(x => x.Value)
                 .Take(7)
                 .ToList();
@@ -140,17 +136,17 @@ namespace Implementations.Leagues.BuisnessLogic
             userIds = userIds.Distinct().ToList();
             var users = _playersRepository
                 .GetRange(userIds)
-                .ToDictionary(x => x.EntityId, 
-                    y => teams.Exists(x => x.MemberIds.Contains(y.EntityId)) 
+                .ToDictionary(x => x.EntityId,
+                    y => teams.Exists(x => x.MemberIds.Contains(y.EntityId))
                         ? y.Name + " (" + teams.Find(x => x.MemberIds.Contains(y.EntityId)).Name + ")"
                         : y.Name);
 
-            return new LeagueStatisticViewModel
+            return new LeagueStatisticsViewModel
             {
                 BestPlayers = bestPlayers.Select(x => new LeagueMemberStatisticViewModel
                 {
                     Id = x.Id,
-                    Name = users.ContainsKey(x.Id) 
+                    Name = users.ContainsKey(x.Id)
                         ? users[x.Id]
                         : null,
                     Number = x.Value
@@ -170,7 +166,21 @@ namespace Implementations.Leagues.BuisnessLogic
                         ? users[x.Id]
                         : null,
                     Number = x.Value
-                }),
+                })
+            };
+        }
+
+        public LeagueTableViewModel GetTable(string leagueId)
+        {
+            var teams = _teamsRepository.GetByLeague(leagueId).ToList();
+            var games = _gamesRepository.GetByLeague(leagueId).ToList();
+
+            var teamsStatistic = teams
+                .Where(x => !x.Hidden)
+                .Select(x => _teamMapper.MapTeamStatistic(x, games));
+            
+            return new LeagueTableViewModel
+            {
                 TeamStatistics = teamsStatistic
                     .OrderByDescending(x => x.Points)
                     .ThenByDescending(x => x.Scores)

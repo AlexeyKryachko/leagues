@@ -1,7 +1,7 @@
 ﻿<div class="dashboard">
     {{#if name}}
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-5">
             <div class="dashboard-box dashboard-box-padded height-140">
                 <div class="dashboard-box__image">
                     {{#if mediaId}}
@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-7">
             <div class="dashboard-box height-140">
                 <div class="dashboard-box__description">
                     <div class="dashboard-box__description-text">
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="dashboard-box-content">
-                    <table class="table table-hovered mb0">
+                    <table class="table table-hovered mb0 table-colored-columns">
                         <thead>
                         <tr>
                             <th></th>
@@ -127,11 +127,11 @@
                     </div>
                     <div class="dashboard-box-header__link col-sm-5 p0">
                         <i class="fa fa-share"></i>
-                        <a href="#leagues/{{id}}/table">статистика</a>
+                        <a href="#leagues/{{id}}/statistics">статистика</a>
                     </div>
                 </div>
                 <div class="dashboard-box-content">
-                    <table class="table table-hovered mb0">
+                    <table class="table table-hovered mb0 table-colored-columns">
                         <thead>
                         <tr>
                             <th class="width-200">Название</th>

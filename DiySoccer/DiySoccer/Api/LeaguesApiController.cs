@@ -17,12 +17,21 @@ namespace DiySoccer.Api
 
         #region GET
 
-        [Route("api/leagues/{leagueId}/statistic")]
+        [Route("api/leagues/{leagueId}/statistics")]
         [DiySoccerAuthorize(LeagueAccessStatus.Member)]
         [HttpGet]
-        public IHttpActionResult GetStatistic(string leagueId)
+        public IHttpActionResult GetLeagueStatistic(string leagueId)
         {
             var statistic = _leaguesManager.GetStatisticByLeague(leagueId);
+            return Json(statistic);
+        }
+
+        [Route("api/leagues/{leagueId}/table")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
+        [HttpGet]
+        public IHttpActionResult GetTable(string leagueId)
+        {
+            var statistic = _leaguesManager.GetTable(leagueId);
             return Json(statistic);
         }
 

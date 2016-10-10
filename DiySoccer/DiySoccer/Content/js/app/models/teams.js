@@ -47,7 +47,7 @@ var TeamsStatistic = Backbone.Model.extend({
         this.leagueId = 0;
     },
     url: function() {
-        return '/api/leagues/' + this.leagueId + '/statistic/';
+        return '/api/leagues/' + this.leagueId + '/table/';
     },
     setLeagueId: function(leagueId) {
         this.leagueId = leagueId;

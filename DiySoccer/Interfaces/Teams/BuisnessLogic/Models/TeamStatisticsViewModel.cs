@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Interfaces.Leagues.BuisnessLogic.Model
+namespace Interfaces.Teams.BuisnessLogic.Models
 {
-    public class TeamStatisticViewModel
+    public class TeamStatisticsViewModel
     {
         [JsonProperty("id")]
         public string Id { get; set; }

@@ -67,8 +67,9 @@
 	__webpack_require__(49);
 	__webpack_require__(52);
 	__webpack_require__(54);
-
 	__webpack_require__(56);
+
+	__webpack_require__(58);
 
 	MyApp.start();
 
@@ -123,7 +124,7 @@
 	MyApp.on('start', function () {
 	    var templateIds = ['layout', 'splitted-layout', 'leagues-actions', 'leagues-list', 'team-list', 'team-item', 'team', 'team-member', 'empty-list-view',
 	        'game-new', 'game-new-member', 'save', 'team-list-actions', 'custom-game', 'team-info', 'team-game', 'cancel', 'header',
-	        'league', 'league-admin', 'calendar', 'calendar-event', 'game-info', 'game-info-scores', 'league-info', 'tournament-info', 'tournament-info-actions'];
+	        'league', 'league-admin', 'calendar', 'calendar-event', 'game-info', 'game-info-scores', 'league-info', 'tournament-info', 'tournament-info-actions', 'leagues-statistics'];
 	    var preloading = Backbone.Marionette.TemplateCache.preloadTemplates(templateIds, this);
 	    MyApp.Settings = new Settings();
 
@@ -10248,6 +10249,7 @@
 	        "leagues/:leagueId/edit": "editLeagueRoute",
 	        "leagues/:leagueId": "leagueInfoRoute",
 	        "leagues/:leagueId/table": "tableRoute",
+	        "leagues/:leagueId/statistics": "leagueStatisticsRoute",
 	        "leagues/:leagueId/teams/new": "newTeamRoute",
 	        "leagues/:leagueId/teams/:teamId/edit": "editTeamRoute",
 	        "leagues/:leagueId/teams/:teamId": "infoTeamRoute",
@@ -10258,6 +10260,10 @@
 	    },
 	    defaultRoute: function () {
 	        this.changeModule(this.app.submodules.leagues);
+	    },
+	    leagueStatisticsRoute: function (leagueId) {
+	        var options = { leagueId: leagueId };
+	        this.changeModule(this.app.submodules.statistics, options);
 	    },
 	    calendarRoute: function(leagueId) {
 	        var options = { leagueId: leagueId };
@@ -13225,7 +13231,7 @@
 	        this.leagueId = 0;
 	    },
 	    url: function() {
-	        return '/api/leagues/' + this.leagueId + '/statistic/';
+	        return '/api/leagues/' + this.leagueId + '/table/';
 	    },
 	    setLeagueId: function(leagueId) {
 	        this.leagueId = leagueId;
@@ -13603,7 +13609,6 @@
 	        self.layout = new Layouts.LayoutView();
 	        self.tableView = new Views.TeamListView({ model: self.statistics, collection: self.teams, leagueId: self.options.leagueId });
 	        self.actions = new Views.TeamListActions({ leagueId: self.options.leagueId });
-	        self.bottomView = new SharedViews.CancelView();
 	    },
 	    bindViews: function () {
 	        var self = this;
@@ -13611,17 +13616,11 @@
 	        self.listenTo(self.layout, 'show', function () {
 	            self.layout.up.show(self.actions);
 	            self.layout.center.show(self.tableView);
-	            self.layout.down.show(self.bottomView);
-	        });
-
-	        self.listenTo(self.bottomView, 'cancel', function () {
-	            window.history.back();
 	        });
 	    },
 	    onStop: function (options) {
 	        var self = this;
 
-	        self.bottomView.destroy();
 	        self.actions.destroy();
 	        self.tableView.destroy();
 	        self.layout.destroy();
@@ -13677,7 +13676,6 @@
 	    childViewContainer: "tbody",
 	    childView: TeamListItemView,
 	    emptyView: SharedViews.EmptyListView,
-	    className: 'page',
 	    initialize: function (options) {
 	        this.options = options;
 	    },
@@ -14592,10 +14590,17 @@
 	    }
 	});
 
+	var LeagueStatisticsModel = Backbone.Model.extend({
+	    url: function () {
+	        return '/api/leagues/' + this.id + '/statistics';
+	    }
+	});
+
 	module.exports = {
 	    LeagueInfo: LeagueInfo,
 	    League: League,
-	    LeaguesModel: LeaguesModel
+	    LeaguesModel: LeaguesModel,
+	    LeagueStatisticsModel: LeagueStatisticsModel
 	}
 
 /***/ },
@@ -14785,8 +14790,75 @@
 
 	var MyApp = __webpack_require__(20);
 	var Layouts = __webpack_require__(31);
-	var SharedViews = __webpack_require__(30);
 	var Views = __webpack_require__(55);
+	var Models = __webpack_require__(50);
+
+	var leagueStatisticsModule = Backbone.Marionette.Module.extend({
+	    startWithParent: false,
+
+	    initialize: function (options, app, object) {
+	        this.app = app;
+
+	        this.statistics = new Models.LeagueStatisticsModel();
+	    },
+
+	    onStart: function (options) {
+	        var self = this;
+
+	        self.createViews();
+	        self.bindViews();
+
+	        self.app.mainRegion.show(self.layout);
+
+	        if (options.leagueId) {
+	            self.statistics.set('id', options.leagueId);
+	        }
+
+	        self.statistics.fetch();
+	    },
+	    createViews: function () {
+	        var self = this;
+
+	        self.layout = new Layouts.LayoutView();
+	        self.StatisticsView = new Views.StatisticsView({ model: self.statistics });
+	    },
+	    bindViews: function () {
+	        var self = this;
+
+	        self.listenTo(self.statistics, 'sync', function () {
+	            self.layout.center.show(self.StatisticsView);
+	        });
+	    },
+	    onStop: function (options) {
+	        var self = this;
+
+	        self.StatisticsView.destroy();
+	        self.layout.destroy();
+	    }
+	});
+
+	MyApp.module("statistics", leagueStatisticsModule);
+
+/***/ },
+/* 55 */
+/***/ function(module, exports) {
+
+	var StatisticsView = Backbone.Marionette.ItemView.extend({
+	    template: "#leagues-statistics"
+	});
+
+	module.exports = {
+	    StatisticsView: StatisticsView
+	}
+
+/***/ },
+/* 56 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var MyApp = __webpack_require__(20);
+	var Layouts = __webpack_require__(31);
+	var SharedViews = __webpack_require__(30);
+	var Views = __webpack_require__(57);
 	var Models = __webpack_require__(50);
 
 	var leagueModule = Backbone.Marionette.Module.extend({
@@ -14861,7 +14933,7 @@
 	MyApp.module("league", leagueModule);
 
 /***/ },
-/* 55 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {var Views = __webpack_require__(30);
@@ -14991,13 +15063,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
 
 /***/ },
-/* 56 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var MyApp = __webpack_require__(20);
 	var Layouts = __webpack_require__(31);
-	var Views = __webpack_require__(57);
-	var Models = __webpack_require__(58);
+	var Views = __webpack_require__(59);
+	var Models = __webpack_require__(60);
 
 	var tournamentsInfoModule = Backbone.Marionette.Module.extend({
 	    startWithParent: false,
@@ -15066,7 +15138,7 @@
 	MyApp.module("tournamentsInfo", tournamentsInfoModule);
 
 /***/ },
-/* 57 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($, _) {__webpack_require__(48);
@@ -15167,7 +15239,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21), __webpack_require__(25)))
 
 /***/ },
-/* 58 */
+/* 60 */
 /***/ function(module, exports) {
 
 	var TournamentsInfo = Backbone.Model.extend({

@@ -33,7 +33,7 @@ namespace Interfaces.Teams.BuisnessLogic.Models
         [JsonProperty("points")]
         public int Points { get; set; }
 
-        public TeamInfoStatisticViewModel(TeamStatisticViewModel model, TeamDb team)
+        public TeamInfoStatisticViewModel(TeamStatisticsViewModel model, TeamDb team)
         {
             this.LeagueName = team.Name;
 

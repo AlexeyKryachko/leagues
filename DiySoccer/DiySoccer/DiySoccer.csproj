@@ -243,6 +243,8 @@
     <Content Include="Content\dist\styles.bundle.css" />
     <Content Include="Content\dist\vendor.bundle.js" />
     <Content Include="Content\img\DefaultLogo_70x70.png" />
+    <Content Include="Content\js\app\leagues\statistic\statisticViews.js" />
+    <Content Include="Content\js\app\leagues\statistic\statisticModule.js" />
     <Content Include="Content\scss\bootstrap\fonts\bootstrap\glyphicons-halflings-regular.svg" />
     <Content Include="Content\scss\bootstrap\javascripts\bootstrap-sprockets.js" />
     <Content Include="Content\scss\bootstrap\javascripts\bootstrap.js" />
@@ -266,6 +268,7 @@
     <Content Include="Content\scss\font-awesome\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\scss\font-awesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="Content\scss\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\templates\leagues-statistics.html" />
     <Content Include="webpack.config.js" />
     <Content Include="Content\scss\bootstrap\stylesheets\bootstrap\mixins\_alerts.scss" />
     <Content Include="Content\scss\bootstrap\stylesheets\bootstrap\mixins\_background-variant.scss" />

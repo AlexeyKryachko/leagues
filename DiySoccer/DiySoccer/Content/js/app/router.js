@@ -17,6 +17,7 @@
         "leagues/:leagueId/edit": "editLeagueRoute",
         "leagues/:leagueId": "leagueInfoRoute",
         "leagues/:leagueId/table": "tableRoute",
+        "leagues/:leagueId/statistics": "leagueStatisticsRoute",
         "leagues/:leagueId/teams/new": "newTeamRoute",
         "leagues/:leagueId/teams/:teamId/edit": "editTeamRoute",
         "leagues/:leagueId/teams/:teamId": "infoTeamRoute",
@@ -27,6 +28,10 @@
     },
     defaultRoute: function () {
         this.changeModule(this.app.submodules.leagues);
+    },
+    leagueStatisticsRoute: function (leagueId) {
+        var options = { leagueId: leagueId };
+        this.changeModule(this.app.submodules.statistics, options);
     },
     calendarRoute: function(leagueId) {
         var options = { leagueId: leagueId };
