@@ -85,9 +85,13 @@ namespace Implementations.Leagues
                     Name = x.Name,
                     MediaId = x.MediaId,
                     Games = _scoreCalculation.GameCount(games, x.EntityId),
-                    Points = _scoreCalculation.Points(games, x.EntityId)
+                    Points = _scoreCalculation.Points(games, x.EntityId),
+                    Scores = _scoreCalculation.GoalsCount(games, x.EntityId),
+                    Missed = _scoreCalculation.MissedCount(games, x.EntityId)
                 })
                 .OrderByDescending(x => x.Points)
+                .ThenByDescending(x => x.Scores)
+                .ThenByDescending(x => x.Missed)
                 .ToList();
 
             var best = _userStatisticCalculation.GetBestStatistic(games)

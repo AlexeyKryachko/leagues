@@ -18,5 +18,11 @@ namespace Interfaces.Leagues.BuisnessLogic.Model
 
         [JsonProperty("points")]
         public int Points { get; set; }
+
+        [JsonIgnore]
+        public int Scores { get; set; }
+
+        [JsonIgnore]
+        public int Missed { get; set; }
     }
 }

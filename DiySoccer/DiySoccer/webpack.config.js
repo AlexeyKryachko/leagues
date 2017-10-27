@@ -44,7 +44,7 @@ module.exports = {
 			$: "jquery",
 			jQuery: "jquery",
 			"window.jQuery": "jquery",
-			_: "underscore",
+			_: "underscore"
 		}),
 		new ExtractTextPlugin('styles.bundle.css')
 	],

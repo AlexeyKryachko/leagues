@@ -17,34 +17,38 @@
 
             min-height: 80px;
 
-            .dashboard-list-item_logo ~ .dashboard-list-item_name {
-                position: absolute;                
-                top: 27px;
-                left: 140px;
-                margin: 0px;
-            }
+            .dashboard-list-item-sub {
+                display: inline-block;
+                width: 100%;
 
+                &:nth-child(2) {
+                    &:nth-last-child(1) {                        
+                        width: inherit;
+                        vertical-align: top;                        
+                    }                     
+                }
+
+                &:nth-child(1) {
+                    &:nth-last-child(2) {
+                        width: inherit;
+                    }
+                }
+            }
+            
             .dashboard-list-item_name {
                 font-weight: bold;
                 font-size: 24px;
                 margin: auto;
-                width: 50%;
                 text-align: center; 
+                padding-left: 10px;
             }
-
-            .dashboard-list-item_logo ~ .dashboard-list-item_description {
-                position: absolute;
-                top: 64px;
-                left: 140px;
-                margin: 0px;
-            }
-
+            
             .dashboard-list-item_description {
                 font-size: 14px;
                 color: $diys-box-table-cell-lighted;
                 margin: auto;
-                width: 50%;
                 text-align: center; 
+                padding-left: 10px;
             }
 
             &:hover {
