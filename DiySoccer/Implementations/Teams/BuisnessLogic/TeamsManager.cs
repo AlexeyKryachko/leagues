@@ -3,7 +3,6 @@ using System.Linq;
 using Interfaces.Core;
 using Interfaces.Events.DataAccess;
 using Interfaces.Games.DataAccess;
-using Interfaces.Leagues.DataAccess;
 using Interfaces.Teams.BuisnessLogic;
 using Interfaces.Teams.BuisnessLogic.Models;
 using Interfaces.Teams.DataAccess;
@@ -13,7 +12,6 @@ namespace Implementations.Teams.BuisnessLogic
 {
     public class TeamsManager : ITeamsManager
     {
-        private readonly ILeaguesRepository _leaguesRepository;
         private readonly IGamesRepository _gamesRepository;
         private readonly ITeamsRepository _teamsRepository;
         private readonly IPlayersRepository _playersRepository;
@@ -21,12 +19,15 @@ namespace Implementations.Teams.BuisnessLogic
 
         private readonly TeamsMapper _teamMapper;
 
-        public TeamsManager(ITeamsRepository teamsRepository, IPlayersRepository playersRepository, IGamesRepository gamesRepository, ILeaguesRepository leaguesRepository, TeamsMapper teamMapper, IEventsRepository eventsRepository)
+        public TeamsManager(ITeamsRepository teamsRepository, 
+            IPlayersRepository playersRepository, 
+            IGamesRepository gamesRepository, 
+            TeamsMapper teamMapper, 
+            IEventsRepository eventsRepository)
         {
             _teamsRepository = teamsRepository;
             _playersRepository = playersRepository;
             _gamesRepository = gamesRepository;
-            _leaguesRepository = leaguesRepository;
             _teamMapper = teamMapper;
             _eventsRepository = eventsRepository;
         }
@@ -134,6 +135,7 @@ namespace Implementations.Teams.BuisnessLogic
                 MediaId = model.Media,
                 Description = model.Description
             };
+
             _teamsRepository.Update(leagueId, entity);
         }
         
@@ -155,7 +157,5 @@ namespace Implementations.Teams.BuisnessLogic
                 })
             });
         }
-
-        
     }
 }

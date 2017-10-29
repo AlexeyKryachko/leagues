@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.IO;
 using System.Web;
-using System.Web.Configuration;
 using ImageProcessor;
 using ImageProcessor.Imaging;
 using ImageProcessor.Imaging.Formats;
@@ -122,6 +121,9 @@ namespace Implementations.Core.Medias.BuisnessLogic
 
         private void CreateImage(string sourcePath, string targetPath, Size size, bool cut)
         {
+            if (!File.Exists(sourcePath))
+                return;
+
             using (var fileStream = new FileStream(targetPath, FileMode.Create))
             {
                 byte[] photoBytes = File.ReadAllBytes(sourcePath); // change imagePath with a valid image path

@@ -8,15 +8,19 @@
         <div class="col-sm-4">
             <div class="dashboard-list-item cursor-pointer" data-id="{{id}}">
                 {{#if mediaId}}
-                <div class="dashboard-list-item_logo">
-                    <img class="img-70-70 " src="/api/image/{{mediaId}}?width=70&height=70"/>
+                <div class="dashboard-list-item-sub">
+                    <div class="dashboard-list-item_logo">
+                        <img class="img-70-70 " src="/api/image/{{mediaId}}?width=70&height=70"/>
+                    </div>
                 </div>
                 {{/if}}
-                <div class="dashboard-list-item_name">
-                    {{name}}
-                </div>
-                <div class="dashboard-list-item_description">
-                    {{description}}
+                <div class="dashboard-list-item-sub">
+                    <div class="dashboard-list-item_name">
+                        {{name}}
+                    </div>
+                    <div class="dashboard-list-item_description">
+                        {{description}}
+                    </div>
                 </div>
             </div>
             {{#if isAdmin}}

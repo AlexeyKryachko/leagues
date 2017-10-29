@@ -33,9 +33,41 @@ var leaguesModule = Backbone.Marionette.Module.extend({
         var self = this;
 
         self.listenTo(self.leagues, 'sync', function () {
-            self.layout.up.show(self.leagueActionView);
-            self.layout.center.show(self.leagueListView);
+            var array = self.leagues.get('leagues');
+
+            for (var index = 0; index < array.length; index++) {
+                var league = array[index];
+                self.imageLoading(self, array, index);
+            }
         });
+    },
+    imageLoading: function(self, array, index) {
+        var league = array[index];
+
+        var tester = new Image();
+        tester.onload = function() {
+            console.log('Image loaded: ' + league.mediaId);
+            league.loaded = true;
+            self.showAfterLoad(self, array);
+        };
+        tester.onerror = function() {
+            console.log('Image error: ' + league.mediaId);
+            league.mediaId = null;
+            league.loaded = true;
+            self.showAfterLoad(self, array);
+        };
+
+        tester.src = '/api/image/' + league.mediaId + '?width=70&height=70';
+    },
+    showAfterLoad: function (self, array) {
+        for (var index = 0; index < array.length; index++) {
+            var league = array[index];
+            if (!league.loaded)
+                return;
+        }
+
+        self.layout.up.show(self.leagueActionView);
+        self.layout.center.show(self.leagueListView);
     },
     onStop: function (options) {
         var self = this;
