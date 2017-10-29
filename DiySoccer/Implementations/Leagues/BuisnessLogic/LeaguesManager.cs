@@ -42,15 +42,22 @@ namespace Implementations.Leagues.BuisnessLogic
         public LeagueInfoViewModel GetInfo(string leagueId)
         {
             var league = _leaguesRepository.Get(leagueId);
+
             var teams = _teamsRepository.GetByLeague(leagueId).ToList();
-            var games = _gamesRepository.GetByLeague(leagueId).ToList();
+            var activeTeams = teams.Where(x => !x.Hidden).ToList();
+
+            var hidedTeams = teams
+                .Where(x => x.Hidden)
+                .Select(x => x.EntityId)
+                .ToList();
+            var games = _gamesRepository.GetByExceptTeams(leagueId, hidedTeams).ToList();
             var events = _eventsRepository.GetByLeague(leagueId).ToList();
 
             var userIds = teams.SelectMany(x => x.MemberIds);
             var users = _playersRepository.GetRange(userIds)
                 .ToDictionary(x => x.EntityId, x => x);
 
-            return _leaguesMapper.MapInfo(league, teams, games, events, users);
+            return _leaguesMapper.MapInfo(league, activeTeams, games, events, users);
         }
 
         public LeaguesViewModel GetLeagues()
@@ -173,10 +180,15 @@ namespace Implementations.Leagues.BuisnessLogic
         public LeagueTableViewModel GetTable(string leagueId)
         {
             var teams = _teamsRepository.GetByLeague(leagueId).ToList();
-            var games = _gamesRepository.GetByLeague(leagueId).ToList();
+            var activeTeams = teams.Where(x => !x.Hidden).ToList();
 
-            var teamsStatistic = teams
-                .Where(x => !x.Hidden)
+            var hidedTeams = teams
+                .Where(x => x.Hidden)
+                .Select(x => x.EntityId)
+                .ToList();
+            var games = _gamesRepository.GetByExceptTeams(leagueId, hidedTeams).ToList();
+
+            var teamsStatistic = activeTeams
                 .Select(x => _teamMapper.MapTeamStatistic(x, games));
             
             return new LeagueTableViewModel

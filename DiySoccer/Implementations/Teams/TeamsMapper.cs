@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Implementations.Core;
-using Implementations.Games;
 using Interfaces.Core;
 using Interfaces.Events.DataAccess.Model;
 using Interfaces.Games.DataAccess.Model;
-using Interfaces.Leagues.BuisnessLogic.Model;
 using Interfaces.Teams.BuisnessLogic.Models;
 using Interfaces.Teams.DataAccess;
 using Interfaces.Users.DataAccess;
@@ -22,7 +20,7 @@ namespace Implementations.Teams
             return new IdNameViewModel
             {
                 Id = team.EntityId,
-                Name = team.Name
+                Name = team.Name + "(" + team.LeagueId + ")"
             };
         }
 

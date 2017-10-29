@@ -22,6 +22,16 @@ namespace Implementations.Games.DataAccess
             return Collection.AsQueryable().Where(x => x.GuestTeam.Id == teamId || x.HomeTeam.Id == teamId);
         }
 
+        public IEnumerable<GameDb> GetByExceptTeams(string leagueId, IEnumerable<string> teamIds)
+        {
+            if (teamIds == null)
+                teamIds = Enumerable.Empty<string>();
+
+            return Collection.AsQueryable().Where(x => x.LeagueId == leagueId &&
+                !teamIds.Contains(x.HomeTeam.Id) &&
+                !teamIds.Contains(x.GuestTeam.Id));
+        }
+
         public void Create(string leagueId, GameVewModel model)
         {
             var entity = new GameDb

@@ -11,6 +11,8 @@ namespace Interfaces.Games.DataAccess
 
         IEnumerable<GameDb> GetByTeam(string leagueId, string teamId);
 
+        IEnumerable<GameDb> GetByExceptTeams(string leagueId, IEnumerable<string> teamIds);
+
         void Create(string leagueId, GameVewModel model);
 
         void Update(string leagueId, string id, GameVewModel model);

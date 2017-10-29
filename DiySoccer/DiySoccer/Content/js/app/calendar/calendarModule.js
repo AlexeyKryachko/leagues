@@ -25,9 +25,6 @@ var calendarModule = Backbone.Marionette.Module.extend({
             }
         });
     },
-    onCancel: function() {
-        window.history.back();
-    },
     onStart: function(options) {
         var self = this;
 
@@ -64,18 +61,15 @@ var calendarModule = Backbone.Marionette.Module.extend({
             collection: self.events
         };
         self.calendarView = new Views.CalendarView(viewOptions);
-        self.bottomView = new SharedViews.CancelView();
     },
     bindViews: function() {
         var self = this;
 
         self.listenTo(self.layout, 'show', function() {
             self.layout.center.show(self.calendarView);
-            self.layout.down.show(self.bottomView);
         });
 
         self.listenTo(self.calendarView, 'submit', this.onSubmit);
-        self.listenTo(self.bottomView, 'cancel', this.onCancel);
         self.listenTo(self.calendarView, 'event:add', this.addEvent);
 
     },

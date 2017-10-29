@@ -12140,9 +12140,6 @@
 	            }
 	        });
 	    },
-	    onCancel: function() {
-	        window.history.back();
-	    },
 	    onStart: function(options) {
 	        var self = this;
 
@@ -12179,18 +12176,15 @@
 	            collection: self.events
 	        };
 	        self.calendarView = new Views.CalendarView(viewOptions);
-	        self.bottomView = new SharedViews.CancelView();
 	    },
 	    bindViews: function() {
 	        var self = this;
 
 	        self.listenTo(self.layout, 'show', function() {
 	            self.layout.center.show(self.calendarView);
-	            self.layout.down.show(self.bottomView);
 	        });
 
 	        self.listenTo(self.calendarView, 'submit', this.onSubmit);
-	        self.listenTo(self.bottomView, 'cancel', this.onCancel);
 	        self.listenTo(self.calendarView, 'event:add', this.addEvent);
 
 	    },
@@ -12413,7 +12407,6 @@
 	var CalendarView = Backbone.Marionette.CompositeView.extend({
 	    template: "#calendar",    
 	    childViewContainer: "tbody",
-	    className: 'page',
 	    childView: CalendarListItemView,
 	    emptyView: Views.EmptyListView,
 	    ui: {
@@ -13633,7 +13626,7 @@
 /* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var MyApp = __webpack_require__(20);
+	/* WEBPACK VAR INJECTION */(function($) {var MyApp = __webpack_require__(20);
 	var SharedViews = __webpack_require__(30);
 
 	var TeamListItemView = Backbone.Marionette.ItemView.extend({
@@ -13702,15 +13695,33 @@
 	    ui: {
 	        'addBtn': '.add-new-team',
 	        'addGame': '.add-new-game',
-	        'calendarLink': '.calendar-link'
+	        'calendarLink': '.calendar-link',
+	        'findTeam': '.import-team-input',
+	        'importTeam': '.import-team-button'
 	    },
 	    events: {
 	        'click @ui.addBtn': 'redirectAddTeam',
 	        'click @ui.addGame': 'redirectAddGame',
-	        'click @ui.calendarLink': 'redirectCalendar'
+	        'click @ui.calendarLink': 'redirectCalendar',
+	        'click @ui.importTeam': 'importTeam'
 	    },
 	    initialize: function (options) {
 	        this.options = options;
+	    },
+	    importTeam: function () {
+	        var val = $(this.ui.importTeam).data('teamId');
+
+	        if (!val || val == '')
+	            return;
+
+	        var self = this;
+	        $.ajax({
+	            type: "POST",
+	            url: '/api/unions/' + this.options.leagueId + '/teams/' + val + '/copy/',
+	            success: function (data, textStatus, xhr) {
+	                self.ui.findTeam.val('');
+	            }
+	        });
 	    },
 	    redirectAddTeam: function (e) {
 	        document.location.href = "#leagues/" + this.options.leagueId + "/teams/new";
@@ -13721,12 +13732,34 @@
 	    redirectCalendar: function (e) {
 	        document.location.href = "#leagues/" + this.options.leagueId + "/calendar";
 	    },
+	    onRender: function () {
+	        var self = this;
+
+	        $(this.ui.findTeam).typeahead({
+	            source: function (query, process) {
+	                var url = '/api/teams/search?page=0&pageSize=10';
+	                return $.get(url, { query: query }, function (response) {
+	                    return process(response);
+	                });
+	            },
+	            displayText: function (item) {
+	                return item.name;
+	            },
+	            updater: function (item) {
+	                $(self.ui.importTeam).data('teamId', item.id);
+	                return item.name;
+	            }
+	        });
+	    },
 	    serializeData: function() {
 	        var model = {};
 
 	        model.isEditor = MyApp.Settings.isEditor(this.options.leagueId);
 
 	        return model;
+	    },
+	    modelEvents: {
+	        'sync': 'render'
 	    }
 	});
 
@@ -13734,6 +13767,7 @@
 	    TeamListActions: TeamListActions,
 	    TeamListView: TeamListView
 	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
 
 /***/ },
 /* 46 */

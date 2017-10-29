@@ -159,7 +159,10 @@ namespace Implementations.Leagues
         private LeagueInfoEventViewModel MapEvent(EventDb eventDb, IEnumerable<TeamDb> teams)
         {
             var dictionary = teams.ToDictionary(x => x.EntityId, x => x);
-            var teamValues = eventDb.Games
+            var teamValues = eventDb
+                .Games
+                .Where(x => dictionary.ContainsKey(x.HomeTeamId) && !dictionary[x.HomeTeamId].Hidden &&
+                    dictionary.ContainsKey(x.GuestTeamId) && !dictionary[x.GuestTeamId].Hidden)
                 .Select(x => dictionary[x.HomeTeamId].Name + " - " + dictionary[x.GuestTeamId].Name);
 
             return new LeagueInfoEventViewModel

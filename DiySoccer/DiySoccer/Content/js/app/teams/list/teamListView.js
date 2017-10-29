@@ -67,15 +67,33 @@ var TeamListActions = Backbone.Marionette.CompositeView.extend({
     ui: {
         'addBtn': '.add-new-team',
         'addGame': '.add-new-game',
-        'calendarLink': '.calendar-link'
+        'calendarLink': '.calendar-link',
+        'findTeam': '.import-team-input',
+        'importTeam': '.import-team-button'
     },
     events: {
         'click @ui.addBtn': 'redirectAddTeam',
         'click @ui.addGame': 'redirectAddGame',
-        'click @ui.calendarLink': 'redirectCalendar'
+        'click @ui.calendarLink': 'redirectCalendar',
+        'click @ui.importTeam': 'importTeam'
     },
     initialize: function (options) {
         this.options = options;
+    },
+    importTeam: function () {
+        var val = $(this.ui.importTeam).data('teamId');
+
+        if (!val || val == '')
+            return;
+
+        var self = this;
+        $.ajax({
+            type: "POST",
+            url: '/api/unions/' + this.options.leagueId + '/teams/' + val + '/copy/',
+            success: function (data, textStatus, xhr) {
+                self.ui.findTeam.val('');
+            }
+        });
     },
     redirectAddTeam: function (e) {
         document.location.href = "#leagues/" + this.options.leagueId + "/teams/new";
@@ -86,12 +104,34 @@ var TeamListActions = Backbone.Marionette.CompositeView.extend({
     redirectCalendar: function (e) {
         document.location.href = "#leagues/" + this.options.leagueId + "/calendar";
     },
+    onRender: function () {
+        var self = this;
+
+        $(this.ui.findTeam).typeahead({
+            source: function (query, process) {
+                var url = '/api/teams/search?page=0&pageSize=10';
+                return $.get(url, { query: query }, function (response) {
+                    return process(response);
+                });
+            },
+            displayText: function (item) {
+                return item.name;
+            },
+            updater: function (item) {
+                $(self.ui.importTeam).data('teamId', item.id);
+                return item.name;
+            }
+        });
+    },
     serializeData: function() {
         var model = {};
 
         model.isEditor = MyApp.Settings.isEditor(this.options.leagueId);
 
         return model;
+    },
+    modelEvents: {
+        'sync': 'render'
     }
 });
 

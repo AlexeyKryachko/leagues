@@ -123,7 +123,6 @@ var CalendarListItemView = Backbone.Marionette.ItemView.extend({
 var CalendarView = Backbone.Marionette.CompositeView.extend({
     template: "#calendar",    
     childViewContainer: "tbody",
-    className: 'page',
     childView: CalendarListItemView,
     emptyView: Views.EmptyListView,
     ui: {
