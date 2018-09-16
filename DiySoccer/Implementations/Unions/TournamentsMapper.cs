@@ -68,7 +68,8 @@ namespace Implementations.Unions
             {
                 Name = eventEntity.Name,
                 Minor = eventEntity.Minor,
-                PlayOffGames = eventGames.Select(x => MapPlayoffGame(x, teams))
+                PlayOffGames = eventGames
+                    .Select(x => MapPlayoffGame(x, teams))
             };
         }
 
@@ -104,7 +105,9 @@ namespace Implementations.Unions
                     Goals = _scoreCalculation.GoalsCount(eventGames, team.EntityId),
                     Missed = _scoreCalculation.MissedCount(eventGames, team.EntityId)
                 })
-                .OrderByDescending(x => x.Points);
+                .OrderByDescending(x => x.Points)
+                .ThenByDescending(x => x.Goals)
+                .ThenByDescending(x => x.Missed);
 
             return new TournamentInfoGroupViewModel
             {
