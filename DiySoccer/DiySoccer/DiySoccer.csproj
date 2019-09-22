@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -443,6 +444,8 @@
     <Content Include="Views\Manage\ManageLogins.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <None Include="Properties\PublishProfiles\diysoccer - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\diysoccer - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\js\app\shared\layouts.js" />
@@ -496,8 +499,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="package.json" />
-    <None Include="Properties\PublishProfiles\diysoccer - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\diysoccer - Web Deploy.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
