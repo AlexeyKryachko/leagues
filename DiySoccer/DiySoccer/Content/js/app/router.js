@@ -1,4 +1,28 @@
-﻿var MyRouter = Backbone.Marionette.AppRouter.extend({
+﻿var _ = require('underscore');
+
+function parseQueryString(queryString) {
+    var params = {};
+    if (queryString) {
+        _.each(
+            _.map(decodeURI(queryString).split(/&/g), function (el, i) {
+                var aux = el.split('='), o = {};
+                if (aux.length >= 1) {
+                    var val = undefined;
+                    if (aux.length == 2)
+                        val = aux[1];
+                    o[aux[0]] = val;
+                }
+                return o;
+            }),
+            function (o) {
+                _.extend(params, o);
+            }
+        );
+    }
+    return params;
+}
+
+var MyRouter = Backbone.Marionette.AppRouter.extend({
     initialize: function (app) {
         var self = this;
 
@@ -21,7 +45,7 @@
         "leagues/:leagueId/teams/new": "newTeamRoute",
         "leagues/:leagueId/teams/:teamId/edit": "editTeamRoute",
         "leagues/:leagueId/teams/:teamId": "infoTeamRoute",
-        "leagues/:leagueId/games/new": "newGameRoute",
+        "leagues/:leagueId/games/new?*queryString": "newGameRoute",
         "leagues/:leagueId/games/:gameId": "gameInfoRoute",
         "leagues/:leagueId/games/:gameId/edit": "editGameRoute",
         "leagues/:leagueId/calendar": "calendarRoute"
@@ -69,8 +93,10 @@
         var options = { leagueId: leagueId, teamId: teamId };
         this.changeModule(this.app.submodules.teamInfo, options);
     },
-    newGameRoute: function (leagueId) {
-        var options = { leagueId: leagueId };
+    newGameRoute: function (leagueId, queryString) {
+        var params = parseQueryString(queryString);
+        var options = { leagueId: leagueId, eventId: params.event, homeTeamId: params.home, guestTeamId: params.guest };
+
         this.changeModule(this.app.submodules.game, options);
     },
     gameInfoRoute: function (leagueId, gameId) {

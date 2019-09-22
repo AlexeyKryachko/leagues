@@ -87,9 +87,12 @@ var calendarModule = Backbone.Marionette.Module.extend({
     onStop: function (options) {
         var self = this;
 
-        self.bottomView.destroy();
-        self.calendarView.destroy();
-        self.layout.destroy();
+        if (self.bottomView)
+            self.bottomView.destroy();
+        if (self.calendarView)
+            self.calendarView.destroy();
+        if (self.layout)
+            self.layout.destroy();
     }
 });
 

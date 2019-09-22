@@ -4,6 +4,7 @@ var SharedViews = require("../../shared/views.js");
 var Views = require("./gameView.js");
 var TeamModels = require("../../models/teams.js");
 var EventModels = require("../../models/calendars.js");
+var $ = require('jquery');
 
 var gameModule = Backbone.Marionette.Module.extend({
     startWithParent: false,
@@ -82,14 +83,32 @@ var gameModule = Backbone.Marionette.Module.extend({
     },
     _onNew: function () {
         var self = this;
-
+        
         self.optionsModel.clear();
+        if (self.options.homeTeamId)
+            self.optionsModel.set('eventId', self.options.eventId);
+
         self.leftModel.clear();
         self.leftModel.set('disableScoreValue', true);
-        self.leftScores.reset();
+        if (self.options.homeTeamId) {
+            self.leftModel.set('id', self.options.homeTeamId);
+            $.get('/api/leagues/' + self.options.leagueId + '/teams/' + self.options.homeTeamId + '/info', function (response) {
+                self.leftScores.reset(response.players);
+            });
+        }
+
         self.rightModel.clear();
         self.rightModel.set('disableScoreValue', true);
+        if (self.options.guestTeamId) {
+            self.rightModel.set('id', self.options.guestTeamId);
+            $.get('/api/leagues/' + self.options.leagueId + '/teams/' + self.options.guestTeamId + '/info', function (response) {
+                self.rightScores.reset(response.players);
+            });
+        }
+
         self.rightScores.reset();
+        self.leftScores.reset();
+
         self.teams.setLeagueId(self.options.leagueId);
         self.events.setLeagueId(self.options.leagueId);
 
@@ -108,12 +127,16 @@ var gameModule = Backbone.Marionette.Module.extend({
             self.leftModel.set('id', response.homeTeam.id);
             self.leftModel.set('score', response.homeTeam.score);
             self.leftModel.set('bestId', response.homeTeam.bestId);
-            self.leftScores.reset(response.homeTeam.members);
+
             self.rightModel.set('id', response.guestTeam.id);
             self.rightModel.set('score', response.guestTeam.score);
             self.rightModel.set('bestId', response.guestTeam.bestId);
+
+            self.leftScores.reset(response.homeTeam.members);
             self.rightScores.reset(response.guestTeam.members);
+
             self.teams.setLeagueId(self.options.leagueId);
+
             self.optionsModel.set('customScores', response.customScores);
             self.optionsModel.set('eventId', response.eventId);
             self.optionsModel.set('events', response.events);
@@ -134,9 +157,22 @@ var gameModule = Backbone.Marionette.Module.extend({
         var self = this;
 
         self.layout = new Layouts.SplittedLayout();
-        self.leftGameView = new Views.GameView({ model: self.leftModel, collection: self.leftScores, teams: self.teams, leagueId: self.options.leagueId });
-        self.rightGameView = new Views.GameView({ model: self.rightModel, collection: self.rightScores, teams: self.teams, leagueId: self.options.leagueId });
-        self.optionsView = new Views.GameOptionsView({ model: self.optionsModel });
+        self.leftGameView = new Views.GameView({
+            model: self.leftModel,
+            collection: self.leftScores,
+            teams: self.teams,
+            leagueId: self.options.leagueId
+        });
+        self.rightGameView = new Views.GameView({
+            model: self.rightModel,
+            collection: self.rightScores,
+            teams: self.teams,
+            leagueId: self.options.leagueId
+        });
+        self.optionsView = new Views.GameOptionsView({
+            model: self.optionsModel,
+            leagueId: self.options.leagueId
+        });
         self.saveView = new SharedViews.SaveView();
     },
     bindViews: function () {

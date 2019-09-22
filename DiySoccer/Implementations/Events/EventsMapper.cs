@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Interfaces.Events.BuisnessLogic.Models;
 using Interfaces.Events.DataAccess.Model;
+using Interfaces.Games.DataAccess.Model;
 
 namespace Implementations.Events
 {
@@ -16,19 +18,24 @@ namespace Implementations.Events
             };
         }
 
-        public EventGameVewModel Map(EventGameDb eventGameEntity)
+        public EventGameVewModel Map(EventGameDb eventGameEntity, IList<GameDb> games)
         {
+            var game = games.FirstOrDefault(x => x.HomeTeam.Id == eventGameEntity.HomeTeamId && x.GuestTeam.Id == eventGameEntity.GuestTeamId);
+
             return new EventGameVewModel
             {
                 Id = eventGameEntity.Id,
                 GuestTeamId = eventGameEntity.GuestTeamId,
                 HomeTeamId = eventGameEntity.HomeTeamId,
+                GameId = game != null 
+                    ? game.EntityId
+                    : null
             };
         }
 
-        public EventVewModel Map(EventDb entity)
+        public EventVewModel Map(EventDb entity, IList<GameDb> games)
         {
-            var games = entity.Games.Select(Map);
+            var eventGames = entity.Games.Select(x => Map(x, games));
 
             return new EventVewModel
             {
@@ -38,7 +45,7 @@ namespace Implementations.Events
                 Name = entity.Name,
                 StartDate = entity.StartDate,
                 EndDate = entity.EndDate,
-                Games = games
+                Games = eventGames
             };
         }
     }

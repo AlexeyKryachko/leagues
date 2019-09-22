@@ -4,30 +4,40 @@ using Interfaces.Events.BuisnessLogic;
 using Interfaces.Events.BuisnessLogic.Models;
 using Interfaces.Events.DataAccess;
 using Interfaces.Events.DataAccess.Model;
-using Interfaces.Teams.DataAccess;
+using Interfaces.Games.DataAccess;
 
 namespace Implementations.Events.BuisnessLogic
 {
     public class EventsManager : IEventsManager
     {
         private readonly IEventsRepository _eventsRepository;
+        private readonly IGamesRepository _gamesRepository;
         private readonly EventsMapper _eventMapper;
 
-        public EventsManager(IEventsRepository eventsRepository, EventsMapper eventMapper)
+        public EventsManager(
+            IEventsRepository eventsRepository,
+            IGamesRepository gamesRepository,
+            EventsMapper eventMapper)
         {
             _eventsRepository = eventsRepository;
+            _gamesRepository = gamesRepository;
             _eventMapper = eventMapper;
         }
 
         public IEnumerable<EventVewModel> GetRange(string leagueId)
         {
             var events = _eventsRepository.GetByLeague(leagueId);
-            return events.Select(x => _eventMapper.Map(x)); 
+            var games = _gamesRepository.GetByLeague(leagueId).ToList();
+
+            return events.Select(x => _eventMapper.Map(x, games)); 
         }
 
         public EventVewModel Create(string leagueId)
         {
-            return _eventMapper.Map(_eventsRepository.Create(leagueId));
+            var created = _eventsRepository.Create(leagueId);
+            var games = _gamesRepository.GetByLeague(leagueId).ToList();
+
+            return _eventMapper.Map(created, games);
         }
 
         public EventGameVewModel CreateEventGame(string leagueId, string eventId)
@@ -37,13 +47,14 @@ namespace Implementations.Events.BuisnessLogic
             var eventItem = new EventGameDb();
             eventItem.Id = eventEntity.Games.Any() ? eventEntity.Games.Max(x => x.Id) + 1 : 0;
 
-            var games = eventEntity.Games.ToList();
-            games.Add(eventItem);
-            eventEntity.Games = games;
+            var eventGames = eventEntity.Games.ToList();
+            eventGames.Add(eventItem);
+            eventEntity.Games = eventGames;
 
             _eventsRepository.Update(eventEntity);
 
-            return _eventMapper.Map(eventItem);
+            var games = _gamesRepository.GetByLeague(leagueId).ToList();
+            return _eventMapper.Map(eventItem, games);
         }
         
         public EventVewModel Update(string leagueId, EventVewModel model)

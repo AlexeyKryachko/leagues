@@ -1,4 +1,5 @@
 ﻿var Views = require("../../shared/views.js");
+var $ = require('jquery');
 require("bootstrap-3-typeahead");
 
 var LeagueAdminListItemView = Backbone.Marionette.ItemView.extend({

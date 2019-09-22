@@ -1,5 +1,6 @@
 ﻿require("bootstrap-3-typeahead");
 var SharedViews = require("../../shared/views.js");
+var $ = require('jquery');
 
 var TeamMemberListItemView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',

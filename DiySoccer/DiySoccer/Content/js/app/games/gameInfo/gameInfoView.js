@@ -2,17 +2,7 @@
 
 var GameInfoScoresView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
-    template: "#game-info-scores",
-    ui: {
-    },
-    events: {
-    },
-    changeScore: function() {
-    },
-    changeHelp: function () {
-    },
-    onShow: function () {
-    }
+    template: "#game-info-scores"
 });
 
 var GameInfoView = Backbone.Marionette.CompositeView.extend({
@@ -20,18 +10,7 @@ var GameInfoView = Backbone.Marionette.CompositeView.extend({
     childViewContainer: "tbody",
     childView: GameInfoScoresView,
     className: 'page',
-    emptyView: SharedViews.EmptyListView,
-    ui: {
-    },
-    events: {
-    },
-    triggers: {
-    },
-    initialize: function () {
-    },
-    onRender: function () {
-        
-    }
+    emptyView: SharedViews.EmptyListView
 });
 
 module.exports = {

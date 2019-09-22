@@ -1,5 +1,6 @@
 ﻿var MyApp = require("../../app.js");
 var SharedViews = require("../../shared/views.js");
+var $ = require('jquery');
 
 var TeamGameView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',

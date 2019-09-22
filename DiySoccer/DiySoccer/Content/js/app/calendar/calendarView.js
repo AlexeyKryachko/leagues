@@ -1,12 +1,15 @@
 ﻿var MyApp = require("../app.js");
 var Views = require("../shared/views.js");
 var _ = require('underscore');
+var $ = require('jquery');
 require('jquery-datetimepicker');
 
 var CalendarListItemView = Backbone.Marionette.ItemView.extend({
     tagName: 'tr',
     template: "#calendar-event",
     ui: {
+        'createEventGame': '.create-event-game',
+        'changeEventGame': '.change-event-game',
         'deleteEvent': '.delete-event',
         'addEventGame': '.add-event-game',
         'deleteEventGame': '.delete-event-game',
@@ -19,6 +22,8 @@ var CalendarListItemView = Backbone.Marionette.ItemView.extend({
         'startDateInput': '.start-date'
     },
     events: {
+        'click @ui.createEventGame': 'createEventGame',
+        'click @ui.changeEventGame': 'changeEventGame',
         'click @ui.deleteEvent': 'deleteEvent',
         'click @ui.addEventGame': 'addEventGame',
         'click @ui.deleteEventGame': 'deleteEventGame',
@@ -40,6 +45,18 @@ var CalendarListItemView = Backbone.Marionette.ItemView.extend({
         var eventGameId = $(e.currentTarget).data('id');
 
         this.model.changeGuestTeam(eventGameId, val);
+    },
+    createEventGame: function (e) {
+        var homeTeamId = $(e.currentTarget).data('home-id');
+        var guestTeamId = $(e.currentTarget).data('guest-id');
+
+        console.log('Create: ' + this.model.id + ' (event), ' + homeTeamId + ' (home), ' + guestTeamId + " (guest)");
+        window.location.href = '/#leagues/' + this.options.leagueId + '/games/new?event=' + this.model.id + '&home=' + homeTeamId + '&guest=' + guestTeamId;
+    },
+    changeEventGame: function (e) {
+        var gameId = $(e.currentTarget).data('game-id');
+        
+        window.location.href = '/#leagues/' + this.options.leagueId + '/games/' + gameId + '/edit';
     },
     deleteEventGame: function (e) {
         var eventGameId = $(e.currentTarget).data('id');

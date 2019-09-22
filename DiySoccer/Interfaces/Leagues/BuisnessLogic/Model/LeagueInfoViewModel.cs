@@ -20,6 +20,8 @@ namespace Interfaces.Leagues.BuisnessLogic.Model
         public IEnumerable<LeagueInfoTeamViewModel> Teams { get; set; }
         [JsonProperty("events")]
         public IEnumerable<LeagueInfoEventViewModel> Events { get; set; }
+        [JsonProperty("gamesToPlay")]
+        public IEnumerable<LeagueInfoGameToPlayViewModel> GamesToPlay { get; set; }
         [JsonProperty("bestPlayer")]
         public LeagueInfoPlayerViewModel BestPlayer { get; set; }
         [JsonProperty("bestGoalPlayer")]
@@ -33,6 +35,7 @@ namespace Interfaces.Leagues.BuisnessLogic.Model
         {
             Teams = Enumerable.Empty<LeagueInfoTeamViewModel>();
             Events = Enumerable.Empty<LeagueInfoEventViewModel>();
+            GamesToPlay = Enumerable.Empty<LeagueInfoGameToPlayViewModel>();
             News = Enumerable.Empty<IdNameViewModel>();
         }
     }

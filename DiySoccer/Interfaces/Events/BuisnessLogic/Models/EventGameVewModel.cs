@@ -12,5 +12,8 @@ namespace Interfaces.Events.BuisnessLogic.Models
         
         [JsonProperty("guestTeamId")]
         public string GuestTeamId { get; set; }
+
+        [JsonProperty("gameId")]
+        public string GameId { get; set; }
     }
 }

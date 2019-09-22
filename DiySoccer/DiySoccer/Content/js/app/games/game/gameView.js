@@ -1,5 +1,6 @@
 ﻿var SharedViews = require("../../shared/views.js");
 var _ = require('underscore');
+var $ = require('jquery');
 
 var GameOptionsView = Backbone.Marionette.ItemView.extend({
     template: "#custom-game",
@@ -11,6 +12,9 @@ var GameOptionsView = Backbone.Marionette.ItemView.extend({
         'change @ui.customScoring': 'customScoring',
         'change @ui.eventChange': 'eventChange'
     },
+    initialize: function (options) {
+        this.leagueId = options.leagueId;
+    },
     eventChange: function () {
         var value = this.ui.eventChange.val();
         this.model.set('eventId', value);
@@ -21,13 +25,14 @@ var GameOptionsView = Backbone.Marionette.ItemView.extend({
         this.trigger('scoring:changed', value);
     },
     serializeData: function () {
-        var model = this.model.toJSON();
+        var self = this;
+        var model = self.model.toJSON();
 
         if (!model.events)
             return model;
 
         _.each(model.events, function (obj) {
-            if (obj.id == model.eventId)
+            if (obj.id === model.eventId)
                 obj.selected = true;
         });
 
@@ -61,7 +66,7 @@ var GameScoresView = Backbone.Marionette.ItemView.extend({
             this.model.set('score', 0);
         if (!this.model.get('help'))
             this.model.set('help', 0);
-        return this.model.toJSON();;
+        return this.model.toJSON();
     }
 });
 

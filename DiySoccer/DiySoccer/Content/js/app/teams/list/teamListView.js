@@ -1,5 +1,6 @@
 ﻿var MyApp = require("../../app.js");
 var SharedViews = require("../../shared/views.js");
+var $ = require('jquery');
 
 var TeamListItemView = Backbone.Marionette.ItemView.extend({
     initialize: function() {
@@ -66,14 +67,12 @@ var TeamListActions = Backbone.Marionette.CompositeView.extend({
     template: "#team-list-actions",
     ui: {
         'addBtn': '.add-new-team',
-        'addGame': '.add-new-game',
         'calendarLink': '.calendar-link',
         'findTeam': '.import-team-input',
         'importTeam': '.import-team-button'
     },
     events: {
         'click @ui.addBtn': 'redirectAddTeam',
-        'click @ui.addGame': 'redirectAddGame',
         'click @ui.calendarLink': 'redirectCalendar',
         'click @ui.importTeam': 'importTeam'
     },
@@ -97,9 +96,6 @@ var TeamListActions = Backbone.Marionette.CompositeView.extend({
     },
     redirectAddTeam: function (e) {
         document.location.href = "#leagues/" + this.options.leagueId + "/teams/new";
-    },
-    redirectAddGame: function (e) {
-        document.location.href = "#leagues/" + this.options.leagueId + "/games/new";
     },
     redirectCalendar: function (e) {
         document.location.href = "#leagues/" + this.options.leagueId + "/calendar";

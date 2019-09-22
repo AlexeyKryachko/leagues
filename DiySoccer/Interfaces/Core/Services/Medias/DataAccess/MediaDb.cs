@@ -7,6 +7,9 @@ namespace Interfaces.Core.Services.Medias.DataAccess
         [BsonId]
         public string EntityId { get; set; }
 
+        [BsonElement("data")]
+        public string Data { get; set; }
+
         [BsonElement("url")]
         public string RelativeUrl { get; set; }
 

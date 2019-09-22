@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Implementations.Core;
+using Implementations.Events;
 using Interfaces.Core;
 using Interfaces.Events.DataAccess.Model;
 using Interfaces.Games.DataAccess.Model;
@@ -16,11 +17,13 @@ namespace Implementations.Leagues
     {
         private readonly ScoreCalculation _scoreCalculation;
         private readonly UserStatisticCalculation _userStatisticCalculation;
+        private readonly EventsMapper _eventsMapper;
 
-        public LeaguesMapper(ScoreCalculation scoreCalculation, UserStatisticCalculation userStatisticCalculation)
+        public LeaguesMapper(ScoreCalculation scoreCalculation, UserStatisticCalculation userStatisticCalculation, EventsMapper eventsMapper)
         {
             _scoreCalculation = scoreCalculation;
             _userStatisticCalculation = userStatisticCalculation;
+            _eventsMapper = eventsMapper;
         }
 
         public LeaguesViewModel MapLeagues(IList<LeagueDb> entities)
@@ -75,7 +78,30 @@ namespace Implementations.Leagues
             };
         }
 
-        public LeagueInfoViewModel MapInfo(LeagueDb league, List<TeamDb> teams, IEnumerable<GameDb> games, IEnumerable<EventDb> events, Dictionary<string, UserDb> users)
+
+        private LeagueInfoGameToPlayViewModel Map(EventDb entity, IList<GameDb> games, IList<TeamDb> teams)
+        {
+            if (games == null || !entity.StartDate.HasValue)
+                return null;
+
+            var dictionary = teams.ToDictionary(x => x.EntityId, x => x);
+            var teamValues = entity
+                .Games
+                .Where(x => !games.Any(game => game.HomeTeam.Id == x.HomeTeamId && game.GuestTeam.Id == x.GuestTeamId))
+                .Where(x => dictionary.ContainsKey(x.HomeTeamId) && !dictionary[x.HomeTeamId].Hidden &&
+                            dictionary.ContainsKey(x.GuestTeamId) && !dictionary[x.GuestTeamId].Hidden)
+                .Select(x => dictionary[x.HomeTeamId].Name + " - " + dictionary[x.GuestTeamId].Name);
+            
+            return new LeagueInfoGameToPlayViewModel
+            {
+                Name = entity.Name,
+                Date = entity.StartDate.Value.ToShortDateString(),
+                Teams = teamValues,
+                Important = entity.StartDate < DateTime.UtcNow.Date.AddDays(-14)
+            };
+        }
+
+        public LeagueInfoViewModel MapInfo(LeagueDb league, List<TeamDb> teams, IList<GameDb> games, IList<EventDb> events, Dictionary<string, UserDb> users)
         {
             var teamsStatistic = teams
                 .Where(x => !x.Hidden)
@@ -146,6 +172,13 @@ namespace Implementations.Leagues
                 .Select(x => MapEvent(x, teams))
                 .ToList();
 
+            var gamesToPlay = events
+                .Where(x => x.StartDate < DateTime.UtcNow.Date)
+                .OrderBy(x => x.StartDate)
+                .Select(x => Map(x, games, teams))
+                .Where(x => x != null && x.Teams.Any())
+                .ToList();
+
             return new LeagueInfoViewModel
             {
                 Name = league.Name,
@@ -156,7 +189,8 @@ namespace Implementations.Leagues
                 BestGoalPlayer = bestGoalPlayer,
                 BestHelpPlayer = bestHelpPlayer,
                 Teams = teamsStatistic,
-                Events = futureEvents
+                Events = futureEvents,
+                GamesToPlay = gamesToPlay
             };
         }
 

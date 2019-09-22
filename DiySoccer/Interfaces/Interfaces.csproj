@@ -93,6 +93,7 @@
     <Compile Include="Games\DataAccess\IGamesRepository.cs" />
     <Compile Include="Games\DataAccess\Model\GameDb.cs" />
     <Compile Include="Leagues\BuisnessLogic\ILeaguesManager.cs" />
+    <Compile Include="Leagues\BuisnessLogic\Model\LeagueInfoGameToPlayViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueInfoEventViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueInfoPlayerViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueInfoTeamViewModel.cs" />

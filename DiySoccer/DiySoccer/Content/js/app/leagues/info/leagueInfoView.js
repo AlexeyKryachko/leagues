@@ -1,4 +1,5 @@
 ﻿var _ = require('underscore');
+var $ = require('jquery');
 
 var LeagueInfoView = Backbone.Marionette.ItemView.extend({
     template: "#league-info",
