@@ -1,4 +1,5 @@
-﻿require("bootstrap-3-typeahead");
+﻿var _ = require('underscore');
+require("bootstrap-3-typeahead");
 
 var TournamentsInfoActions = Backbone.Marionette.ItemView.extend({
     template: "#tournament-info-actions",

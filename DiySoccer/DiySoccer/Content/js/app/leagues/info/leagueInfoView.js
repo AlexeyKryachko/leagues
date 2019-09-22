@@ -1,4 +1,6 @@
-﻿var LeagueInfoView = Backbone.Marionette.ItemView.extend({
+﻿var _ = require('underscore');
+
+var LeagueInfoView = Backbone.Marionette.ItemView.extend({
     template: "#league-info",
     ui: {
         'team': '.team-row'

@@ -1,7 +1,7 @@
 ﻿//Styles
-require('./scss/default.scss');
-require('./scss/bootstrap/stylesheets/_bootstrap.scss');
-require('./scss/datetimepicker/jquery.datetimepicker.min.css');
+//require('./scss/default.scss');
+//require('./scss/bootstrap/stylesheets/_bootstrap.scss');
+//require('./scss/datetimepicker/jquery.datetimepicker.min.css');
 
 //Scripts
 var MyApp = require("./js/app/app.js");

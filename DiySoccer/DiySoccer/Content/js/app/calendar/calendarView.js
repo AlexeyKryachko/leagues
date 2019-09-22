@@ -1,5 +1,6 @@
 ﻿var MyApp = require("../app.js");
 var Views = require("../shared/views.js");
+var _ = require('underscore');
 require('jquery-datetimepicker');
 
 var CalendarListItemView = Backbone.Marionette.ItemView.extend({

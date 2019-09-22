@@ -1,4 +1,6 @@
 ﻿var MyApp = require("../../app.js");
+var _ = require('underscore');
+var $ = require('jquery');
 
 var LeagueActions = Backbone.Marionette.ItemView.extend({
     template: "#leagues-actions",

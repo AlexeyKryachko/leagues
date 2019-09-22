@@ -1,4 +1,5 @@
 ﻿var SharedViews = require("../../shared/views.js");
+var _ = require('underscore');
 
 var GameOptionsView = Backbone.Marionette.ItemView.extend({
     template: "#custom-game",

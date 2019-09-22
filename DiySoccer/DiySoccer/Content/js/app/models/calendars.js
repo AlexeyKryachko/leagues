@@ -1,4 +1,6 @@
-﻿var Calendar = Backbone.Model.extend({
+﻿var _ = require('underscore');
+
+var Calendar = Backbone.Model.extend({
     initialize: function () {
         this.leagueId = 0;
     },

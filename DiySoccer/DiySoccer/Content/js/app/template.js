@@ -1,5 +1,6 @@
-﻿var _ = require('underscore');
-var Handlebars = require('handlebars');
+﻿var Handlebars = require('handlebars');
+var _ = require('underscore');
+var $ = require('jquery');
 
 Backbone.Marionette.TemplateCache.preloadTemplate = function (templateId, context) {
     // preload a single template

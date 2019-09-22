@@ -2,6 +2,7 @@
 
 var MyRouter = require("./router.js");
 var Settings = require("./models/settings.js");
+var $ = require('jquery');
 
 MyApp.addRegions({
     mainRegion: "#main-container",

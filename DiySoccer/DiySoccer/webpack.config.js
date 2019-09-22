@@ -3,7 +3,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
-		app : "./content/entry.js",
+        app: __dirname + "/content/entry.js",
 		vendor : [
 			'jquery',
 			'jquery-deferred',
@@ -15,11 +15,11 @@ module.exports = {
 		]
 	},
     output: {
-        path: './content/dist/',
+        path: __dirname + '/content/dist/',
         filename: "[name].bundle.js"
     },
-	module: {
-	    loaders: [
+	/*module: {
+	    rules: [
             {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract("style-loader", "css-loader")
@@ -47,9 +47,9 @@ module.exports = {
 			_: "underscore"
 		}),
 		new ExtractTextPlugin('styles.bundle.css')
-	],
+	],*/
 	resolve: {
-		modulesDirectories: ['node_modules'],
+		modules: ['node_modules'],
 		alias: {
 			handlebars: 'handlebars/dist/handlebars.min.js',
 			$: 'jquery/dist/jquery.min.js'
