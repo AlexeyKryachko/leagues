@@ -26,7 +26,9 @@ namespace Implementations.Events
             {
                 Id = eventGameEntity.Id,
                 GuestTeamId = eventGameEntity.GuestTeamId,
+                GuestTeamScore = game == null ? 0 : game.GuestTeam.Score,
                 HomeTeamId = eventGameEntity.HomeTeamId,
+                HomeTeamScore = game == null ? 0 : game.HomeTeam.Score,
                 GameId = game != null 
                     ? game.EntityId
                     : null

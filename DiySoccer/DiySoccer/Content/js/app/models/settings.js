@@ -1,4 +1,6 @@
-﻿var settings = Backbone.Model.extend({
+﻿var $ = require('jquery');
+
+var settings = Backbone.Model.extend({
     initialize: function() {
     },
     urlRoot: "/api/settings",

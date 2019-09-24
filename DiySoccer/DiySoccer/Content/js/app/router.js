@@ -35,11 +35,13 @@ var MyRouter = Backbone.Marionette.AppRouter.extend({
     },
     routes: {
         "": "defaultRoute",
+        "#": "defaultRoute",
         "leagues/": "defaultRoute",
         "leagues/new": "newLeagueRoute",
         "tournaments/:tournamentId": "tournamentInfoRoute",
         "leagues/:leagueId/edit": "editLeagueRoute",
         "leagues/:leagueId": "leagueInfoRoute",
+        "leagues/:leagueId/": "leagueInfoRoute",
         "leagues/:leagueId/table": "tableRoute",
         "leagues/:leagueId/statistics": "leagueStatisticsRoute",
         "leagues/:leagueId/teams/new": "newTeamRoute",
@@ -108,12 +110,17 @@ var MyRouter = Backbone.Marionette.AppRouter.extend({
         this.changeModule(this.app.submodules.game, options);
     },
     changeModule: function (module, options) {
+        console.log('[router] Route has been changed.');
+
         if (this.workingModule)
             this.workingModule.stop();
 
         this.workingModule = module;
         this.workingOptions = options;
         this.workingModule.start(this.workingOptions);
+    },
+    onRoute: function (name, path, args) {
+        console.log('[router] Route has been changed.');
     }
 });
 

@@ -104,6 +104,9 @@
     <Compile Include="Leagues\BuisnessLogic\Model\LeaguesViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueUnsecureViewModel.cs" />
     <Compile Include="Leagues\BuisnessLogic\Model\LeagueViewModel.cs" />
+    <Compile Include="Shared\BreadcrumpType.cs" />
+    <Compile Include="Shared\BreadcrumpsViewModel.cs" />
+    <Compile Include="Shared\BreadcrumpViewModel.cs" />
     <Compile Include="Unions\BuisnessLogic\Models\Tournaments\ITournamentInfoGroupViewModel.cs" />
     <Compile Include="Unions\BuisnessLogic\Models\Tournaments\TournamentInfoPlayOffGameViewModel.cs" />
     <Compile Include="Unions\BuisnessLogic\Models\Tournaments\TournamentInfoGroupGameViewModel.cs" />

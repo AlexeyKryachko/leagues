@@ -1,5 +1,4 @@
-﻿{{#if isEditor}}
-<td>
+﻿<td>
     <div class="mb10">
         <input type="text" class="form-control name-event" data-id="{{id}}" value="{{name}}"/>
     </div>
@@ -62,23 +61,3 @@
         </div>
     </div>
 </td>
-{{else}}
-<td>
-    {{name}}
-</td>
-<td>
-    {{#each games}}
-    <div class="row">
-        <div class="col-sm-6">
-            {{homeTeamName}}
-        </div>
-        <div class="col-sm-6">
-            {{guestTeamName}}
-        </div>
-    </div>
-    {{/each}}
-</td>
-<td>
-    {{startDate}}
-</td>
-{{/if}}

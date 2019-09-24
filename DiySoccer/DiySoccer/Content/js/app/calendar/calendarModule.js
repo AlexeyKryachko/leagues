@@ -1,8 +1,8 @@
 ﻿var MyApp = require("../app.js");
-var SharedViews = require("../shared/views.js");
 var Layouts = require("../shared/layouts.js");
 var Views = require("./calendarView.js");
 var Models = require("../models/calendars.js");
+var sharedViews = require("../shared/views.js");
 
 var calendarModule = Backbone.Marionette.Module.extend({
     startWithParent: false,
@@ -25,7 +25,8 @@ var calendarModule = Backbone.Marionette.Module.extend({
             }
         });
     },
-    onStart: function(options) {
+    onStart: function (options) {
+        console.log('[calendarModule] Module has been started.');
         var self = this;
 
         self.model.clear();
@@ -60,13 +61,17 @@ var calendarModule = Backbone.Marionette.Module.extend({
             model: self.model,
             collection: self.events
         };
-        self.calendarView = new Views.CalendarView(viewOptions);
+        self.calendarView = MyApp.Settings.isEditor(self.options.leagueId)
+            ? new Views.EditorCalendarView(viewOptions)
+            : new Views.UserCalendarView(viewOptions);
+        self.breadcrumpsView = new sharedViews.breadcrumpsView({ model: self.model });
     },
     bindViews: function() {
         var self = this;
 
         self.listenTo(self.layout, 'show', function() {
             self.layout.center.show(self.calendarView);
+            self.layout.breadcrumbs.show(self.breadcrumpsView);
         });
 
         self.listenTo(self.calendarView, 'submit', this.onSubmit);
@@ -85,6 +90,7 @@ var calendarModule = Backbone.Marionette.Module.extend({
         });
     },
     onStop: function (options) {
+        console.log('[calendarModule] Module has been stopped.');
         var self = this;
 
         if (self.bottomView)

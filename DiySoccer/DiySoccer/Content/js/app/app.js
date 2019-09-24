@@ -11,6 +11,7 @@ MyApp.addRegions({
 
 MyApp.on('start', function () {
     var templateIds = ['layout',
+        'breadcrumps',
         'splitted-layout',
         'leagues-actions',
         'leagues-list',
@@ -31,7 +32,9 @@ MyApp.on('start', function () {
         'league',
         'league-admin',
         'calendar',
+        'calendar-user',
         'calendar-event',
+        'calendar-user-event',
         'game-info',
         'game-info-scores',
         'league-info',

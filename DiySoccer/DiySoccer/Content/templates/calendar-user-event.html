@@ -1,0 +1,22 @@
+﻿<table class="table table-striped mb0">
+    <thead>
+        <tr>
+            <th style="width: 70%">{{name}}</th>
+            <th>{{startDate}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each games}}
+        <tr>
+            <td style="width: 70%">
+                {{homeTeamName}} {{guestTeamName}}
+            </td>
+            <td>
+                {{#if gameId}}
+                {{homeTeamScore}} - {{guestTeamScore}}
+                {{/if}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

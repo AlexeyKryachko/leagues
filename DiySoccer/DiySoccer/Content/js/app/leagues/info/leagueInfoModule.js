@@ -14,6 +14,7 @@ var leagueInfoModule = Backbone.Marionette.Module.extend({
         self.leagueInfo = new Models.LeagueInfo();
     },
     onStart: function (options) {
+        console.log('[leagueInfoModule] Module has been changed.');
         var self = this;
 
         self.options = options;
@@ -44,6 +45,7 @@ var leagueInfoModule = Backbone.Marionette.Module.extend({
         });
     },
     onStop: function () {
+        console.log('[leagueInfoModule] Module has been stopped.');
         var self = this;
 
         self.leagueInfoView.destroy();

@@ -138,7 +138,7 @@ var CalendarListItemView = Backbone.Marionette.ItemView.extend({
     }
 });
 
-var CalendarView = Backbone.Marionette.CompositeView.extend({
+var EditorCalendarView = Backbone.Marionette.CompositeView.extend({
     template: "#calendar",    
     childViewContainer: "tbody",
     childView: CalendarListItemView,
@@ -160,21 +160,63 @@ var CalendarView = Backbone.Marionette.CompositeView.extend({
     addEvent: function() {
         this.trigger('event:add');
     },
-    
-    onShow: function () {
-    },
-    onRender: function () {
-    },
     initialize: function (options) {
         this.options = options;
     },
     serializeData: function() {
         var model = this.model.toJSON();
-        console.log('[CalendarView] ', model);
-        model.showAddEvent = MyApp.Settings.isEditor(this.options.leagueId);
+
+        model.isEditor = MyApp.Settings.isEditor(this.options.leagueId);
 
         return model;
     }
 });
 
-module.exports = { CalendarView: CalendarView }
+var CalendarUserListItemView = Backbone.Marionette.ItemView.extend({
+    tagName: 'div',
+    template: "#calendar-user-event",
+    setOptions: function (options) {
+        this.options.teams = options.teams;
+        this.options.leagueId = options.leagueId;
+        this.model.setLeagueId(options.leagueId);
+    },
+    serializeData: function () {
+        var self = this;
+        var model = this.model.toJSON();
+
+        console.log(model.games);
+
+        _.each(model.games, function (obj) {
+            var guestTeam = _.findWhere(self.options.teams.models, { id: obj.guestTeamId });
+            var homeTeam = _.findWhere(self.options.teams.models, { id: obj.homeTeamId });
+            obj.guestTeamName = guestTeam ? guestTeam.get('name') : '';
+            obj.homeTeamName = homeTeam ? homeTeam.get('name') : '';
+            obj.teams = self.options.teams.toJSON();
+        });
+
+        if (model.startDate) {
+            var date = new Date(model.startDate);
+            model.startDate = date.toLocaleDateString();
+        }
+
+        return model;
+    }
+});
+
+var UserCalendarView = Backbone.Marionette.CompositeView.extend({
+    template: "#calendar-user",
+    childViewContainer: ".events-container",
+    childView: CalendarUserListItemView,
+    emptyView: Views.EmptyListView,
+    onBeforeAddChild: function (childView) {
+        childView.setOptions(this.options);
+    },
+    initialize: function (options) {
+        this.options = options;
+    }
+});
+
+module.exports = {
+    EditorCalendarView: EditorCalendarView,
+    UserCalendarView: UserCalendarView
+}

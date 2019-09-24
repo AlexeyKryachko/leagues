@@ -1,0 +1,12 @@
+﻿<div class="dashboard">
+    <div class="dashboard-box dashboard-box-padded">
+        <a href="/">Home</a>
+        {{#if breadcrumps}}
+        {{#each breadcrumps}}
+        
+        > <a href="{{url}}">{{name}}</a>
+
+        {{/each}}
+        {{/if}}
+    </div>
+</div>

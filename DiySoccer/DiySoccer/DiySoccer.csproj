@@ -269,6 +269,9 @@
     <Content Include="Content\scss\font-awesome\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\scss\font-awesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="Content\scss\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\templates\breadcrumps.html" />
+    <Content Include="Content\templates\calendar-user.html" />
+    <Content Include="Content\templates\calendar-user-event.html" />
     <Content Include="Content\templates\leagues-statistics.html" />
     <Content Include="webpack.config.js" />
     <Content Include="Content\scss\bootstrap\stylesheets\bootstrap\mixins\_alerts.scss" />
