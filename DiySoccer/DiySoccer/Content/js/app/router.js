@@ -49,7 +49,9 @@ var MyRouter = Backbone.Marionette.AppRouter.extend({
         "leagues/:leagueId/teams/:teamId": "infoTeamRoute",
         "leagues/:leagueId/games/new?*queryString": "newGameRoute",
         "leagues/:leagueId/games/:gameId": "gameInfoRoute",
+        "leagues/:leagueId/games/:gameId/": "gameInfoRoute",
         "leagues/:leagueId/games/:gameId/edit": "editGameRoute",
+        "leagues/:leagueId/games/:gameId/edit/": "editGameRoute",
         "leagues/:leagueId/calendar": "calendarRoute"
     },
     defaultRoute: function () {

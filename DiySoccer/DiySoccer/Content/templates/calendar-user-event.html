@@ -7,16 +7,26 @@
     </thead>
     <tbody>
         {{#each games}}
+
+        {{#if gameId}}
+        <tr class="cursor-pointer" data-game-id="{{gameId}}">
+            <td style="width: 70%">
+                {{homeTeamName}} {{guestTeamName}}
+            </td>
+            <td>
+                {{homeTeamScore}} - {{guestTeamScore}}
+            </td>
+        </tr>
+        {{else}}
         <tr>
             <td style="width: 70%">
                 {{homeTeamName}} {{guestTeamName}}
             </td>
             <td>
-                {{#if gameId}}
-                {{homeTeamScore}} - {{guestTeamScore}}
-                {{/if}}
             </td>
         </tr>
+        {{/if}}
+
         {{/each}}
     </tbody>
 </table>

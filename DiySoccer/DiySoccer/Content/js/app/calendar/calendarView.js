@@ -175,6 +175,18 @@ var EditorCalendarView = Backbone.Marionette.CompositeView.extend({
 var CalendarUserListItemView = Backbone.Marionette.ItemView.extend({
     tagName: 'div',
     template: "#calendar-user-event",
+    ui: {
+        'viewGame': '.cursor-pointer'
+    },
+    events: {
+        'click @ui.viewGame': 'viewGame',
+
+    },
+    viewGame: function (e) {
+        var gameId = $(e.currentTarget).data('game-id');
+
+        window.location.href = "/#leagues/" + this.options.leagueId + '/games/' + gameId + '/';
+    },
     setOptions: function (options) {
         this.options.teams = options.teams;
         this.options.leagueId = options.leagueId;
@@ -183,9 +195,7 @@ var CalendarUserListItemView = Backbone.Marionette.ItemView.extend({
     serializeData: function () {
         var self = this;
         var model = this.model.toJSON();
-
-        console.log(model.games);
-
+        
         _.each(model.games, function (obj) {
             var guestTeam = _.findWhere(self.options.teams.models, { id: obj.guestTeamId });
             var homeTeam = _.findWhere(self.options.teams.models, { id: obj.homeTeamId });
