@@ -5,6 +5,7 @@ namespace Interfaces.Games.BuisnessLogic
     public interface IGamesManager
     {
         GameVewModel Get(string leagueId, string gameId);
+        GameExternalViewModel GetExternal(string leagueId);
 
         GameInfoViewModel GetInfo(string leagueId, string gameId);
 

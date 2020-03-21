@@ -23,6 +23,8 @@ namespace Implementations.Core.Medias.BuisnessLogic
         public MediaIOViewModel GetCutImage(string mediaId, int? width, int? height)
         {
             var media = _mediaRepository.Get(mediaId);
+            if (media == null || string.IsNullOrEmpty(media.RelativeUrl))
+                return null;
 
             var path = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + media.RelativeUrl;
             var extenstion = Path.GetExtension(path);
@@ -41,7 +43,9 @@ namespace Implementations.Core.Medias.BuisnessLogic
                 if (!File.Exists(targetPath))
                     CreateImage(path, targetPath, true);
             }
-            
+
+            if (!File.Exists(targetPath))
+                return null;
             
             return new MediaIOViewModel
             {
@@ -53,6 +57,8 @@ namespace Implementations.Core.Medias.BuisnessLogic
         public MediaIOViewModel GetImage(string mediaId, int? width, int? height)
         {
             var media = _mediaRepository.Get(mediaId);
+            if (media == null || string.IsNullOrEmpty(media.RelativeUrl))
+                return null;
 
             var path = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath + media.RelativeUrl;
             var extenstion = Path.GetExtension(path);
@@ -72,6 +78,8 @@ namespace Implementations.Core.Medias.BuisnessLogic
                     CreateImage(path, targetPath, false);
             }
 
+            if (!File.Exists(targetPath))
+                return null;
 
             return new MediaIOViewModel
             {

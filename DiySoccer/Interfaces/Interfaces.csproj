@@ -82,7 +82,15 @@
     <Compile Include="Events\DataAccess\IEventsRepository.cs" />
     <Compile Include="Events\DataAccess\Model\EventDb.cs" />
     <Compile Include="Events\DataAccess\Model\EventGameDb.cs" />
+    <Compile Include="GameApproval\BuisnessLogic\IGameApprovalManager.cs" />
+    <Compile Include="GameApproval\DataAccess\IGameApprovalRepository.cs" />
+    <Compile Include="GameApproval\DataAccess\Model\GameApprovalDb.cs" />
+    <Compile Include="GameApproval\DataAccess\Model\MemberGameApprovalDb.cs" />
+    <Compile Include="GameApproval\DataAccess\Model\TeamGameApprovalDb.cs" />
     <Compile Include="Games\BuisnessLogic\IGamesManager.cs" />
+    <Compile Include="Games\BuisnessLogic\Models\EventGameExternalViewModel.cs" />
+    <Compile Include="Games\BuisnessLogic\Models\EventsGameExternalViewModel.cs" />
+    <Compile Include="Games\BuisnessLogic\Models\GameExternalViewModel.cs" />
     <Compile Include="Games\BuisnessLogic\Models\GameInfoViewModel.cs" />
     <Compile Include="Games\BuisnessLogic\Models\GameInfoMemberScoreViewModel.cs" />
     <Compile Include="Games\BuisnessLogic\Models\GameMemberViewModel.cs" />

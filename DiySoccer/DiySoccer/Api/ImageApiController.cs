@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
@@ -26,6 +27,9 @@ namespace DiySoccer.Api
         public HttpResponseMessage GetCutImage(string mediaId, int? width = null, int? height = null)
         {
             var model = _mediaManager.GetCutImage(mediaId, width, height);
+            if (model == null)
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+
             var response = new HttpResponseMessage()
             {
                 Content = new StreamContent(model.Stream)
@@ -42,6 +46,9 @@ namespace DiySoccer.Api
         public HttpResponseMessage GetImage(string mediaId, int? width = null, int? height = null)
         {
             var model = _mediaManager.GetImage(mediaId, width, height);
+            if (model == null)
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+
             var response = new HttpResponseMessage()
             {
                 Content = new StreamContent(model.Stream)

@@ -74,6 +74,56 @@ namespace Implementations.Games.BuisnessLogic
             };
         }
 
+        public GameExternalViewModel GetExternal(string leagueId)
+        {
+            var eventsDb = _eventsRepository.GetByLeague(leagueId).ToList();
+            var teamsDb = _teamsRepository.GetByLeague(leagueId).ToList();
+            var playersDb = _playersRepository
+                .Find(leagueId, null, 0, int.MaxValue)
+                .ToDictionary(x => x.EntityId, y => y);
+
+            var eventsViewModel = new List<EventsGameExternalViewModel>();
+
+            foreach (var eventDb in eventsDb)
+            {
+                var eventViewModel = new EventsGameExternalViewModel
+                {
+                    Id = eventDb.EntityId,
+                    Title = eventDb.Name
+                };
+
+                foreach (var gameDb in eventDb.Games)
+                {
+                    var homeTeam = teamsDb.FirstOrDefault(x => x.EntityId == gameDb.HomeTeamId);
+                    if (homeTeam == null)
+                        continue;
+
+                    var guestTeam = teamsDb.FirstOrDefault(x => x.EntityId == gameDb.GuestTeamId);
+                    if (guestTeam == null)
+                        continue;
+                    
+                    var gameViewModel = new EventGameExternalViewModel
+                    {
+                        Title = homeTeam.Name + " - " + guestTeam.Name,
+                        Value = homeTeam.EntityId + "-" + guestTeam.EntityId,
+                        HomeTeamTitle = homeTeam.Name,
+                        HomeTeam = _gameMapper.MapTeamInfo(homeTeam, playersDb),
+                        GuestTeamTitle = guestTeam.Name,
+                        GuestTeam = _gameMapper.MapTeamInfo(guestTeam, playersDb),
+                    };
+
+                    eventViewModel.Games.Add(gameViewModel);
+                }
+
+                eventsViewModel.Add(eventViewModel);
+            }
+
+            return new GameExternalViewModel
+            {
+                Events = eventsViewModel
+            };
+        }
+
         public GameInfoViewModel GetInfo(string leagueId, string gameId)
         {
             var game = _gamesRepository.Get(gameId);

@@ -1,0 +1,111 @@
+﻿
+<div class="game-external-view">
+<select class="form-control change-event-js mb20">
+    <option value="" selected="selected" disabled="disabled">Выбрать тур</option>
+    {{#each events}}
+    {{#if selected}}
+    <option value="{{id}}" selected="selected">{{title}}</option>
+    {{else}}
+    <option value="{{id}}">{{title}}</option>
+    {{/if}}
+    {{/each}}
+</select>
+
+{{#each events}}
+{{#if selected}}
+<select class="form-control change-game-js mb20">
+    <option value="" selected="selected" disabled="disabled">Выбрать игру</option>
+    {{#each games}}
+    {{#if selected}}
+    <option value="{{value}}" selected="selected">{{title}}</option>
+    {{else}}
+    <option value="{{value}}">{{title}}</option>
+    {{/if}}
+    {{/each}}
+</select>
+{{/if}}
+{{/each}}
+    
+    {{#each events}}
+    {{#if selected}}
+    {{#each games}}
+    {{#if selected}}
+    <div class="container mb20 background-white">
+        <div class="row ">
+            <div class="col-md-6 col-sm-12">
+                <div class="row mb20 mt20">
+                    <div class="col-xs-12">{{homeTeamTitle}}</div>
+                </div>
+                <div class="row mb20">
+                    <div class="col-xs-4">Имя</div>
+                    <div class="col-xs-3">Гол</div>
+                    <div class="col-xs-3">Пас</div>
+                </div>
+                {{#each homeTeam.members}}
+                <div class="row mb20">
+                    <div class="col-xs-4">{{name}}</div>
+                    <div class="col-xs-3">
+                        <input type="number" class="game-input score-js" data-id="{{id}}" value="{{score}}">
+                    </div>
+                    <div class="col-xs-3">
+                        <input type="number" class="game-input help-js" data-id="{{id}}" value="{{help}}">
+                    </div>
+                </div>
+                {{/each}}
+                <div class="row mb20 mt20">
+                    <div class="col-xs-12">
+                        <select class="form-control change-home-best-js" data-id="{{id}}">
+                            <option value="" selected="selected" disabled="disabled">Выбрать лучшего</option>
+                            {{#each homeTeam.members}}
+                            {{#if selected}}
+                            <option value="{{id}}" selected="selected">{{name}}</option>
+                            {{else}}
+                            <option value="{{id}}">{{name}}</option>
+                            {{/if}}
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="row mb20 mt20">
+                    <div class="col-xs-12">{{guestTeamTitle}}</div>
+                </div>
+                <div class="row mb20">
+                    <div class="col-xs-4">Имя</div>
+                    <div class="col-xs-3">Гол</div>
+                    <div class="col-xs-3">Пас</div>
+                </div>
+                {{#each guestTeam.members}}
+                <div class="row mb20">
+                    <div class="col-xs-4">{{name}}</div>
+                    <div class="col-xs-3">
+                        <input type="number" class="game-input score-js" data-id="{{id}}" value="{{score}}">
+                    </div>
+                    <div class="col-xs-3">
+                        <input type="number" class="game-input help-js" data-id="{{id}}" value="{{help}}">
+                    </div>
+                </div>
+                {{/each}}
+                <div class="row mb20 mt20">
+                    <div class="col-xs-12">
+                        <select class="form-control change-guest-best-js" data-id="{{id}}">
+                            <option value="" selected="selected" disabled="disabled">Выбрать лучшего</option>
+                            {{#each guestTeam.members}}
+                            {{#if selected}}
+                            <option value="{{id}}" selected="selected">{{name}}</option>
+                            {{else}}
+                            <option value="{{id}}">{{name}}</option>
+                            {{/if}}
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+    {{/each}}
+    {{/if}}
+    {{/each}}
+</div>

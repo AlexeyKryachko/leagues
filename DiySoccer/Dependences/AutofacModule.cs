@@ -7,6 +7,8 @@ using Implementations.Core.Medias.DataAccess;
 using Implementations.Events;
 using Implementations.Events.BuisnessLogic;
 using Implementations.Events.DataAccess;
+using Implementations.GameApproval.BuisnessLogic;
+using Implementations.GameApproval.DataAccess;
 using Implementations.Games;
 using Implementations.Games.BuisnessLogic;
 using Implementations.Games.DataAccess;
@@ -25,6 +27,8 @@ using Interfaces.Core.Services.Medias.BuisnessLogic;
 using Interfaces.Core.Services.Medias.DataAccess;
 using Interfaces.Events.BuisnessLogic;
 using Interfaces.Events.DataAccess;
+using Interfaces.GameApproval.BuisnessLogic;
+using Interfaces.GameApproval.DataAccess;
 using Interfaces.Games.BuisnessLogic;
 using Interfaces.Games.DataAccess;
 using Interfaces.Leagues.BuisnessLogic;
@@ -50,6 +54,9 @@ namespace Dependences
 
             builder.RegisterType(typeof(GamesManager)).As<IGamesManager>();
             builder.RegisterType(typeof(GamesRepository)).As<IGamesRepository>();
+
+            builder.RegisterType(typeof(GameApprovalManager)).As<IGameApprovalManager>();
+            builder.RegisterType(typeof(GameApprovalRepository)).As<IGameApprovalRepository>();
 
             builder.RegisterType(typeof(TournamentsManager)).As<ITournamentsManager>();
             builder.RegisterType(typeof(LeaguesManager)).As<ILeaguesManager>();

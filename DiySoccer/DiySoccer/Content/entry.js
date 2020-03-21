@@ -13,6 +13,7 @@ require("./js/app/calendar/calendarModule.js");
 
 require("./js/app/games/game/gameModule.js");
 require("./js/app/games/gameInfo/gameInfoModule.js");
+require("./js/app/games/gameExternal/gameExternalModule.js");
 
 require("./js/app/teams/info/teamInfoModule.js");
 require("./js/app/teams/list/teamListModule.js");

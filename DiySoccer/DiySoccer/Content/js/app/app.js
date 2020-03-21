@@ -22,6 +22,7 @@ MyApp.on('start', function () {
         'empty-list-view',
         'game-new',
         'game-new-member',
+        'game-external-info',
         'save',
         'team-list-actions',
         'custom-game',

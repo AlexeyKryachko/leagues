@@ -2,6 +2,7 @@
 using System.Web.Http;
 using DiySoccer.Core.Attributes;
 using Interfaces.Core;
+using Interfaces.GameApproval.BuisnessLogic;
 using Interfaces.Games.BuisnessLogic;
 using Interfaces.Games.BuisnessLogic.Models;
 
@@ -10,10 +11,12 @@ namespace DiySoccer.Api
     public class GamesController : BaseApiController
     {
         private readonly IGamesManager _gamesManager;
+        private readonly IGameApprovalManager _gameApprovalManager;
 
-        public GamesController(IGamesManager gamesManager)
+        public GamesController(IGamesManager gamesManager, IGameApprovalManager gameApprovalManager)
         {
             _gamesManager = gamesManager;
+            _gameApprovalManager = gameApprovalManager;
         }
 
         #region GET
@@ -34,6 +37,16 @@ namespace DiySoccer.Api
         {
             var game = _gamesManager.GetInfo(leagueId, gameId);
             return Json(game);
+        }
+
+        [Route("api/leagues/{leagueId}/games/external")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
+        [HttpGet]
+        public IHttpActionResult GetGameExternal(string leagueId)
+        {
+            var model = _gamesManager.GetExternal(leagueId);
+
+            return Json(model);
         }
 
         #endregion
@@ -58,6 +71,16 @@ namespace DiySoccer.Api
         public void Create([FromUri]string leagueId, [FromBody]GameVewModel model)
         {
             _gamesManager.Create(leagueId, model);
+        }
+
+        [Route("api/leagues/{leagueId}/games/external")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Member)]
+        [HttpPost]
+        public IHttpActionResult PostGameExternal([FromUri]string leagueId, GameExternalViewModel model)
+        {
+            _gameApprovalManager.Create(leagueId, model);
+
+            return Ok();
         }
 
         #endregion

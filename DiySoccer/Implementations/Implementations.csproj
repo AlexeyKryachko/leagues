@@ -122,6 +122,8 @@
     <Compile Include="Events\BuisnessLogic\EventsManager.cs" />
     <Compile Include="Events\DataAccess\EventsRepository.cs" />
     <Compile Include="Events\EventsMapper.cs" />
+    <Compile Include="GameApproval\BuisnessLogic\GameApprovalManager.cs" />
+    <Compile Include="GameApproval\DataAccess\GameApprovalRepository.cs" />
     <Compile Include="Games\BuisnessLogic\GamesManager.cs" />
     <Compile Include="Games\DataAccess\GamesRepository.cs" />
     <Compile Include="Games\GamesMapper.cs" />

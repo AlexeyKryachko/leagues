@@ -3,11 +3,28 @@ using System.Linq;
 using Interfaces.Games.BuisnessLogic.Models;
 using Interfaces.Games.DataAccess.Model;
 using Interfaces.Teams.DataAccess;
+using Interfaces.Users.DataAccess;
 
 namespace Implementations.Games
 {
     public class GamesMapper
     {
+        public GameTeamViewModel MapTeamInfo(TeamDb team, Dictionary<string, UserDb> users)
+        {
+            return new GameTeamViewModel
+            {
+                Id = team.EntityId,
+                Members = team
+                    .MemberIds
+                    .Where(users.ContainsKey)
+                    .Select(x => new GameMemberViewModel
+                    {
+                        Id = x,
+                        Name = users[x].Name,
+                    })
+            };
+        }
+
         public GameInfoViewModel MapGameInfo(GameDb game, IEnumerable<TeamDb> teams, Dictionary<string, string> users)
         {
             var result = new GameInfoViewModel();

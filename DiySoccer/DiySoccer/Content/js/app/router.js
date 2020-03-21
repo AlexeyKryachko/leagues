@@ -47,11 +47,14 @@ var MyRouter = Backbone.Marionette.AppRouter.extend({
         "leagues/:leagueId/teams/new": "newTeamRoute",
         "leagues/:leagueId/teams/:teamId/edit": "editTeamRoute",
         "leagues/:leagueId/teams/:teamId": "infoTeamRoute",
+
+        "leagues/:leagueId/games/external": "gameExternalRoute",
         "leagues/:leagueId/games/new?*queryString": "newGameRoute",
         "leagues/:leagueId/games/:gameId": "gameInfoRoute",
         "leagues/:leagueId/games/:gameId/": "gameInfoRoute",
         "leagues/:leagueId/games/:gameId/edit": "editGameRoute",
         "leagues/:leagueId/games/:gameId/edit/": "editGameRoute",
+
         "leagues/:leagueId/calendar": "calendarRoute"
     },
     defaultRoute: function () {
@@ -107,12 +110,19 @@ var MyRouter = Backbone.Marionette.AppRouter.extend({
         var options = { leagueId: leagueId, gameId: gameId };
         this.changeModule(this.app.submodules.gameInfo, options);
     },
+    gameExternalRoute: function (leagueId) {
+
+        console.log('[router] GameExternalRoute: leagueId' + leagueId);
+
+        var options = { leagueId: leagueId };
+        this.changeModule(this.app.submodules.gameExternal, options);
+    },
     editGameRoute: function (leagueId, gameId) {
         var options = { leagueId: leagueId, gameId: gameId };
         this.changeModule(this.app.submodules.game, options);
     },
     changeModule: function (module, options) {
-        console.log('[router] Route has been changed.');
+        console.log('[router] Module has been changed: ', module);
 
         if (this.workingModule)
             this.workingModule.stop();
@@ -122,7 +132,7 @@ var MyRouter = Backbone.Marionette.AppRouter.extend({
         this.workingModule.start(this.workingOptions);
     },
     onRoute: function (name, path, args) {
-        console.log('[router] Route has been changed.');
+        //console.log('[router] Route has been changed.');
     }
 });
 

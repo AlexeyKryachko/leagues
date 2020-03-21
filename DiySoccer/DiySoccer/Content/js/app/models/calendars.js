@@ -1,4 +1,5 @@
 ﻿var _ = require('underscore');
+var $ = require('jquery');
 
 var Calendar = Backbone.Model.extend({
     initialize: function () {

@@ -13,6 +13,19 @@
     }
 });
 
+var gameExternalInfo = Backbone.Model.extend({
+    initialize: function () {
+        this.leagueId = 0;
+    },
+    url: function () {
+        return '/api/leagues/' + this.leagueId + '/games/external';
+    },
+    setLeagueId: function (leagueId) {
+        this.leagueId = leagueId;
+    }
+});
+
 module.exports = {
-    GameInfo: GameInfo
-}
+    GameInfo: GameInfo,
+    gameExternalInfo: gameExternalInfo
+};

@@ -241,9 +241,12 @@
     <Content Include="Content\dist\89889688147bd7575d6327160d64e760.svg" />
     <Content Include="Content\dist\app.bundle.js" />
     <Content Include="Content\dist\d7c639084f684d66a1bc66855d193ed8.svg" />
+    <Content Include="Content\dist\main.css" />
     <Content Include="Content\dist\styles.bundle.css" />
     <Content Include="Content\dist\vendor.bundle.js" />
     <Content Include="Content\img\DefaultLogo_70x70.png" />
+    <Content Include="Content\js\app\games\gameExternal\gameExternalModule.js" />
+    <Content Include="Content\js\app\games\gameExternal\gameExternalView.js" />
     <Content Include="Content\js\app\leagues\statistic\statisticViews.js" />
     <Content Include="Content\js\app\leagues\statistic\statisticModule.js" />
     <Content Include="Content\scss\bootstrap\fonts\bootstrap\glyphicons-halflings-regular.svg" />
@@ -272,6 +275,7 @@
     <Content Include="Content\templates\breadcrumps.html" />
     <Content Include="Content\templates\calendar-user.html" />
     <Content Include="Content\templates\calendar-user-event.html" />
+    <Content Include="Content\templates\game-external-info.html" />
     <Content Include="Content\templates\leagues-statistics.html" />
     <Content Include="webpack.config.js" />
     <Content Include="Content\scss\bootstrap\stylesheets\bootstrap\mixins\_alerts.scss" />
