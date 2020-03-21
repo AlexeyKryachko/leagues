@@ -1,0 +1,73 @@
+﻿{{#each approvals}}
+
+<div class="row background-white">
+    <div class="col-sm-12">
+        <div class="row mb20 mt20">
+            <div class="col-xs-6">{{eventTitle}}</div>
+            <div class="col-xs-6">
+                <button class="btn btn-primary save-js" data-id="{{id}}">Сохранить</button>
+                <button class="btn btn-primary delete-js" data-id="{{id}}">Удалить</button>
+            </div>
+            
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="row mb20 mt20">
+            <div class="col-xs-12">
+                {{homeTeamTitle}}
+                <strong>({{homeTeamScore}})</strong>
+            </div>
+        </div>
+        <div class="row mb20">
+            <div class="col-xs-4">Имя</div>
+            <div class="col-xs-3">Гол</div>
+            <div class="col-xs-3">Пас</div>
+        </div>
+        {{#each homePlayers}}
+        <div class="row mb20">
+            <div class="col-xs-4">
+                {{name}}
+                {{#if best}}
+                (Лучший)
+                {{/if}}
+            </div>
+            <div class="col-xs-3">
+                {{score}}
+            </div>
+            <div class="col-xs-3">
+                {{help}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="row mb20 mt20">
+            <div class="col-xs-12">
+                {{guestTeamTitle}}
+                <strong>({{guestTeamScore}})</strong>
+            </div>
+        </div>
+        <div class="row mb20">
+            <div class="col-xs-4">Имя</div>
+            <div class="col-xs-3">Гол</div>
+            <div class="col-xs-3">Пас</div>
+        </div>
+        {{#each guestPlayers}}
+        <div class="row mb20">
+            <div class="col-xs-4">
+                {{name}}
+                {{#if best}}
+                (Лучший)
+                {{/if}}
+            </div>
+            <div class="col-xs-3">
+                {{score}}
+            </div>
+            <div class="col-xs-3">
+                {{help}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+{{/each}}

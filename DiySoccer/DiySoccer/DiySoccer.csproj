@@ -246,6 +246,7 @@
     <Content Include="Content\dist\vendor.bundle.js" />
     <Content Include="Content\img\DefaultLogo_70x70.png" />
     <Content Include="Content\js\app\games\gameExternal\gameExternalModule.js" />
+    <Content Include="Content\js\app\games\gameExternal\gameExternalListView.js" />
     <Content Include="Content\js\app\games\gameExternal\gameExternalView.js" />
     <Content Include="Content\js\app\leagues\statistic\statisticViews.js" />
     <Content Include="Content\js\app\leagues\statistic\statisticModule.js" />
@@ -275,6 +276,7 @@
     <Content Include="Content\templates\breadcrumps.html" />
     <Content Include="Content\templates\calendar-user.html" />
     <Content Include="Content\templates\calendar-user-event.html" />
+    <Content Include="Content\templates\game-external-list.html" />
     <Content Include="Content\templates\game-external-info.html" />
     <Content Include="Content\templates\leagues-statistics.html" />
     <Content Include="webpack.config.js" />

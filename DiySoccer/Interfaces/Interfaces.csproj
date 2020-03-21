@@ -83,6 +83,9 @@
     <Compile Include="Events\DataAccess\Model\EventDb.cs" />
     <Compile Include="Events\DataAccess\Model\EventGameDb.cs" />
     <Compile Include="GameApproval\BuisnessLogic\IGameApprovalManager.cs" />
+    <Compile Include="GameApproval\BuisnessLogic\Model\ApprovalsViewModel.cs" />
+    <Compile Include="GameApproval\BuisnessLogic\Model\PlayerApprovalViewModel.cs" />
+    <Compile Include="GameApproval\BuisnessLogic\Model\ApprovalViewModel.cs" />
     <Compile Include="GameApproval\DataAccess\IGameApprovalRepository.cs" />
     <Compile Include="GameApproval\DataAccess\Model\GameApprovalDb.cs" />
     <Compile Include="GameApproval\DataAccess\Model\MemberGameApprovalDb.cs" />

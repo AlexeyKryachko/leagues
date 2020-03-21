@@ -22,6 +22,11 @@ namespace Implementations.Games.DataAccess
             return Collection.AsQueryable().Where(x => x.GuestTeam.Id == teamId || x.HomeTeam.Id == teamId);
         }
 
+        public GameDb GetByTeams(string leagueId, string homeTeamId, string guestTeamId)
+        {
+            return Collection.AsQueryable().FirstOrDefault(x => x.GuestTeam.Id == guestTeamId || x.HomeTeam.Id == homeTeamId);
+        }
+
         public IEnumerable<GameDb> GetByExceptTeams(string leagueId, IEnumerable<string> teamIds)
         {
             if (teamIds == null)

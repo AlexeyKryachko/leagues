@@ -25,7 +25,20 @@ var gameExternalInfo = Backbone.Model.extend({
     }
 });
 
+var gameExternalList = Backbone.Model.extend({
+    initialize: function () {
+        this.leagueId = 0;
+    },
+    url: function () {
+        return '/api/leagues/' + this.leagueId + '/games/approval';
+    },
+    setLeagueId: function (leagueId) {
+        this.leagueId = leagueId;
+    }
+});
+
 module.exports = {
     GameInfo: GameInfo,
-    gameExternalInfo: gameExternalInfo
+    gameExternalInfo: gameExternalInfo,
+    gameExternalList: gameExternalList
 };

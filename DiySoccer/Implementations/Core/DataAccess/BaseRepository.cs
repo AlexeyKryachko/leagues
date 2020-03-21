@@ -42,10 +42,15 @@ namespace Implementations.Core.DataAccess
         {
             return Collection.AsQueryable().FirstOrDefault(x => x.EntityId == id);
         }
-
+        
         public IEnumerable<T> GetRange(IEnumerable<string> ids)
         {
             return Collection.AsQueryable().Where(x => ids.Contains(x.EntityId));
+        }
+
+        public IEnumerable<T> GetByLeagueId(string leagueId)
+        {
+            return Collection.AsQueryable().Where(x => x.LeagueId == leagueId);
         }
 
         public void Delete(string id)

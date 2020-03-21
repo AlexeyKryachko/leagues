@@ -49,6 +49,16 @@ namespace DiySoccer.Api
             return Json(model);
         }
 
+        [Route("api/leagues/{leagueId}/games/approval")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
+        [HttpGet]
+        public IHttpActionResult GetGameApproval(string leagueId)
+        {
+            var model = _gameApprovalManager.GetApprovals(leagueId);
+
+            return Json(model);
+        }
+
         #endregion
 
         #region PUT
@@ -79,6 +89,26 @@ namespace DiySoccer.Api
         public IHttpActionResult PostGameExternal([FromUri]string leagueId, GameExternalViewModel model)
         {
             _gameApprovalManager.Create(leagueId, model);
+
+            return Ok();
+        }
+
+        [Route("api/leagues/{leagueId}/games/approve/{id}")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
+        [HttpPost]
+        public IHttpActionResult GetApprove(string leagueId, string id)
+        {
+            _gameApprovalManager.Approve(leagueId, id);
+
+            return Ok();
+        }
+
+        [Route("api/leagues/{leagueId}/games/decline/{id}")]
+        [DiySoccerAuthorize(LeagueAccessStatus.Editor)]
+        [HttpPost]
+        public IHttpActionResult GetDecline(string leagueId, string id)
+        {
+            _gameApprovalManager.Delete(id);
 
             return Ok();
         }

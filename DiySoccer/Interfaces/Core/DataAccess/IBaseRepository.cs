@@ -13,6 +13,7 @@ namespace Interfaces.Core.DataAccess
         T Get(string id);
 
         IEnumerable<T> GetRange(IEnumerable<string> ids);
+        IEnumerable<T> GetByLeagueId(string leagueId);
 
         void Delete(string id);
 

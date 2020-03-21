@@ -10,7 +10,7 @@ namespace Interfaces.Games.DataAccess
         IEnumerable<GameDb> GetByLeague(string leagueId);
 
         IEnumerable<GameDb> GetByTeam(string leagueId, string teamId);
-
+        GameDb GetByTeams(string leagueId, string homeTeamId, string guestTeamId);
         IEnumerable<GameDb> GetByExceptTeams(string leagueId, IEnumerable<string> teamIds);
 
         void Create(string leagueId, GameVewModel model);
